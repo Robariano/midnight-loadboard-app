@@ -1,5 +1,6 @@
 import { getServiceClient } from "../../../../../lib/supabase";
 import { v4 as uuidv4 } from "uuid";
+import { sendCoverageConfirmationSMS, looksLikePhoneNumber, normalizeToE164 } from "../../../../../lib/twilio";
 
 export async function POST(req, { params }) {
   const loadId = params.id;
@@ -61,9 +62,36 @@ export async function POST(req, { params }) {
     // Solo owner-operator self-attests right away in the UI
     return Response.json({ selfAttestationNeeded: true, token });
   } else {
-    // In production: send this URL via SMS/email to body.driver_contact.
-    // TODO: integrate Twilio (SMS) or an email service (e.g. Resend, SendGrid) here.
-    const confirmUrl = `/confirm/${token}`;
-    return Response.json({ assignedLinkSent: true, confirmUrl, token });
+    const baseUrl = process.env.APP_BASE_URL || "https://midnightloadboard.com";
+    const confirmUrl = `${baseUrl}/confirm/${token}`;
+
+    let smsSent = false;
+    let smsError = null;
+
+    if (looksLikePhoneNumber(body.driver_contact)) {
+      try {
+        await sendCoverageConfirmationSMS(
+          normalizeToE164(body.driver_contact),
+          body.driver_name,
+          confirmUrl
+        );
+        smsSent = true;
+      } catch (err) {
+        // Don't fail the claim if the text fails to send — the confirm
+        // link is still returned below so it can be sent manually.
+        console.error(`[twilio] Failed to text driver for load ${loadId}:`, err.message);
+        smsError = err.message;
+      }
+    }
+    // TODO: for email-style driver_contact values, send via an email
+    // service (e.g. Resend, SendGrid) — not implemented yet.
+
+    return Response.json({
+      assignedLinkSent: true,
+      confirmUrl: `/confirm/${token}`,
+      token,
+      smsSent,
+      smsError,
+    });
   }
 }

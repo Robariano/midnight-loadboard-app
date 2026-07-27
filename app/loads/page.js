@@ -144,8 +144,9 @@ export default function Loads() {
                 )}
                 {claimResult.assignedLinkSent && (
                   <p style={{ color: "#4caf50", fontSize: 13 }}>
-                    A confirmation link was generated for the assigned driver. In production this gets
-                    texted/emailed automatically — for now, here it is to copy:
+                    {claimResult.smsSent
+                      ? "The driver was texted their confirmation link automatically. Copy below as a backup:"
+                      : "A confirmation link was generated for the assigned driver. Texting failed or the contact wasn't a phone number — copy/send it manually for now:"}
                     <br />
                     <code style={{ color: "#5c5cff" }}>{claimResult.confirmUrl}</code>
                   </p>
