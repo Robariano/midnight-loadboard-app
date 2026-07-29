@@ -37,6 +37,9 @@ export default function RootLayout({ children }) {
             <a href="/get-verified" style={{ color: "#4caf50", fontSize: 13, fontWeight: 700, textDecoration: "none" }}>
               Get Verified
             </a>
+            <a href="/revoked-carriers" style={{ color: "#ff6b6b", fontSize: 13, fontWeight: 700, textDecoration: "none" }}>
+              Revoked Credentials
+            </a>
           </nav>
         </header>
         <main style={{ maxWidth: 720, margin: "0 auto", padding: "40px 24px" }}>{children}</main>
