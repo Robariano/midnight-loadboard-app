@@ -1,6 +1,5 @@
 import { getServiceClient } from "../../../../../lib/supabase";
 import { v4 as uuidv4 } from "uuid";
-import { sendCoverageConfirmationSMS, looksLikePhoneNumber, normalizeToE164 } from "../../../../../lib/twilio";
 import { sendCoverageConfirmationEmail, looksLikeEmail } from "../../../../../lib/email";
 
 export async function POST(req, { params }) {
@@ -73,26 +72,16 @@ export async function POST(req, { params }) {
     const baseUrl = process.env.APP_BASE_URL || "https://midnightloadboard.com";
     const confirmUrl = `${baseUrl}/confirm/${token}`;
 
-    let smsSent = false;
-    let smsError = null;
+    // SMS is intentionally not attempted here — Twilio's A2P 10DLC campaign
+    // for this number is rejected, so texts can come back as "sent" without
+    // ever actually being delivered. The confirm link below (always returned)
+    // is the reliable path: the carrier copies/sends it to the driver
+    // themselves. Email is still attempted automatically when driver_contact
+    // is an email address, since Resend isn't affected by the A2P issue.
     let emailSent = false;
     let emailError = null;
 
-    if (looksLikePhoneNumber(body.driver_contact)) {
-      try {
-        await sendCoverageConfirmationSMS(
-          normalizeToE164(body.driver_contact),
-          body.driver_name,
-          confirmUrl
-        );
-        smsSent = true;
-      } catch (err) {
-        // Don't fail the claim if the text fails to send — the confirm
-        // link is still returned below so it can be sent manually.
-        console.error(`[twilio] Failed to text driver for load ${loadId}:`, err.message);
-        smsError = err.message;
-      }
-    } else if (looksLikeEmail(body.driver_contact)) {
+    if (looksLikeEmail(body.driver_contact)) {
       try {
         await sendCoverageConfirmationEmail(
           body.driver_contact.trim(),
@@ -101,8 +90,8 @@ export async function POST(req, { params }) {
         );
         emailSent = true;
       } catch (err) {
-        // Same reasoning as the SMS branch — don't fail the claim, just
-        // surface the error so the link can be sent manually if needed.
+        // Don't fail the claim if the email fails to send — the confirm
+        // link is still returned below so it can be sent manually.
         console.error(`[email] Failed to email driver for load ${loadId}:`, err.message);
         emailError = err.message;
       }
@@ -112,8 +101,6 @@ export async function POST(req, { params }) {
       assignedLinkSent: true,
       confirmUrl: `/confirm/${token}`,
       token,
-      smsSent,
-      smsError,
       emailSent,
       emailError,
     });
