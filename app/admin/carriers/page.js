@@ -82,6 +82,10 @@ export default function AdminCarriers() {
           <p style={{ fontSize: 12, color: "#888", margin: "0 0 4px" }}>
             Carrier ID: <code style={{ color: "#5c5cff" }}>{c.id}</code>
           </p>
+          <p style={{ fontSize: 12, color: "#888", margin: "0 0 4px" }}>
+            Secret: <code style={{ color: "#5c5cff" }}>{c.carrier_secret}</code>
+            {" "}<span style={{ color: "#666" }}>(only needed if they signed up before this was added — send it to them once, privately)</span>
+          </p>
           <p style={{ fontSize: 12, margin: "0 0 4px" }}>
             {c.cdl_link && <a href={c.cdl_link} target="_blank" style={{ color: "#5c5cff", marginRight: 12 }}>CDL</a>}
             {c.insurance_link && <a href={c.insurance_link} target="_blank" style={{ color: "#5c5cff", marginRight: 12 }}>Insurance</a>}
