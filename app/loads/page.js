@@ -313,13 +313,47 @@ export default function Loads() {
                   <SelfAttestPrompt token={claimResult.token} />
                 )}
                 {claimResult.assignedLinkSent && (
-                  <p style={{ color: "#4caf50", fontSize: 13 }}>
-                    {claimResult.smsSent
-                      ? "The driver was texted their confirmation link automatically. Copy below as a backup:"
-                      : "A confirmation link was generated for the assigned driver. Texting failed or the contact wasn't a phone number — copy/send it manually for now:"}
-                    <br />
-                    <code style={{ color: "#5c5cff" }}>{claimResult.confirmUrl}</code>
-                  </p>
+                  <div style={{ marginTop: 4 }}>
+                    <p style={{ color: "#e0e0e0", fontSize: 13, marginBottom: 6 }}>
+                      Send this confirmation link to the driver yourself (text, call, email — whatever's fastest).
+                      This is the reliable way to get it to them right now:
+                    </p>
+                    <div style={{
+                      display: "flex", alignItems: "center", gap: 8, background: "#0a0a12",
+                      border: "1px solid #2a2a3e", borderRadius: 6, padding: "8px 10px", marginBottom: 8,
+                    }}>
+                      <code style={{ color: "#5c5cff", fontSize: 13, wordBreak: "break-all", flex: 1 }}>
+                        {claimResult.confirmUrl}
+                      </code>
+                      <button
+                        onClick={() => navigator.clipboard.writeText(claimResult.confirmUrl)}
+                        style={{
+                          background: "#2a2a3e", color: "#e0e0e0", border: "none", borderRadius: 6,
+                          padding: "6px 10px", fontSize: 12, cursor: "pointer", whiteSpace: "nowrap",
+                        }}>
+                        Copy link
+                      </button>
+                    </div>
+                    {claimResult.smsSent && (
+                      <p style={{ color: "#e0a94c", fontSize: 12 }}>
+                        Also sent a text automatically — but delivery isn't confirmed, so use the link above
+                        as the source of truth for now.
+                      </p>
+                    )}
+                    {claimResult.smsError && (
+                      <p style={{ color: "#ff6b6b", fontSize: 12 }}>
+                        Automatic text failed: {claimResult.smsError}
+                      </p>
+                    )}
+                    {claimResult.emailSent && (
+                      <p style={{ color: "#4caf50", fontSize: 12 }}>Also emailed automatically.</p>
+                    )}
+                    {claimResult.emailError && (
+                      <p style={{ color: "#ff6b6b", fontSize: 12 }}>
+                        Automatic email failed: {claimResult.emailError}
+                      </p>
+                    )}
+                  </div>
                 )}
               </div>
             )}
