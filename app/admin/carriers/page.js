@@ -59,8 +59,11 @@ export default function AdminCarriers() {
   return (
     <div>
       <h1 style={{ color: "#fff" }}>Carrier Review</h1>
-      <p style={{ color: "#888", marginBottom: 20 }}>
+      <p style={{ color: "#888", marginBottom: 8 }}>
         Approve carriers after checking their submitted CDL, insurance, and authority links.
+      </p>
+      <p style={{ color: "#888", marginBottom: 20 }}>
+        <a href="/admin/flags" style={{ color: "#5c5cff" }}>View coverage flags →</a>
       </p>
       {carriers.map((c) => (
         <div key={c.id} style={{
