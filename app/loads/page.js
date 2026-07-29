@@ -28,6 +28,7 @@ export default function Loads() {
   const [loading, setLoading] = useState(true);
   const [claiming, setClaiming] = useState(null); // load id being claimed
   const [carrierId, setCarrierId] = useState("");
+  const [carrierSecret, setCarrierSecret] = useState("");
   const [driverType, setDriverType] = useState("self"); // self or assigned
   const [driverName, setDriverName] = useState("");
   const [driverContact, setDriverContact] = useState("");
@@ -90,6 +91,7 @@ export default function Loads() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         carrier_id: carrierId,
+        carrier_secret: carrierSecret,
         is_self_attestation: driverType === "self",
         driver_name: driverType === "self" ? null : driverName,
         driver_contact: driverType === "self" ? null : driverContact,
@@ -250,6 +252,17 @@ export default function Loads() {
                 </label>
                 <input value={carrierId} onChange={(e) => setCarrierId(e.target.value)}
                   placeholder="paste your carrier ID from your verification email"
+                  style={{
+                    width: "100%", padding: 8, marginBottom: 10, background: "#0a0a12",
+                    border: "1px solid #2a2a3e", borderRadius: 6, color: "#e0e0e0", fontSize: 13,
+                  }} />
+
+                <label style={{ display: "block", fontSize: 12, color: "#888", marginBottom: 4 }}>
+                  Your carrier secret
+                </label>
+                <input value={carrierSecret} onChange={(e) => setCarrierSecret(e.target.value)}
+                  type="password"
+                  placeholder="paste the secret you saved at signup"
                   style={{
                     width: "100%", padding: 8, marginBottom: 10, background: "#0a0a12",
                     border: "1px solid #2a2a3e", borderRadius: 6, color: "#e0e0e0", fontSize: 13,
