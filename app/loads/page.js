@@ -315,8 +315,7 @@ export default function Loads() {
                 {claimResult.assignedLinkSent && (
                   <div style={{ marginTop: 4 }}>
                     <p style={{ color: "#e0e0e0", fontSize: 13, marginBottom: 6 }}>
-                      Send this confirmation link to the driver yourself (text, call, email — whatever's fastest).
-                      This is the reliable way to get it to them right now:
+                      Send this confirmation link to the driver yourself (text, call, email — whatever's fastest):
                     </p>
                     <div style={{
                       display: "flex", alignItems: "center", gap: 8, background: "#0a0a12",
@@ -334,17 +333,6 @@ export default function Loads() {
                         Copy link
                       </button>
                     </div>
-                    {claimResult.smsSent && (
-                      <p style={{ color: "#e0a94c", fontSize: 12 }}>
-                        Also sent a text automatically — but delivery isn't confirmed, so use the link above
-                        as the source of truth for now.
-                      </p>
-                    )}
-                    {claimResult.smsError && (
-                      <p style={{ color: "#ff6b6b", fontSize: 12 }}>
-                        Automatic text failed: {claimResult.smsError}
-                      </p>
-                    )}
                     {claimResult.emailSent && (
                       <p style={{ color: "#4caf50", fontSize: 12 }}>Also emailed automatically.</p>
                     )}
