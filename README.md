@@ -8,9 +8,14 @@ load claiming, and the coverage attestation safety system we designed. Your exis
 
 - **/get-verified** — carrier signup form → saves to a real database
 - **/post-load** — shipper load posting form → saves to a real database
-- **/loads** — browse open loads, claim a load, triggers coverage attestation
-- **/confirm/[token]** — the private driver confirmation page (sent via link)
+- **/loads** — browse open loads (with search/filter by lane, equipment, rate, pickup date), claim a
+  load, mark a confirmed load delivered, rate a carrier after delivery
+- **/confirm/[token]** — the private driver confirmation page (sent via SMS or email)
+- **/carriers/[id]** — public carrier profile: verification status + shipper ratings/reviews
+- **/revoked-carriers** — public list of carriers whose verified status has been revoked
 - Full coverage attestation logic: flags, on-hold loads, carrier flag counts
+- Automatic SMS (Twilio) and email (Resend) delivery of the driver confirmation link
+- Daily automated check (Vercel Cron) that warns carriers before their on-file insurance expires
 
 ## Step 1 — Create a free Supabase account (your database)
 
@@ -59,19 +64,42 @@ On your existing GoDaddy Website Builder pages, change the button links:
 
 GoDaddy Website Builder lets you edit a button's link URL directly in its editor — no code needed there.
 
+## If you're setting this up fresh (new Supabase project)
+
+Just run `supabase-schema.sql` — it already includes every table, including `carrier_ratings` and the
+`insurance_alert_sent_at` column.
+
+## If you already had this app running before July 2026
+
+Your Supabase project has the original tables already, so don't re-run `supabase-schema.sql` (it'll
+error on tables that already exist). Instead, run `supabase-migration-ratings-and-alerts.sql` once —
+same steps: SQL Editor > New Query > paste > Run. It only adds what's new: the `carrier_ratings` table
+and the `insurance_alert_sent_at` column on `carriers`.
+
+You'll also want to add these new environment variables (same two places as before — `.env.local` and
+your Vercel project settings):
+
+- `RESEND_API_KEY` / `RESEND_FROM_EMAIL` — powers email delivery of the driver confirmation link when a
+  driver only has an email on file (no phone). Free account at resend.com.
+- `CRON_SECRET` — any long random string. Set it in Vercel's project settings and Vercel will
+  automatically use it to authenticate the daily insurance-expiration check (see `vercel.json`) —
+  nothing else to configure.
+
 ## Next steps / things not yet built
 
-- **Actual SMS/email sending** — the driver confirmation link is generated but not automatically texted/
-  emailed yet. Adding this needs a service like Twilio (SMS) or Resend/SendGrid (email) — marked as a
-  TODO in `app/api/loads/[id]/claim/route.js`.
 - **Carrier login** — carriers currently claim loads by pasting their Carrier ID (found in their
   verification confirmation). A real login system would be a nice upgrade later, not required to launch.
-- **Revoked Credentials page wiring** — the flag counts are tracked (`lifetime_flag_count`), but nothing
-  yet automatically publishes to a public revoked list — that's a manual decision you'd make based on
-  the flag pattern, per the Terms language we drafted.
+- **Re-verification flow** — there's a `pending_reverification` status reserved in the schema for when a
+  carrier's docs need a refresh, but no UI/flow triggers it yet.
+- **Escalating flags** — `coverage_flags` supports `resolved`/`escalated` states in the schema, but only
+  `open` is ever set today; there's no admin action yet to resolve or escalate a flag.
 
 ## Files that matter most
 
-- `supabase-schema.sql` — your database structure
-- `app/api/loads/[id]/claim/route.js` — the core claim + attestation trigger logic
+- `supabase-schema.sql` — full database structure (fresh installs)
+- `supabase-migration-ratings-and-alerts.sql` — incremental migration (existing installs)
+- `vercel.json` — the daily insurance-expiration cron schedule
+- `app/api/loads/[id]/claim/route.js` — the core claim + attestation trigger logic (SMS/email dispatch)
 - `app/api/attestations/[token]/route.js` — where "neither" creates a flag and puts a load on hold
+- `app/api/cron/insurance-alerts/route.js` — the daily insurance-expiration warning job
+- `app/api/loads/[id]/rate/route.js` — carrier rating submission

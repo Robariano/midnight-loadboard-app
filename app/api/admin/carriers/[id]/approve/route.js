@@ -9,7 +9,13 @@ export async function POST(req, { params }) {
   const supabase = getServiceClient();
   const { error } = await supabase
     .from("carriers")
-    .update({ verified_status: "verified", verified_date: new Date().toISOString() })
+    // Reset insurance_alert_sent_at so a fresh approval (presumably with an
+    // updated insurance cert) is eligible for a new expiration warning cycle.
+    .update({
+      verified_status: "verified",
+      verified_date: new Date().toISOString(),
+      insurance_alert_sent_at: null,
+    })
     .eq("id", params.id);
 
   if (error) return Response.json({ error: error.message }, { status: 500 });

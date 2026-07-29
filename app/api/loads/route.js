@@ -29,12 +29,47 @@ export async function POST(req) {
   return Response.json({ load: data }, { status: 201 });
 }
 
-export async function GET() {
+export async function GET(req) {
   const supabase = getServiceClient();
-  const { data, error } = await supabase
-    .from("loads")
-    .select("*")
-    .order("created_at", { ascending: false });
+  const params = req.nextUrl.searchParams;
+
+  let query = supabase.from("loads").select("*, carrier:carriers(id, company_name)");
+
+  // Default to only showing open loads unless the caller explicitly asks
+  // for everything (browse page wants "open" by default so carriers aren't
+  // shown loads someone else already claimed).
+  const status = params.get("status");
+  if (status && status !== "all") {
+    query = query.eq("status", status);
+  } else if (!status) {
+    query = query.eq("status", "open");
+  }
+
+  const originCity = params.get("origin_city");
+  if (originCity) query = query.ilike("pickup_city", `%${originCity}%`);
+
+  const destCity = params.get("destination_city");
+  if (destCity) query = query.ilike("delivery_city", `%${destCity}%`);
+
+  const equipmentType = params.get("equipment_type");
+  if (equipmentType) query = query.eq("equipment_type", equipmentType);
+
+  const pickupAfter = params.get("pickup_after");
+  if (pickupAfter) query = query.gte("pickup_date", pickupAfter);
+
+  const pickupBefore = params.get("pickup_before");
+  if (pickupBefore) query = query.lte("pickup_date", pickupBefore);
+
+  const minRate = params.get("min_rate");
+  if (minRate) query = query.gte("rate", Number(minRate));
+
+  const sort = params.get("sort");
+  if (sort === "rate_desc") query = query.order("rate", { ascending: false, nullsFirst: false });
+  else if (sort === "rate_asc") query = query.order("rate", { ascending: true, nullsFirst: false });
+  else if (sort === "pickup_date") query = query.order("pickup_date", { ascending: true });
+  else query = query.order("created_at", { ascending: false });
+
+  const { data, error } = await query;
 
   if (error) return Response.json({ error: error.message }, { status: 500 });
   return Response.json({ loads: data });

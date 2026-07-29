@@ -15,6 +15,7 @@ create table carriers (
   insurance_link text,
   authority_link text,
   insurance_expiration_date date,
+  insurance_alert_sent_at timestamptz, -- when we last warned this carrier about upcoming expiration
   verified_status text not null default 'pending', -- pending / verified / pending_reverification / revoked
   verified_date timestamptz,
   lifetime_flag_count int not null default 0,
@@ -64,7 +65,20 @@ create table coverage_flags (
   created_at timestamptz not null default now()
 );
 
+-- One rating per delivered load, left by whoever posted the load (shipper).
+create table carrier_ratings (
+  id uuid primary key default uuid_generate_v4(),
+  load_id uuid not null references loads(id) unique,
+  carrier_id uuid not null references carriers(id),
+  rating int not null check (rating between 1 and 5),
+  comment text,
+  rater_name text,
+  rater_email text,
+  created_at timestamptz not null default now()
+);
+
 -- Helpful indexes
 create index on loads (status);
 create index on coverage_attestations (token);
 create index on coverage_flags (carrier_id, status);
+create index on carrier_ratings (carrier_id);
