@@ -1,6 +1,7 @@
 import { getServiceClient } from "../../../../../lib/supabase";
 import { v4 as uuidv4 } from "uuid";
 import { sendCoverageConfirmationSMS, looksLikePhoneNumber, normalizeToE164 } from "../../../../../lib/twilio";
+import { sendCoverageConfirmationEmail, looksLikeEmail } from "../../../../../lib/email";
 
 export async function POST(req, { params }) {
   const loadId = params.id;
@@ -67,6 +68,8 @@ export async function POST(req, { params }) {
 
     let smsSent = false;
     let smsError = null;
+    let emailSent = false;
+    let emailError = null;
 
     if (looksLikePhoneNumber(body.driver_contact)) {
       try {
@@ -82,9 +85,21 @@ export async function POST(req, { params }) {
         console.error(`[twilio] Failed to text driver for load ${loadId}:`, err.message);
         smsError = err.message;
       }
+    } else if (looksLikeEmail(body.driver_contact)) {
+      try {
+        await sendCoverageConfirmationEmail(
+          body.driver_contact.trim(),
+          body.driver_name,
+          confirmUrl
+        );
+        emailSent = true;
+      } catch (err) {
+        // Same reasoning as the SMS branch — don't fail the claim, just
+        // surface the error so the link can be sent manually if needed.
+        console.error(`[email] Failed to email driver for load ${loadId}:`, err.message);
+        emailError = err.message;
+      }
     }
-    // TODO: for email-style driver_contact values, send via an email
-    // service (e.g. Resend, SendGrid) — not implemented yet.
 
     return Response.json({
       assignedLinkSent: true,
@@ -92,6 +107,8 @@ export async function POST(req, { params }) {
       token,
       smsSent,
       smsError,
+      emailSent,
+      emailError,
     });
   }
 }
