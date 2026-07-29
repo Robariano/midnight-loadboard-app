@@ -28,6 +28,7 @@ export default function GetVerified() {
     insurance_expiration_date: "",
   });
   const [status, setStatus] = useState(null);
+  const [carrierInfo, setCarrierInfo] = useState(null);
 
   function update(field, value) {
     setForm((f) => ({ ...f, [field]: value }));
@@ -41,7 +42,9 @@ export default function GetVerified() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(form),
     });
+    const data = await res.json().catch(() => ({}));
     if (res.ok) {
+      setCarrierInfo(data.carrier);
       setStatus("success");
     } else {
       setStatus("error");
@@ -56,6 +59,27 @@ export default function GetVerified() {
           Your documents were submitted. We review everything within 24–48 hours. You'll hear from us at{" "}
           {form.contact_email}.
         </p>
+        {carrierInfo && (
+          <div style={{
+            marginTop: 20, background: "#12121e", border: "1px solid #2a2a3e",
+            borderRadius: 12, padding: 16,
+          }}>
+            <p style={{ color: "#e0a94c", fontWeight: 700, marginBottom: 10, fontSize: 14 }}>
+              Save these now — you'll need both to claim loads once you're verified. We can't show the
+              secret again.
+            </p>
+            <p style={{ fontSize: 12, color: "#888", margin: "0 0 4px" }}>Carrier ID</p>
+            <code style={{
+              display: "block", color: "#5c5cff", fontSize: 13, wordBreak: "break-all", marginBottom: 12,
+            }}>
+              {carrierInfo.id}
+            </code>
+            <p style={{ fontSize: 12, color: "#888", margin: "0 0 4px" }}>Carrier Secret</p>
+            <code style={{ display: "block", color: "#5c5cff", fontSize: 13, wordBreak: "break-all" }}>
+              {carrierInfo.carrier_secret}
+            </code>
+          </div>
+        )}
       </div>
     );
   }
