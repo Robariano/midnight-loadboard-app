@@ -26,6 +26,28 @@ export default function PrivacyPolicy() {
         the messaging providers (such as Twilio) we use to deliver the message itself.
       </p>
 
+      <h2 style={{ color: "#fff", fontSize: 18, marginTop: 24 }}>SMS messaging terms</h2>
+      <p style={{ color: "#e0e0e0", lineHeight: 1.6 }}>
+        A driver's mobile number is entered into Midnight Loadboard by the carrier dispatching that
+        driver, as part of assigning them to a specific load. By entering the number, the carrier
+        confirms the driver has agreed to receive this text as part of their existing working
+        relationship with that carrier.
+      </p>
+      <p style={{ color: "#e0e0e0", lineHeight: 1.6 }}>
+        <strong>Mobile opt-in data is never shared with third parties or affiliates for marketing or
+        promotional purposes.</strong> It is used solely to deliver the coverage confirmation message
+        for the specific load it was submitted for.
+      </p>
+      <p style={{ color: "#e0e0e0", lineHeight: 1.6 }}>
+        <strong>Message frequency:</strong> one message per load assignment. A driver who is assigned
+        multiple loads over time will receive one message per assignment; most drivers receive a
+        single message.
+      </p>
+      <p style={{ color: "#e0e0e0", lineHeight: 1.6 }}>
+        <strong>Message and data rates may apply.</strong> Reply HELP for help. Reply STOP at any time
+        to stop receiving messages.
+      </p>
+
       <h2 style={{ color: "#fff", fontSize: 18, marginTop: 24 }}>Opting out</h2>
       <p style={{ color: "#e0e0e0", lineHeight: 1.6 }}>
         Reply STOP to any text message from us to stop receiving further messages. Because each
