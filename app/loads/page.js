@@ -31,6 +31,7 @@ export default function Loads() {
   const [driverType, setDriverType] = useState("self"); // self or assigned
   const [driverName, setDriverName] = useState("");
   const [driverContact, setDriverContact] = useState("");
+  const [driverConsent, setDriverConsent] = useState(false);
   const [claimResult, setClaimResult] = useState(null);
 
   const [originCity, setOriginCity] = useState("");
@@ -92,6 +93,7 @@ export default function Loads() {
         is_self_attestation: driverType === "self",
         driver_name: driverType === "self" ? null : driverName,
         driver_contact: driverType === "self" ? null : driverContact,
+        driver_consent_confirmed: driverType === "self" ? undefined : driverConsent,
       }),
     });
     const data = await res.json();
@@ -279,13 +281,25 @@ export default function Loads() {
                         width: "100%", padding: 8, marginBottom: 10, background: "#0a0a12",
                         border: "1px solid #2a2a3e", borderRadius: 6, color: "#e0e0e0", fontSize: 13,
                       }} />
+                    <label style={{ display: "flex", gap: 8, alignItems: "flex-start", fontSize: 12, color: "#aaa", marginBottom: 10 }}>
+                      <input type="checkbox" checked={driverConsent}
+                        onChange={(e) => setDriverConsent(e.target.checked)}
+                        style={{ marginTop: 2 }} />
+                      <span>
+                        I confirm this driver has agreed, as part of our working relationship, to receive
+                        this one-time text or email to verify insurance coverage for this load.
+                      </span>
+                    </label>
                   </>
                 )}
 
                 <button onClick={() => submitClaim(load.id)}
+                  disabled={driverType === "assigned" && !driverConsent}
                   style={{
-                    background: "#4caf50", color: "#fff", border: "none", borderRadius: 6,
-                    padding: "8px 16px", fontSize: 13, fontWeight: 700, cursor: "pointer",
+                    background: (driverType === "assigned" && !driverConsent) ? "#2f4f31" : "#4caf50",
+                    color: "#fff", border: "none", borderRadius: 6,
+                    padding: "8px 16px", fontSize: 13, fontWeight: 700,
+                    cursor: (driverType === "assigned" && !driverConsent) ? "not-allowed" : "pointer",
                   }}>
                   Confirm claim
                 </button>

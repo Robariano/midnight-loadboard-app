@@ -11,6 +11,12 @@ export async function POST(req, { params }) {
   if (!body.carrier_id) {
     return Response.json({ error: "Carrier ID is required." }, { status: 400 });
   }
+  if (!body.is_self_attestation && !body.driver_consent_confirmed) {
+    return Response.json(
+      { error: "You must confirm the driver has agreed to receive this text/email before assigning them." },
+      { status: 400 }
+    );
+  }
 
   // 1. Confirm the carrier is actually verified
   const { data: carrier, error: carrierErr } = await supabase
@@ -51,6 +57,7 @@ export async function POST(req, { params }) {
     driver_name: isSelf ? null : body.driver_name,
     driver_contact: isSelf ? null : body.driver_contact,
     is_self_attestation: isSelf,
+    driver_consent_confirmed_at: isSelf ? null : new Date().toISOString(),
     token,
     response: "pending",
   });

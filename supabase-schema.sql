@@ -82,3 +82,9 @@ create index on loads (status);
 create index on coverage_attestations (token);
 create index on coverage_flags (carrier_id, status);
 create index on carrier_ratings (carrier_id);
+
+-- Migration: record when the dispatching carrier confirmed the driver
+-- consented to receive the coverage-confirmation text/email (A2P 10DLC
+-- opt-in audit trail). Safe to run even if it's already been applied.
+alter table coverage_attestations
+  add column if not exists driver_consent_confirmed_at timestamptz;
