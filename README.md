@@ -87,12 +87,8 @@ your Vercel project settings):
 
 ## Next steps / things not yet built
 
-- **Carrier login** — carriers currently claim loads by pasting their Carrier ID (found in their
-  verification confirmation). A real login system would be a nice upgrade later, not required to launch.
-- **Re-verification flow** — there's a `pending_reverification` status reserved in the schema for when a
-  carrier's docs need a refresh, but no UI/flow triggers it yet.
-- **Escalating flags** — `coverage_flags` supports `resolved`/`escalated` states in the schema, but only
-  `open` is ever set today; there's no admin action yet to resolve or escalate a flag.
+- **Done this session:** carrier auth now requires a private `carrier_secret` (issued at signup) alongside the public Carrier ID before claiming a load or updating anything - closes the impersonation gap without a full account system. Self-service re-verification is live at `/reverify/[id]`: carriers can resubmit updated docs themselves using that same secret, the daily insurance-expiration cron now actually pauses lapsed carriers to `pending_reverification` and emails them the link, and admins have a manual "Request Re-verification" button plus a copyable reverify link per carrier. Flag escalation (`/admin/flags`, resolve/escalate) was also already fully built in an earlier session.
+- **Still optional:** a real account system (email/password or magic-link login) instead of the secret-token approach - not required, just a nicer UX if this grows.
 
 ## Files that matter most
 
