@@ -134,23 +134,31 @@ export default function ConfirmPage({ params }) {
 
   return (
     <div>
-      <div
-        style={{
-          background: "#12121e",
-          border: "1px solid #2a2a3e",
-          borderRadius: 12,
-          padding: 20,
-          marginBottom: 16,
-        }}
-      >
-        <p style={{ fontSize: 12, color: "#888", margin: "0 0 4px" }}>You've been assigned a load</p>
-        <p style={{ fontWeight: 700, color: "#fff", fontSize: 17, margin: "0 0 10px", wordBreak: "break-word" }}>
-          {info.load.pickup_city} → {info.load.delivery_city}
-        </p>
-        <p style={{ color: "#888", fontSize: 13, margin: 0 }}>
-          Carrier: {info.carrier.company_name} · Pickup {info.load.pickup_date}
-        </p>
-      </div>
+       <div
+  style={{
+    background: "#12121e",
+    border: "1px solid #2a2a3e",
+    borderRadius: 12,
+    padding: 20,
+    marginBottom: 16,
+  }}
+>
+  <p style={{ fontSize: 12, color: "#888", margin: "0 0 4px" }}>You've been assigned a load</p>
+  {info.load ? (
+    <>
+      <p style={{ fontWeight: 700, color: "#fff", fontSize: 17, margin: "0 0 10px", wordBreak: "break-word" }}>
+        {info.load.pickup_city} → {info.load.delivery_city}
+      </p>
+      <p style={{ color: "#888", fontSize: 13, margin: 0 }}>
+        Carrier: {info.carrier.company_name} · Pickup {info.load.pickup_date}
+      </p>
+    </>
+  ) : (
+    <p style={{ color: "#888", fontSize: 13, margin: 0 }}>
+      Carrier: {info.carrier.company_name}
+    </p>
+  )}
+</div>
 
       <div style={{ background: "#1a1a2e", borderRadius: 8, padding: 16, marginBottom: 20 }}>
         <p style={{ fontSize: 13, fontWeight: 700, color: "#e0e0e0", margin: "0 0 6px" }}>
