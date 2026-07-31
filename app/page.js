@@ -47,15 +47,16 @@ export default function Home() {
     <div>
       {/* Hero */}
       <h1 style={{ color: "#fff", fontSize: 32, lineHeight: 1.25, marginBottom: 12 }}>
-        Every driver on every load, actually covered.
+        Know you're covered before you drive.
       </h1>
       <p style={{ color: "#888", fontSize: 16, lineHeight: 1.6, marginBottom: 28, maxWidth: 560 }}>
-        Midnight Loadboard verifies carriers before they can claim a load, then confirms — privately,
-        directly with the driver — that whoever's actually behind the wheel is covered under an active
-        policy. No phone tag. No trusting a paper certificate that's already expired.
+        A truck can carry valid commercial insurance while the driver behind the wheel isn't actually
+        covered under it. Midnight Loadboard is a free, private coverage check — for drivers to confirm
+        for themselves, or for carriers to confirm with a driver — before the truck ever leaves. Works no
+        matter where the load came from.
       </p>
       <div style={{ display: "flex", gap: 12, marginBottom: 48, flexWrap: "wrap" }}>
-        <a href="/post-load" style={primaryBtn}>Post a Load →</a>
+        <a href="/confirm-coverage" style={primaryBtn}>Confirm Coverage →</a>
         <a href="/get-verified" style={secondaryBtn}>Get Verified as a Carrier →</a>
       </div>
 
@@ -65,10 +66,12 @@ export default function Home() {
           Why coverage attestation matters
         </p>
         <p style={{ color: "#888", fontSize: 14, lineHeight: 1.7, margin: 0 }}>
-          A carrier can hold valid insurance while the driver actually running the load isn't listed on
-          that policy at all. It happens through double brokering, last-minute driver swaps, or carriers
-          who just don't think to check. Whoever posted the load is left exposed and doesn't find out
-          until something goes wrong. We close that gap before the truck ever leaves.
+          Being covered means you're a named or listed driver on the carrier's active policy for that
+          trip — not just that the truck has valid papers. That gap gets missed through double brokering,
+          last-minute driver swaps, or a small carrier moving fast with nobody dedicated to catching it.
+          Whoever's behind the wheel is the one exposed, and usually doesn't find out until something's
+          already gone wrong. This closes that gap before the truck ever leaves — for one driver on one
+          load, in about 30 seconds.
         </p>
       </div>
 
@@ -78,32 +81,33 @@ export default function Home() {
         <div style={cardStyle}>
           <div style={stepNumber}>1</div>
           <p style={{ color: "#fff", fontWeight: 700, fontSize: 14, marginBottom: 6 }}>
-            A load gets posted, a verified carrier claims it
+            Check coverage for any load, from anywhere
           </p>
           <p style={{ color: "#888", fontSize: 13, lineHeight: 1.6, margin: 0 }}>
-            Every carrier on Midnight Loadboard has already submitted their CDL, insurance certificate,
-            and operating authority for review before they can claim anything.
+            Found the load on DAT, Truckstop, or a phone call? Doesn't matter. A driver can check their
+            own coverage directly, no carrier or account required — or a verified carrier can send a
+            driver a private confirmation link.
           </p>
         </div>
         <div style={cardStyle}>
           <div style={{ ...stepNumber, background: "#4caf50" }}>2</div>
           <p style={{ color: "#fff", fontWeight: 700, fontSize: 14, marginBottom: 6 }}>
-            The assigned driver gets one text
+            One private link, one honest question
           </p>
           <p style={{ color: "#888", fontSize: 13, lineHeight: 1.6, margin: 0 }}>
-            If the carrier is driving it themselves, coverage is confirmed instantly. If they're assigning
-            a driver, that driver gets a private link by text — no app to download, no account to create.
+            The driver gets a link by email — no app to download, no account to create — and answers one
+            question: are you actually listed on the active policy for this trip?
           </p>
         </div>
         <div style={cardStyle}>
           <div style={{ ...stepNumber, background: "#e0a94c" }}>3</div>
           <p style={{ color: "#fff", fontWeight: 700, fontSize: 14, marginBottom: 6 }}>
-            The driver answers honestly, and it stays private
+            The answer stays private — the outcome doesn't
           </p>
           <p style={{ color: "#888", fontSize: 13, lineHeight: 1.6, margin: 0 }}>
-            The driver confirms whether they're actually listed on the carrier's policy. Their answer is
-            never shown to the carrier — if something's wrong, the load is flagged and put on hold
-            automatically, and it becomes part of that carrier's record.
+            A carrier never sees how a driver responded. If something's wrong, the carrier just sees that
+            it's flagged, and it becomes part of that carrier's record — enough to act on, without putting
+            the driver on the spot.
           </p>
         </div>
       </div>
@@ -111,12 +115,12 @@ export default function Home() {
       {/* Trust / no fees */}
       <div style={{ ...cardStyle, marginBottom: 48, display: "flex", gap: 32, flexWrap: "wrap" }}>
         <div>
-          <p style={{ color: "#4caf50", fontWeight: 700, fontSize: 14, marginBottom: 4 }}>Free to verify</p>
-          <p style={{ color: "#888", fontSize: 13, margin: 0 }}>No fees, no subscriptions to get credentialed.</p>
+          <p style={{ color: "#4caf50", fontWeight: 700, fontSize: 14, marginBottom: 4 }}>Always free</p>
+          <p style={{ color: "#888", fontSize: 13, margin: 0 }}>No fees, no subscription, no account needed to check your own coverage.</p>
         </div>
         <div>
-          <p style={{ color: "#4caf50", fontWeight: 700, fontSize: 14, marginBottom: 4 }}>New authority welcome</p>
-          <p style={{ color: "#888", fontSize: 13, margin: 0 }}>You don't need years of history — just real, current documents.</p>
+          <p style={{ color: "#4caf50", fontWeight: 700, fontSize: 14, marginBottom: 4 }}>Works with any load</p>
+          <p style={{ color: "#888", fontSize: 13, margin: 0 }}>Not tied to this site's load board — use it alongside DAT, Truckstop, or a direct call.</p>
         </div>
         <div>
           <p style={{ color: "#4caf50", fontWeight: 700, fontSize: 14, marginBottom: 4 }}>Driver answers stay private</p>
@@ -127,9 +131,13 @@ export default function Home() {
       {/* Final CTA */}
       <div style={{ textAlign: "center", padding: "12px 0 8px" }}>
         <p style={{ color: "#fff", fontSize: 16, fontWeight: 700, marginBottom: 16 }}>
-          Ready to see what's open right now?
+          Not sure if you're covered on your next load?
         </p>
-        <a href="/loads" style={primaryBtn}>Browse Open Loads →</a>
+        <a href="/confirm-coverage" style={primaryBtn}>Confirm Coverage →</a>
+        <p style={{ color: "#666", fontSize: 12, marginTop: 20 }}>
+          Also verifying loads through Midnight Loadboard directly?{" "}
+          <a href="/loads" style={{ color: "#5c5cff" }}>Browse open loads →</a>
+        </p>
       </div>
     </div>
   );
