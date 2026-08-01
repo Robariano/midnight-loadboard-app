@@ -30,6 +30,9 @@ export default function RootLayout({ children }) {
             <a href="/loads" style={{ color: "#5c5cff", fontSize: 13, fontWeight: 700, textDecoration: "none" }}>
               Browse Loads
             </a>
+            <a href="/carriers" style={{ color: "#5c5cff", fontSize: 13, fontWeight: 700, textDecoration: "none" }}>
+              Carriers
+            </a>
             <a href="/confirm-coverage" style={{ color: "#5c5cff", fontSize: 13, fontWeight: 700, textDecoration: "none" }}>
               Confirm Coverage
             </a>
