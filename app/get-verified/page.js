@@ -5,14 +5,14 @@ const inputStyle = {
       width: "100%",
       padding: "10px 12px",
       marginBottom: 14,
-      background: "#12121e",
-      border: "1px solid #2a2a3e",
+      background: "#f7f8fa",
+      border: "1px solid #e2e5ea",
       borderRadius: 6,
-      color: "#e0e0e0",
+      color: "#14181f",
       fontSize: 14,
 };
 
-const labelStyle = { display: "block", fontSize: 13, color: "#888", marginBottom: 4 };
+const labelStyle = { display: "block", fontSize: 13, color: "#4b5568", marginBottom: 4 };
 
 const honeypotStyle = { position: "absolute", left: "-9999px", width: 1, height: 1, opacity: 0 };
 
@@ -66,16 +66,16 @@ export default function GetVerified() {
           return (
                     <div>
                       <h1>Submitted</h1>
-              <p style={{ color: "#888" }}>
+              <p style={{ color: "#4b5568" }}>
               Your documents were submitted. We review everything within 24-48 hours. You'll hear from us at{" "}
               {form.contact_email}.
     </p>
-            <p style={{ color: "#888", marginTop: 12 }}>
+            <p style={{ color: "#4b5568", marginTop: 12 }}>
           You're logged in with the account you just created - use it any time to claim loads or update your
                         documents.
               </p>
         <p style={{ marginTop: 16 }}>
-          <a href="/loads" style={{ color: "#5c5cff" }}>Browse loads</a>
+          <a href="/loads" style={{ color: "#1d4ed8" }}>Browse loads</a>
               </p>
               </div>
     );
@@ -83,8 +83,8 @@ export default function GetVerified() {
 
   return (
           <div>
-            <h1 style={{ color: "#fff" }}>Get Your Carrier Credential</h1>
-      <p style={{ color: "#888", marginBottom: 24 }}>
+            <h1 style={{ color: "#14181f" }}>Get Your Carrier Credential</h1>
+      <p style={{ color: "#4b5568", marginBottom: 24 }}>
         Verification is free. No fees. No subscriptions. New authority? You don't need history - just real,
                     current documents.
             </p>
@@ -148,17 +148,17 @@ export default function GetVerified() {
 
                       <button type="submit" disabled={status === "submitting"}
                         style={{
-                          width: "100%", padding: "14px", background: "#4caf50", color: "#fff",
+                          width: "100%", padding: "14px", background: "#166534", color: "#fff",
                           border: "none", borderRadius: 8, fontWeight: 700, fontSize: 15, cursor: "pointer",
           }}>
 {status === "submitting" ? "Submitting..." : "Submit for Verification"}
 </button>
 {status === "error" && (
-              <p style={{ color: "#ff6b6b", marginTop: 12 }}>{error || "Something went wrong - please try again."}</p>
+              <p style={{ color: "#991b1b", marginTop: 12 }}>{error || "Something went wrong - please try again."}</p>
         )}
 </form>
-      <p style={{ color: "#888", marginTop: 16, fontSize: 13 }}>
-        Already have an account? <a href="/login" style={{ color: "#5c5cff" }}>Log in</a>
+      <p style={{ color: "#4b5568", marginTop: 16, fontSize: 13 }}>
+        Already have an account? <a href="/login" style={{ color: "#1d4ed8" }}>Log in</a>
             </p>
             </div>
   );

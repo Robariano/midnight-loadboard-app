@@ -30,18 +30,18 @@ async function getRatings(id) {
 }
 
 const statusBadge = {
-  verified: { bg: "#1a3a1a", color: "#4caf50", label: "Verified" },
-  pending: { bg: "#3a331a", color: "#e0a94c", label: "Verification pending" },
-  pending_reverification: { bg: "#3a331a", color: "#e0a94c", label: "Re-verification pending" },
-  revoked: { bg: "#3a1a1a", color: "#ff6b6b", label: "Revoked" },
+  verified: { bg: "#e9f7ef", color: "#166534", label: "Verified" },
+  pending: { bg: "#fef3e2", color: "#92400e", label: "Verification pending" },
+  pending_reverification: { bg: "#fef3e2", color: "#92400e", label: "Re-verification pending" },
+  revoked: { bg: "#fdecec", color: "#991b1b", label: "Revoked" },
 };
 
 function Stars({ value }) {
   const rounded = Math.round(value);
   return (
-    <span style={{ color: "#e0a94c", fontSize: 16, letterSpacing: 1 }}>
+    <span style={{ color: "#92400e", fontSize: 16, letterSpacing: 1 }}>
       {"★".repeat(rounded)}
-      <span style={{ color: "#2a2a3e" }}>{"★".repeat(5 - rounded)}</span>
+      <span style={{ color: "#e2e5ea" }}>{"★".repeat(5 - rounded)}</span>
     </span>
   );
 }
@@ -50,7 +50,7 @@ export default async function CarrierProfile({ params }) {
   const carrier = await getCarrier(params.id);
 
   if (!carrier) {
-    return <p style={{ color: "#ff6b6b" }}>Carrier not found.</p>;
+    return <p style={{ color: "#991b1b" }}>Carrier not found.</p>;
   }
 
   const { ratings, average, count } = await getRatings(params.id);
@@ -59,7 +59,7 @@ export default async function CarrierProfile({ params }) {
   return (
     <div>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 8 }}>
-        <h1 style={{ color: "#fff", margin: 0 }}>{carrier.company_name}</h1>
+        <h1 style={{ color: "#14181f", margin: 0 }}>{carrier.company_name}</h1>
         <span style={{
           fontSize: 12, padding: "3px 10px", borderRadius: 20, fontWeight: 700,
           background: badge.bg, color: badge.color, whiteSpace: "nowrap",
@@ -67,23 +67,23 @@ export default async function CarrierProfile({ params }) {
           {badge.label}
         </span>
       </div>
-      <p style={{ color: "#888", fontSize: 13, marginBottom: 24 }}>
+      <p style={{ color: "#4b5568", fontSize: 13, marginBottom: 24 }}>
         DOT {carrier.dot_number || "—"} · MC {carrier.mc_number || "—"}
       </p>
 
       <div style={{
-        background: "#12121e", border: "1px solid #2a2a3e", borderRadius: 12,
+        background: "#f7f8fa", border: "1px solid #e2e5ea", borderRadius: 12,
         padding: 20, marginBottom: 24,
       }}>
         {count === 0 ? (
-          <p style={{ color: "#888", margin: 0, fontSize: 14 }}>No ratings yet.</p>
+          <p style={{ color: "#4b5568", margin: 0, fontSize: 14 }}>No ratings yet.</p>
         ) : (
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
             <Stars value={average} />
-            <p style={{ color: "#fff", fontWeight: 700, margin: 0, fontSize: 15 }}>
+            <p style={{ color: "#14181f", fontWeight: 700, margin: 0, fontSize: 15 }}>
               {average.toFixed(1)} / 5
             </p>
-            <p style={{ color: "#888", margin: 0, fontSize: 13 }}>
+            <p style={{ color: "#4b5568", margin: 0, fontSize: 13 }}>
               ({count} {count === 1 ? "rating" : "ratings"})
             </p>
           </div>
@@ -92,25 +92,25 @@ export default async function CarrierProfile({ params }) {
 
       {ratings.length > 0 && (
         <div>
-          <h2 style={{ color: "#fff", fontSize: 16, marginBottom: 12 }}>Shipper reviews</h2>
+          <h2 style={{ color: "#14181f", fontSize: 16, marginBottom: 12 }}>Shipper reviews</h2>
           {ratings.map((r) => (
             <div key={r.id} style={{
-              background: "#12121e", border: "1px solid #2a2a3e", borderRadius: 10,
+              background: "#f7f8fa", border: "1px solid #e2e5ea", borderRadius: 10,
               padding: 14, marginBottom: 10,
             }}>
               <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6 }}>
                 <Stars value={r.rating} />
-                <span style={{ color: "#666", fontSize: 12 }}>
+                <span style={{ color: "#6b7280", fontSize: 12 }}>
                   {new Date(r.created_at).toLocaleDateString()}
                 </span>
               </div>
               {r.comment && (
-                <p style={{ color: "#e0e0e0", fontSize: 13, margin: "0 0 4px", lineHeight: 1.6 }}>
+                <p style={{ color: "#14181f", fontSize: 13, margin: "0 0 4px", lineHeight: 1.6 }}>
                   {r.comment}
                 </p>
               )}
               {r.rater_name && (
-                <p style={{ color: "#666", fontSize: 12, margin: 0 }}>— {r.rater_name}</p>
+                <p style={{ color: "#6b7280", fontSize: 12, margin: 0 }}>— {r.rater_name}</p>
               )}
             </div>
           ))}

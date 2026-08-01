@@ -16,14 +16,14 @@ export default function Account() {
         window.location.href = "/";
   }
 
-  if (carrier === undefined) return <p style={{ color: "#888" }}>Loading...</p>;
+  if (carrier === undefined) return <p style={{ color: "#4b5568" }}>Loading...</p>;
 
   if (!carrier) {
         return (
                 <div>
-                  <h1 style={{ color: "#fff" }}>Not Logged In</h1>
-        <p style={{ color: "#888" }}>
-          <a href="/login" style={{ color: "#5c5cff" }}>Log in</a> to view your account.
+                  <h1 style={{ color: "#14181f" }}>Not Logged In</h1>
+        <p style={{ color: "#4b5568" }}>
+          <a href="/login" style={{ color: "#1d4ed8" }}>Log in</a> to view your account.
     </p>
     </div>
     );
@@ -32,19 +32,19 @@ export default function Account() {
 
     return (
           <div>
-            <h1 style={{ color: "#fff" }}>Your Account</h1>
+            <h1 style={{ color: "#14181f" }}>Your Account</h1>
       <div style={{
-              background: "#12121e", border: "1px solid #2a2a3e", borderRadius: 12,
+              background: "#f7f8fa", border: "1px solid #e2e5ea", borderRadius: 12,
               padding: 20, marginBottom: 20,
     }}>
-        <p style={{ color: "#fff", fontWeight: 700, fontSize: 17, margin: "0 0 6px" }}>{carrier.company_name}</p>
-        <p style={{ color: "#888", fontSize: 13, margin: 0 }}>Status: {carrier.verified_status}</p>
+        <p style={{ color: "#14181f", fontWeight: 700, fontSize: 17, margin: "0 0 6px" }}>{carrier.company_name}</p>
+        <p style={{ color: "#4b5568", fontSize: 13, margin: 0 }}>Status: {carrier.verified_status}</p>
       </div>
-      <p style={{ color: "#888", fontSize: 13, marginBottom: 20 }}>
-        <a href={`/reverify/${carrier.id}`} style={{ color: "#5c5cff" }}>Update your documents</a>
+      <p style={{ color: "#4b5568", fontSize: 13, marginBottom: 20 }}>
+        <a href={`/reverify/${carrier.id}`} style={{ color: "#1d4ed8" }}>Update your documents</a>
       </p>
       <button onClick={logout} style={{
-              background: "transparent", color: "#ff6b6b", border: "1px solid #ff6b6b",
+              background: "transparent", color: "#991b1b", border: "1px solid #991b1b",
               borderRadius: 6, padding: "8px 16px", fontSize: 13, fontWeight: 700, cursor: "pointer",
     }}>
         Log Out

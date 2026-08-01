@@ -5,13 +5,13 @@ const inputStyle = {
       width: "100%",
       padding: "10px 12px",
       marginBottom: 14,
-      background: "#12121e",
-      border: "1px solid #2a2a3e",
+      background: "#f7f8fa",
+      border: "1px solid #e2e5ea",
       borderRadius: 6,
-      color: "#e0e0e0",
+      color: "#14181f",
       fontSize: 14,
 };
-const labelStyle = { display: "block", fontSize: 13, color: "#888", marginBottom: 4 };
+const labelStyle = { display: "block", fontSize: 13, color: "#4b5568", marginBottom: 4 };
 
 // Hidden from sighted users and unreachable by keyboard tab order - real
 // visitors never touch this field. Simple bots that fill in every input
@@ -52,21 +52,21 @@ export default function PostLoad() {
   if (status === "success") {
           return (
                     <div>
-                      <h1 style={{ color: "#4caf50" }}>✓ Load Posted</h1>
-            <p style={{ color: "#888" }}>Your load is live. Verified carriers can now see and claim it.</p>
-        <p style={{ color: "#888", marginTop: 12 }}>
+                      <h1 style={{ color: "#166534" }}>✓ Load Posted</h1>
+            <p style={{ color: "#4b5568" }}>Your load is live. Verified carriers can now see and claim it.</p>
+        <p style={{ color: "#4b5568", marginTop: 12 }}>
           We just emailed you a private link to check its status, update the rate/notes, or cancel it later -
                         keep that email, since posting doesn't require an account.
               </p>
-        <a href="/loads" style={{ color: "#5c5cff" }}>View open loads →</a>
+        <a href="/loads" style={{ color: "#1d4ed8" }}>View open loads →</a>
               </div>
     );
 }
 
   return (
           <div>
-            <h1 style={{ color: "#fff" }}>Post a Load</h1>
-      <p style={{ color: "#888", marginBottom: 24 }}>
+            <h1 style={{ color: "#14181f" }}>Post a Load</h1>
+      <p style={{ color: "#4b5568", marginBottom: 24 }}>
         Every carrier is pre-verified. Payment terms are clear upfront. No surprises.
             </p>
       <form onSubmit={handleSubmit}>
@@ -123,7 +123,7 @@ export default function PostLoad() {
 
                       <button type="submit" disabled={status === "submitting"}
                         style={{
-                          width: "100%", padding: "14px", background: "#5c5cff", color: "#fff",
+                          width: "100%", padding: "14px", background: "#1d4ed8", color: "#fff",
                           border: "none", borderRadius: 8, fontWeight: 700, fontSize: 15, cursor: "pointer",
           }}>
 {status === "submitting" ? "Posting..." : "Submit Load"}

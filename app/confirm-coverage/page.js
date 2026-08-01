@@ -34,14 +34,14 @@ export default function ConfirmCoverage() {
     setSubmitting(false);
   }
 
-  if (me === undefined) return <p style={{ color: "#888" }}>Loading...</p>;
+  if (me === undefined) return <p style={{ color: "#4b5568" }}>Loading...</p>;
 
   if (!me) {
     return (
       <div>
-        <h1 style={{ color: "#fff" }}>Confirm Driver Coverage</h1>
-        <p style={{ color: "#888" }}>
-          <a href="/login?next=/confirm-coverage" style={{ color: "#5c5cff" }}>Log in</a> to use this tool.
+        <h1 style={{ color: "#14181f" }}>Confirm Driver Coverage</h1>
+        <p style={{ color: "#4b5568" }}>
+          <a href="/login?next=/confirm-coverage" style={{ color: "#1d4ed8" }}>Log in</a> to use this tool.
         </p>
       </div>
     );
@@ -50,8 +50,8 @@ export default function ConfirmCoverage() {
   if (me.verified_status !== "verified") {
     return (
       <div>
-        <h1 style={{ color: "#fff" }}>Confirm Driver Coverage</h1>
-        <p style={{ color: "#e0a94c", fontSize: 13 }}>
+        <h1 style={{ color: "#14181f" }}>Confirm Driver Coverage</h1>
+        <p style={{ color: "#92400e", fontSize: 13 }}>
           Your account isn't verified yet (status: {me.verified_status}). You'll be able to use this tool
           once an admin approves your documents.
         </p>
@@ -61,8 +61,8 @@ export default function ConfirmCoverage() {
 
   return (
     <div>
-      <h1 style={{ color: "#fff", marginBottom: 4 }}>Confirm Driver Coverage</h1>
-      <p style={{ color: "#888", fontSize: 13, marginBottom: 20 }}>
+      <h1 style={{ color: "#14181f", marginBottom: 4 }}>Confirm Driver Coverage</h1>
+      <p style={{ color: "#4b5568", fontSize: 13, marginBottom: 20 }}>
         Got a load from somewhere other than Midnight Loadboard (DAT, Truckstop, a phone call, whatever)?
         Use this to send a quick coverage confirmation to whoever's driving — same safety check, no load
         listing required.
@@ -70,17 +70,17 @@ export default function ConfirmCoverage() {
 
       {!result && (
         <div style={{
-          background: "#12121e", border: "1px solid #2a2a3e", borderRadius: 12,
+          background: "#f7f8fa", border: "1px solid #e2e5ea", borderRadius: 12,
           padding: "16px 20px",
         }}>
-          <label style={{ display: "block", fontSize: 12, color: "#888", marginBottom: 6 }}>
+          <label style={{ display: "block", fontSize: 12, color: "#4b5568", marginBottom: 6 }}>
             Who's actually driving this load?
           </label>
-          <label style={{ display: "block", fontSize: 13, color: "#e0e0e0", marginBottom: 6 }}>
+          <label style={{ display: "block", fontSize: 13, color: "#14181f", marginBottom: 6 }}>
             <input type="radio" checked={driverType === "self"}
               onChange={() => setDriverType("self")} /> I'm driving it myself
           </label>
-          <label style={{ display: "block", fontSize: 13, color: "#e0e0e0", marginBottom: 10 }}>
+          <label style={{ display: "block", fontSize: 13, color: "#14181f", marginBottom: 10 }}>
             <input type="radio" checked={driverType === "assigned"}
               onChange={() => setDriverType("assigned")} /> I'm assigning a driver
           </label>
@@ -90,20 +90,20 @@ export default function ConfirmCoverage() {
               <input value={driverName} onChange={(e) => setDriverName(e.target.value)}
                 placeholder="Driver's name"
                 style={{
-                  width: "100%", padding: 8, marginBottom: 8, background: "#0a0a12",
-                  border: "1px solid #2a2a3e", borderRadius: 6, color: "#e0e0e0", fontSize: 13,
+                  width: "100%", padding: 8, marginBottom: 8, background: "#ffffff",
+                  border: "1px solid #e2e5ea", borderRadius: 6, color: "#14181f", fontSize: 13,
                 }} />
               <input value={driverContact} onChange={(e) => setDriverContact(e.target.value)}
                 placeholder="Driver's email"
                 style={{
-                  width: "100%", padding: 8, marginBottom: 8, background: "#0a0a12",
-                  border: "1px solid #2a2a3e", borderRadius: 6, color: "#e0e0e0", fontSize: 13,
+                  width: "100%", padding: 8, marginBottom: 8, background: "#ffffff",
+                  border: "1px solid #e2e5ea", borderRadius: 6, color: "#14181f", fontSize: 13,
                 }} />
-              <p style={{ fontSize: 11, color: "#666", marginTop: -4, marginBottom: 10 }}>
+              <p style={{ fontSize: 11, color: "#6b7280", marginTop: -4, marginBottom: 10 }}>
                 Texting isn't available right now — we'll email the driver a private confirmation link instead.
               </p>
 
-              <label style={{ display: "flex", gap: 8, alignItems: "flex-start", fontSize: 12, color: "#aaa", marginBottom: 10 }}>
+              <label style={{ display: "flex", gap: 8, alignItems: "flex-start", fontSize: 12, color: "#6b7280", marginBottom: 10 }}>
                 <input type="checkbox" checked={driverConsent}
                   onChange={(e) => setDriverConsent(e.target.checked)}
                   style={{ marginTop: 2 }} />
@@ -118,7 +118,7 @@ export default function ConfirmCoverage() {
           <button onClick={submit}
             disabled={submitting || (driverType === "assigned" && !driverConsent)}
             style={{
-              background: (driverType === "assigned" && !driverConsent) ? "#2f4f31" : "#4caf50",
+              background: (driverType === "assigned" && !driverConsent) ? "#d1e7dd" : "#166534",
               color: "#fff", border: "none", borderRadius: 6,
               padding: "8px 16px", fontSize: 13, fontWeight: 700,
               cursor: (driverType === "assigned" && !driverConsent) ? "not-allowed" : "pointer",
@@ -130,17 +130,17 @@ export default function ConfirmCoverage() {
 
       {result && (
         <div style={{
-          background: "#12121e", border: "1px solid #2a2a3e", borderRadius: 12,
+          background: "#f7f8fa", border: "1px solid #e2e5ea", borderRadius: 12,
           padding: "16px 20px",
         }}>
-          {result.error && <p style={{ color: "#ff6b6b", fontSize: 13 }}>{result.error}</p>}
+          {result.error && <p style={{ color: "#991b1b", fontSize: 13 }}>{result.error}</p>}
           {result.selfAttestationNeeded && <SelfAttestPrompt token={result.token} />}
           {result.assignedLinkSent && (
             <div>
-              <p style={{ color: "#4caf50", fontSize: 12, marginBottom: 8 }}>
+              <p style={{ color: "#166534", fontSize: 12, marginBottom: 8 }}>
                 Confirmation email sent to the driver automatically.
               </p>
-              <p style={{ color: "#888", fontSize: 12, marginBottom: 6 }}>
+              <p style={{ color: "#4b5568", fontSize: 12, marginBottom: 6 }}>
                 You can also share this link directly if needed:
               </p>
               <LinkBox url={result.confirmUrl} />
@@ -148,7 +148,7 @@ export default function ConfirmCoverage() {
           )}
           {result.assignedLinkSent === false && result.confirmUrl && (
             <div>
-              <p style={{ color: "#ff6b6b", fontSize: 13, marginBottom: 6 }}>
+              <p style={{ color: "#991b1b", fontSize: 13, marginBottom: 6 }}>
                 {result.error || "The confirmation email couldn't be sent."} Share this link with the driver yourself:
               </p>
               <LinkBox url={result.confirmUrl} />
@@ -157,7 +157,7 @@ export default function ConfirmCoverage() {
           {!result.error && (
             <button onClick={() => { setResult(null); setDriverName(""); setDriverContact(""); setDriverConsent(false); }}
               style={{
-                marginTop: 12, background: "transparent", color: "#888", border: "1px solid #2a2a3e",
+                marginTop: 12, background: "transparent", color: "#4b5568", border: "1px solid #e2e5ea",
                 borderRadius: 6, padding: "8px 16px", fontSize: 13, cursor: "pointer",
               }}>
               Send another
@@ -172,14 +172,14 @@ export default function ConfirmCoverage() {
 function LinkBox({ url }) {
   return (
     <div style={{
-      display: "flex", alignItems: "center", gap: 8, background: "#0a0a12",
-      border: "1px solid #2a2a3e", borderRadius: 6, padding: "8px 10px", marginBottom: 8,
+      display: "flex", alignItems: "center", gap: 8, background: "#ffffff",
+      border: "1px solid #e2e5ea", borderRadius: 6, padding: "8px 10px", marginBottom: 8,
     }}>
-      <code style={{ color: "#5c5cff", fontSize: 13, wordBreak: "break-all", flex: 1 }}>{url}</code>
+      <code style={{ color: "#1d4ed8", fontSize: 13, wordBreak: "break-all", flex: 1 }}>{url}</code>
       <button
         onClick={() => navigator.clipboard.writeText(url)}
         style={{
-          background: "#2a2a3e", color: "#e0e0e0", border: "none", borderRadius: 6,
+          background: "#e2e5ea", color: "#14181f", border: "none", borderRadius: 6,
           padding: "6px 10px", fontSize: 12, cursor: "pointer", whiteSpace: "nowrap",
         }}>
         Copy link
@@ -198,18 +198,18 @@ function SelfAttestPrompt({ token }) {
     });
     setAnswered(true);
   }
-  if (answered) return <p style={{ color: "#4caf50", fontSize: 13 }}>Thanks - recorded.</p>;
+  if (answered) return <p style={{ color: "#166534", fontSize: 13 }}>Thanks - recorded.</p>;
   return (
     <div>
-      <p style={{ fontSize: 13, color: "#e0e0e0", marginBottom: 8 }}>
+      <p style={{ fontSize: 13, color: "#14181f", marginBottom: 8 }}>
         Confirm: are you covered under your own active insurance/authority for this trip?
       </p>
       <button onClick={() => respond("own_authority")}
-        style={{ marginRight: 8, background: "#4caf50", color: "#fff", border: "none", borderRadius: 6, padding: "6px 12px", fontSize: 12 }}>
+        style={{ marginRight: 8, background: "#166534", color: "#fff", border: "none", borderRadius: 6, padding: "6px 12px", fontSize: 12 }}>
         Yes
       </button>
       <button onClick={() => respond("neither")}
-        style={{ background: "#3a1a1a", color: "#ff6b6b", border: "1px solid #ff6b6b", borderRadius: 6, padding: "6px 12px", fontSize: 12 }}>
+        style={{ background: "#fdecec", color: "#991b1b", border: "1px solid #991b1b", borderRadius: 6, padding: "6px 12px", fontSize: 12 }}>
         No / not sure
       </button>
     </div>
