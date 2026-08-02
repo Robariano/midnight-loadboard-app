@@ -5,14 +5,14 @@ const inputStyle = {
     width: "100%",
     padding: "10px 12px",
     marginBottom: 14,
-    background: "#12121e",
-    border: "1px solid #2a2a3e",
+    background: "#f7f8fa",
+    border: "1px solid #e2e5ea",
     borderRadius: 6,
-    color: "#e0e0e0",
+    color: "#14181f",
     fontSize: 14,
 };
 
-const labelStyle = { display: "block", fontSize: 13, color: "#888", marginBottom: 4 };
+const labelStyle = { display: "block", fontSize: 13, color: "#4b5568", marginBottom: 4 };
 
 export default function ResetPassword({ params }) {
     const { token } = params;
@@ -46,7 +46,7 @@ export default function ResetPassword({ params }) {
 
   return (
         <div>
-          <h1 style={{ color: "#fff" }}>Set a New Password</h1>
+          <h1 style={{ color: "#14181f" }}>Set a New Password</h1>
       <form onSubmit={handleSubmit}>
           <label style={labelStyle}>New Password</label>
         <input style={inputStyle} type="password" required minLength={8} value={password}
@@ -57,12 +57,12 @@ export default function ResetPassword({ params }) {
           onChange={(e) => setConfirm(e.target.value)} />
 
                     <button type="submit" disabled={status === "submitting"} style={{
-                      width: "100%", padding: "14px", background: "#4caf50", color: "#fff",
+                      width: "100%", padding: "14px", background: "#166534", color: "#fff",
                       border: "none", borderRadius: 8, fontWeight: 700, fontSize: 15, cursor: "pointer",
           }}>
 {status === "submitting" ? "Saving..." : "Set Password"}
 </button>
-{status === "error" && <p style={{ color: "#ff6b6b", marginTop: 12 }}>{error}</p>}
+{status === "error" && <p style={{ color: "#991b1b", marginTop: 12 }}>{error}</p>}
   </form>
   </div>
   );

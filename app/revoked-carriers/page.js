@@ -31,14 +31,14 @@ export default async function RevokedCarriers() {
 
   return (
     <div>
-      <h1 style={{ color: "#fff" }}>Revoked Credentials</h1>
-      <p style={{ color: "#888", lineHeight: 1.6 }}>
+      <h1 style={{ color: "#14181f" }}>Revoked Credentials</h1>
+      <p style={{ color: "#4b5568", lineHeight: 1.6 }}>
         Midnight Loadboard revokes a carrier's verified status if their authority, insurance, or
         safety standing no longer checks out, or if they've been flagged for repeatedly assigning
         loads to drivers who weren't actually covered. This page is public so any shipper or
         carrier can double-check a company's standing before doing business with them.
       </p>
-      <p style={{ color: "#888", lineHeight: 1.6, marginBottom: 24 }}>
+      <p style={{ color: "#4b5568", lineHeight: 1.6, marginBottom: 24 }}>
         A revoked carrier can reapply for verification at any time by correcting the issue that
         led to revocation. This list only reflects verification status on Midnight Loadboard — it
         is not a substitute for checking a carrier's FMCSA record directly.
@@ -47,14 +47,14 @@ export default async function RevokedCarriers() {
       {carriers.length === 0 ? (
         <div
           style={{
-            background: "#12121e",
-            border: "1px solid #2a2a3e",
+            background: "#f7f8fa",
+            border: "1px solid #e2e5ea",
             borderRadius: 12,
             padding: 24,
             textAlign: "center",
           }}
         >
-          <p style={{ color: "#4caf50", fontWeight: 700, margin: 0 }}>
+          <p style={{ color: "#166534", fontWeight: 700, margin: 0 }}>
             No carriers currently have a revoked credential.
           </p>
         </div>
@@ -64,19 +64,19 @@ export default async function RevokedCarriers() {
             <div
               key={c.id}
               style={{
-                background: "#12121e",
-                border: "1px solid #2a2a3e",
-                borderLeft: "3px solid #ff6b6b",
+                background: "#f7f8fa",
+                border: "1px solid #e2e5ea",
+                borderLeft: "3px solid #991b1b",
                 borderRadius: 12,
                 padding: 16,
                 marginBottom: 12,
               }}
             >
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <p style={{ fontWeight: 700, color: "#fff", margin: 0 }}>{c.company_name}</p>
-                <span style={{ fontSize: 12, color: "#ff6b6b", fontWeight: 700 }}>REVOKED</span>
+                <p style={{ fontWeight: 700, color: "#14181f", margin: 0 }}>{c.company_name}</p>
+                <span style={{ fontSize: 12, color: "#991b1b", fontWeight: 700 }}>REVOKED</span>
               </div>
-              <p style={{ fontSize: 12, color: "#888", margin: "6px 0 0" }}>
+              <p style={{ fontSize: 12, color: "#4b5568", margin: "6px 0 0" }}>
                 DOT {c.dot_number || "—"} · MC {c.mc_number || "—"}
               </p>
             </div>
@@ -84,9 +84,9 @@ export default async function RevokedCarriers() {
         </div>
       )}
 
-      <p style={{ color: "#666", fontSize: 12, marginTop: 24 }}>
+      <p style={{ color: "#6b7280", fontSize: 12, marginTop: 24 }}>
         Believe a listing here is a mistake? Contact{" "}
-        <a href="mailto:robertariano@gmail.com" style={{ color: "#5c5cff" }}>
+        <a href="mailto:robertariano@gmail.com" style={{ color: "#1d4ed8" }}>
           robertariano@gmail.com
         </a>.
       </p>

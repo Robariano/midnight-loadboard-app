@@ -22,7 +22,7 @@ export default function AdminLogin() {
 
   return (
     <div>
-      <h1 style={{ color: "#fff" }}>Admin Login</h1>
+      <h1 style={{ color: "#14181f" }}>Admin Login</h1>
       <form onSubmit={handleSubmit} style={{ maxWidth: 320 }}>
         <input
           type="password"
@@ -30,18 +30,18 @@ export default function AdminLogin() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           style={{
-            width: "100%", padding: 10, marginBottom: 12, background: "#12121e",
-            border: "1px solid #2a2a3e", borderRadius: 6, color: "#e0e0e0", fontSize: 14,
+            width: "100%", padding: 10, marginBottom: 12, background: "#f7f8fa",
+            border: "1px solid #e2e5ea", borderRadius: 6, color: "#14181f", fontSize: 14,
           }}
         />
         <button type="submit" style={{
-          width: "100%", padding: 12, background: "#5c5cff", color: "#fff",
+          width: "100%", padding: 12, background: "#1d4ed8", color: "#fff",
           border: "none", borderRadius: 8, fontWeight: 700, cursor: "pointer",
         }}>
           Log in
         </button>
       </form>
-      {error && <p style={{ color: "#ff6b6b", marginTop: 10 }}>{error}</p>}
+      {error && <p style={{ color: "#991b1b", marginTop: 10 }}>{error}</p>}
     </div>
   );
 }

@@ -5,14 +5,14 @@ const inputStyle = {
       width: "100%",
       padding: "10px 12px",
       marginBottom: 14,
-      background: "#12121e",
-      border: "1px solid #2a2a3e",
+      background: "#f7f8fa",
+      border: "1px solid #e2e5ea",
       borderRadius: 6,
-      color: "#e0e0e0",
+      color: "#14181f",
       fontSize: 14,
 };
 
-const labelStyle = { display: "block", fontSize: 13, color: "#888", marginBottom: 4 };
+const labelStyle = { display: "block", fontSize: 13, color: "#4b5568", marginBottom: 4 };
 
 export default function Reverify({ params }) {
       const { id: carrierId } = params;
@@ -59,17 +59,17 @@ export default function Reverify({ params }) {
           }
   }
 
-  if (carrier === undefined) return <p style={{ color: "#888" }}>Loading...</p>;
+  if (carrier === undefined) return <p style={{ color: "#4b5568" }}>Loading...</p>;
 
   if (!carrier) {
           return (
                     <div>
-                      <h1 style={{ color: "#fff" }}>Update Your Verification</h1>
-        <p style={{ color: "#888", marginBottom: 20 }}>
+                      <h1 style={{ color: "#14181f" }}>Update Your Verification</h1>
+        <p style={{ color: "#4b5568", marginBottom: 20 }}>
           Log in to your carrier account to submit updated documents.
               </p>
         <a href={`/login?next=/reverify/${carrierId}`} style={{
-                        display: "inline-block", padding: "12px 20px", background: "#4caf50", color: "#fff",
+                        display: "inline-block", padding: "12px 20px", background: "#166534", color: "#fff",
                         borderRadius: 8, fontWeight: 700, fontSize: 14, textDecoration: "none",
           }}>
           Log In
@@ -81,8 +81,8 @@ export default function Reverify({ params }) {
   if (status === "success") {
           return (
                     <div>
-                      <h1 style={{ color: "#4caf50" }}>Submitted</h1>
-        <p style={{ color: "#888" }}>
+                      <h1 style={{ color: "#166534" }}>Submitted</h1>
+        <p style={{ color: "#4b5568" }}>
           Your updated documents were submitted for review. We review everything within 24-48 hours,
                         and you'll be able to claim loads again once approved.
               </p>
@@ -92,9 +92,9 @@ export default function Reverify({ params }) {
 
   return (
           <div>
-            <h1 style={{ color: "#fff" }}>Update Your Verification</h1>
-      <p style={{ color: "#888", marginBottom: 24 }}>
-        Logged in as <strong style={{ color: "#e0e0e0" }}>{carrier.company_name}</strong>. Use this if your
+            <h1 style={{ color: "#14181f" }}>Update Your Verification</h1>
+      <p style={{ color: "#4b5568", marginBottom: 24 }}>
+        Logged in as <strong style={{ color: "#14181f" }}>{carrier.company_name}</strong>. Use this if your
         insurance has expired or your documents are out of date - we review everything within 24-48 hours.
             </p>
       <form onSubmit={handleSubmit}>
@@ -140,7 +140,7 @@ export default function Reverify({ params }) {
                         style={{
                           width: "100%",
                           padding: "14px",
-                          background: "#4caf50",
+                          background: "#166534",
                           color: "#fff",
                           border: "none",
                           borderRadius: 8,
@@ -151,7 +151,7 @@ export default function Reverify({ params }) {
         >
 {status === "submitting" ? "Submitting..." : "Submit Updated Documents"}
 </button>
-{status === "error" && <p style={{ color: "#ff6b6b", marginTop: 12 }}>{error}</p>}
+{status === "error" && <p style={{ color: "#991b1b", marginTop: 12 }}>{error}</p>}
     </form>
     </div>
   );
