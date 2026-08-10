@@ -42,7 +42,7 @@ export async function POST(req) {
                             verified_status: "pending",
                             password_hash: hashPassword(body.password),
             })
-            .select()
+            .select("id, company_name, verified_status")
             .single();
 
     if (error) {
@@ -59,7 +59,7 @@ export async function GET() {
         const supabase = getServiceClient();
         const { data, error } = await supabase
             .from("carriers")
-            .select("id, company_name, verified_status, verified_date, open_flag_count")
+            .select("id, company_name, verified_status, verified_date")
             .eq("verified_status", "verified");
 
     if (error) return Response.json({ error: error.message }, { status: 500 });
