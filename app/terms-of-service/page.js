@@ -34,7 +34,7 @@ export default function TermsOfService() {
       <h2 style={{ color: "#14181f", fontSize: 18, marginTop: 24 }}>Contact</h2>
       <p style={{ color: "#14181f", lineHeight: 1.6 }}>
         Questions about these terms can be sent to{" "}
-        <a href="mailto:robertariano@gmail.com" style={{ color: "#1d4ed8" }}>robertariano@gmail.com</a>.
+        <a href="mailto:support@midnightloadboard.com" style={{ color: "#1d4ed8" }}>support@midnightloadboard.com</a>.
       </p>
     </div>
   );
