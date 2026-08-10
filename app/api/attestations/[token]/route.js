@@ -1,4 +1,5 @@
 import { getServiceClient } from "../../../../lib/supabase";
+import { sendCoverageFlagNoticeEmail } from "../../../../lib/email";
 export async function GET(req, { params }) {
   const supabase = getServiceClient();
   const { data: attestation, error } = await supabase
@@ -47,7 +48,7 @@ export async function POST(req, { params }) {
     // Increment carrier flag counts (fetch then update — simple approach for MVP)
     const { data: carrier } = await supabase
       .from("carriers")
-      .select("lifetime_flag_count, open_flag_count")
+      .select("lifetime_flag_count, open_flag_count, contact_email, company_name")
       .eq("id", attestation.carrier_id)
       .single();
     await supabase
@@ -57,6 +58,11 @@ export async function POST(req, { params }) {
         open_flag_count: (carrier?.open_flag_count || 0) + 1,
       })
       .eq("id", attestation.carrier_id);
+    if (carrier?.contact_email) {
+      sendCoverageFlagNoticeEmail(carrier.contact_email, carrier.company_name).catch((err) =>
+        console.error("[email] Failed to send coverage flag notice:", err.message)
+      );
+    }
   } else if (attestation.load_id) {
     // Covered — load moves to confirmed (only applies to loads claimed on
     // Midnight Loadboard itself; standalone attestations have no load to update)
