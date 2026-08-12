@@ -22,7 +22,7 @@ const WARNING_WINDOW_DAYS = 14;
 
 function isAuthorized(req) {
   const cronSecret = process.env.CRON_SECRET;
-  if (!cronSecret) return true; // not configured yet - allow, but this should be set in production
+  if (!cronSecret) return false; // not configured - deny by default, don't allow unauthenticated access
   const auth = req.headers.get("authorization");
   return auth === `Bearer ${cronSecret}`;
 }
