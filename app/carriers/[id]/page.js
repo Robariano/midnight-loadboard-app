@@ -30,7 +30,7 @@ async function getRatings(id) {
 }
 
 const statusBadge = {
-  verified: { bg: "#e9f7ef", color: "#166534", label: "Verified" },
+  verified: { bg: "#e9f7ef", color: "#166534", label: "Documents Reviewed" },
   pending: { bg: "#fef3e2", color: "#92400e", label: "Verification pending" },
   pending_reverification: { bg: "#fef3e2", color: "#92400e", label: "Re-verification pending" },
   revoked: { bg: "#fdecec", color: "#991b1b", label: "Revoked" },
@@ -70,6 +70,16 @@ export default async function CarrierProfile({ params }) {
       <p style={{ color: "#4b5568", fontSize: 13, marginBottom: 24 }}>
         DOT {carrier.dot_number || "—"} · MC {carrier.mc_number || "—"}
       </p>
+        {carrier.verified_status === "verified" && (
+        <p style={{ color: "#8a92a0", fontSize: 12, marginTop: -18, marginBottom: 24 }}>
+          This reflects the documents this carrier submitted to us — it is not an independent
+          confirmation of ownership or an FMCSA verification. Always check{" "}
+          <a href="https://safer.fmcsa.dot.gov/CompanySnapshot.aspx" target="_blank" rel="noreferrer" style={{ color: "#5c5cff" }}>
+            FMCSA's records
+          </a>{" "}
+          directly.
+        </p>
+      )}
 
       <div style={{
         background: "#f7f8fa", border: "1px solid #e2e5ea", borderRadius: 12,
