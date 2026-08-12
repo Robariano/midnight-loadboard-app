@@ -63,7 +63,7 @@ export default async function CarriersDirectory() {
                 fontSize: 12, padding: "3px 10px", borderRadius: 20, fontWeight: 700,
                 background: "#1a3a1a", color: "#4caf50", whiteSpace: "nowrap",
               }}>
-                Verified
+                Documents Reviewed
               </span>
             </Link>
           ))}
