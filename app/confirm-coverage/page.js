@@ -3,12 +3,6 @@ import { useEffect, useState } from "react";
 
 export default function ConfirmCoverage() {
   const [me, setMe] = useState(undefined);
-  const [driverType, setDriverType] = useState("self");
-  const [driverName, setDriverName] = useState("");
-  const [driverContact, setDriverContact] = useState("");
-  const [driverConsent, setDriverConsent] = useState(false);
-  const [result, setResult] = useState(null);
-  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     fetch("/api/carriers/me")
@@ -16,6 +10,157 @@ export default function ConfirmCoverage() {
       .then((d) => setMe(d.carrier))
       .catch(() => setMe(null));
   }, []);
+
+  if (me === undefined) return <p style={{ color: "#4b5568" }}>Loading...</p>;
+
+  // Logged in, but not yet verified — this doesn't apply to the public
+  // check below (which anyone can use regardless of carrier status), only
+  // to the carrier-specific "assign a driver" tool further down.
+  if (me && me.verified_status !== "verified") {
+    return (
+      <div>
+        <h1 style={{ color: "#14181f" }}>Confirm Driver Coverage</h1>
+        <p style={{ color: "#92400e", fontSize: 13, marginBottom: 24 }}>
+          Your carrier account isn't verified yet (status: {me.verified_status}), so the "assign a
+          driver" tool isn't available until an admin approves your documents.
+        </p>
+        <PublicCheck />
+      </div>
+    );
+  }
+
+  // Logged in and verified — full tool: check on yourself, or send a
+  // private link to a driver you're assigning.
+  if (me && me.verified_status === "verified") {
+    return <VerifiedCarrierTool />;
+  }
+
+  // Not logged in at all — this is the "no account needed" public tool
+  // described in Midnight Loadboard's marketing.
+  return (
+    <div>
+      <h1 style={{ color: "#14181f", marginBottom: 4 }}>Confirm Driver Coverage</h1>
+      <p style={{ color: "#4b5568", fontSize: 13, marginBottom: 20 }}>
+        Free, private, 30 seconds. Tell us who you're driving for and answer one question — the
+        carrier never sees your answer, only whether the load ends up flagged.
+      </p>
+      <PublicCheck />
+      <p style={{ color: "#8a92a0", fontSize: 12, marginTop: 20 }}>
+        Are you a carrier looking to send this check to a driver you're assigning?{" "}
+        <a href="/login?next=/confirm-coverage" style={{ color: "#1d4ed8" }}>Log in</a>.
+      </p>
+    </div>
+  );
+}
+
+// The genuinely public, no-account version — a driver names who they're
+// driving for and answers the coverage question directly, no email
+// round-trip needed since they're answering live themselves.
+function PublicCheck() {
+  const [carrierName, setCarrierName] = useState("");
+  const [dotNumber, setDotNumber] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const [result, setResult] = useState(null);
+
+  async function submit(response) {
+    if (!carrierName.trim()) {
+      setResult({ error: "Please enter the company name you're driving for." });
+      return;
+    }
+    setSubmitting(true);
+    const res = await fetch("/api/public-coverage-check", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ carrier_name: carrierName, dot_number: dotNumber, response }),
+    });
+    const data = await res.json();
+    setResult(data);
+    setSubmitting(false);
+  }
+
+  if (result && !result.error) {
+    return (
+      <div style={{
+        background: "#f7f8fa", border: "1px solid #e2e5ea", borderRadius: 12,
+        padding: "16px 20px",
+      }}>
+        <p style={{ color: "#166534", fontSize: 13, margin: 0 }}>
+          Thanks — recorded privately. {result.flagged
+            ? "Nothing further needed from you."
+            : "You're all set."}
+        </p>
+        <button
+          onClick={() => { setResult(null); setCarrierName(""); setDotNumber(""); }}
+          style={{
+            marginTop: 12, background: "transparent", color: "#4b5568", border: "1px solid #e2e5ea",
+            borderRadius: 6, padding: "8px 16px", fontSize: 13, cursor: "pointer",
+          }}>
+          Check another
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <div style={{
+      background: "#f7f8fa", border: "1px solid #e2e5ea", borderRadius: 12,
+      padding: "16px 20px",
+    }}>
+      {result?.error && (
+        <p style={{ color: "#991b1b", fontSize: 13, marginBottom: 10 }}>{result.error}</p>
+      )}
+      <label style={{ display: "block", fontSize: 12, color: "#4b5568", marginBottom: 6 }}>
+        Company name you're driving for
+      </label>
+      <input value={carrierName} onChange={(e) => setCarrierName(e.target.value)}
+        placeholder="e.g. Acme Trucking LLC"
+        style={{
+          width: "100%", padding: 8, marginBottom: 8, background: "#ffffff",
+          border: "1px solid #e2e5ea", borderRadius: 6, color: "#14181f", fontSize: 13,
+        }} />
+      <label style={{ display: "block", fontSize: 12, color: "#4b5568", marginBottom: 6 }}>
+        DOT number (optional, helps us match the right company)
+      </label>
+      <input value={dotNumber} onChange={(e) => setDotNumber(e.target.value)}
+        placeholder="e.g. 1234567"
+        style={{
+          width: "100%", padding: 8, marginBottom: 14, background: "#ffffff",
+          border: "1px solid #e2e5ea", borderRadius: 6, color: "#14181f", fontSize: 13,
+        }} />
+
+      <p style={{ fontSize: 13, color: "#14181f", marginBottom: 8 }}>
+        Are you covered under this carrier's active insurance/authority for this trip?
+      </p>
+      <button onClick={() => submit("covered")} disabled={submitting}
+        style={{
+          marginRight: 8, background: "#166534", color: "#fff", border: "none",
+          borderRadius: 6, padding: "8px 16px", fontSize: 13, fontWeight: 700,
+          cursor: submitting ? "not-allowed" : "pointer",
+        }}>
+        Yes
+      </button>
+      <button onClick={() => submit("not_covered")} disabled={submitting}
+        style={{
+          background: "#fdecec", color: "#991b1b", border: "1px solid #991b1b",
+          borderRadius: 6, padding: "8px 16px", fontSize: 13, fontWeight: 700,
+          cursor: submitting ? "not-allowed" : "pointer",
+        }}>
+        No / not sure
+      </button>
+    </div>
+  );
+}
+
+// The existing tool for logged-in, verified carriers: check on yourself,
+// or send a private link to a driver you're assigning to a load found
+// elsewhere (DAT, Truckstop, a phone call, etc.).
+function VerifiedCarrierTool() {
+  const [driverType, setDriverType] = useState("self");
+  const [driverName, setDriverName] = useState("");
+  const [driverContact, setDriverContact] = useState("");
+  const [driverConsent, setDriverConsent] = useState(false);
+  const [result, setResult] = useState(null);
+  const [submitting, setSubmitting] = useState(false);
 
   async function submit() {
     setSubmitting(true);
@@ -32,31 +177,6 @@ export default function ConfirmCoverage() {
     const data = await res.json();
     setResult(data);
     setSubmitting(false);
-  }
-
-  if (me === undefined) return <p style={{ color: "#4b5568" }}>Loading...</p>;
-
-  if (!me) {
-    return (
-      <div>
-        <h1 style={{ color: "#14181f" }}>Confirm Driver Coverage</h1>
-        <p style={{ color: "#4b5568" }}>
-          <a href="/login?next=/confirm-coverage" style={{ color: "#1d4ed8" }}>Log in</a> to use this tool.
-        </p>
-      </div>
-    );
-  }
-
-  if (me.verified_status !== "verified") {
-    return (
-      <div>
-        <h1 style={{ color: "#14181f" }}>Confirm Driver Coverage</h1>
-        <p style={{ color: "#92400e", fontSize: 13 }}>
-          Your account isn't verified yet (status: {me.verified_status}). You'll be able to use this tool
-          once an admin approves your documents.
-        </p>
-      </div>
-    );
   }
 
   return (
