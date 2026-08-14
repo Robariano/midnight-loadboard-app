@@ -75,6 +75,25 @@ export default function ManageLoad({ params }) {
         }
   }
 
+  async function handleReopen() {
+        if (!confirm("Reopen this load to the board? Any verified carrier will be able to claim it again.")) return;
+        setStatus("saving");
+        setError(null);
+        const res = await fetch(`/api/loads/manage/${token}`, {
+                method: "PATCH",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ reopen: true }),
+        });
+        const data = await res.json().catch(() => ({}));
+        if (res.ok) {
+                setLoad(data.load);
+                setStatus("reopened");
+        } else {
+                setStatus("error");
+                setError(data.error || "Something went wrong.");
+        }
+  }
+
   if (load === undefined) {
         return (
                 <div>
@@ -93,6 +112,7 @@ export default function ManageLoad({ params }) {
 }
 
   const isOpen = load.status === "open";
+  const isOnHold = load.status === "on_hold";
 
   return (
         <div>
@@ -101,12 +121,29 @@ export default function ManageLoad({ params }) {
 {load.pickup_city} → {load.delivery_city} · {load.equipment_type}
 </p>
 
-{!isOpen && (
+{!isOpen && !isOnHold && (
           <p style={{ color: load.status === "cancelled" ? "#991b1b" : "#166534", marginBottom: 16 }}>
 {load.status === "cancelled"
              ? "This load has been cancelled."
               : "This load has already been claimed by a carrier and can no longer be edited here."}
 </p>
+      )}
+
+{isOnHold && (
+        <div style={{ marginBottom: 16 }}>
+          <p style={{ color: "#991b1b", marginBottom: 12 }}>
+            This load is on hold. The driver assigned to it wasn't able to confirm they're covered under
+            the carrier's active insurance policy for this trip.
+          </p>
+          <button type="button" onClick={handleReopen} disabled={status === "saving"} style={{
+              width: "100%", padding: "14px", background: "#1d4ed8", color: "#fff",
+              border: "none", borderRadius: 8, fontWeight: 700, fontSize: 15, cursor: "pointer",
+          }}>
+            {status === "saving" ? "Reopening..." : "Reopen This Load to the Board"}
+          </button>
+          {status === "reopened" && <p style={{ color: "#166534", marginTop: 12 }}>Reopened — visible to carriers again.</p>}
+          {status === "error" && <p style={{ color: "#991b1b", marginTop: 12 }}>{error}</p>}
+        </div>
       )}
 
 {isOpen && (
