@@ -32,22 +32,25 @@ export async function PATCH(req, { params }) {
 
   if (fetchErr) return Response.json({ error: fetchErr.message }, { status: 500 });
     if (!load) return Response.json({ error: "Load not found." }, { status: 404 });
-    if (load.status !== "open") {
-          return Response.json(
-            { error: "This load has already been claimed and can no longer be edited here." },
-            { status: 409 }
-                );
-    }
+   if (load.status !== "open" && load.status !== "on_hold") {
+        return Response.json(
+          { error: "This load has already been claimed and can no longer be edited here." },
+          { status: 409 }
+              );
+  }
 
   const updates = {};
-    if (body.cancel) {
+    if (body.reopen && load.status === "on_hold") {
+          updates.status = "open";
+          updates.claimed_by_carrier_id = null;
+          updates.claimed_at = null;
+    } else if (body.cancel) {
           updates.status = "cancelled";
-    } else {
+    } else if (load.status === "open") {
           if (body.rate !== undefined) updates.rate = body.rate || null;
           if (body.notes !== undefined) updates.notes = body.notes || null;
           if (body.pickup_date !== undefined) updates.pickup_date = body.pickup_date;
     }
-
   const { data, error } = await supabase
       .from("loads")
       .update(updates)
