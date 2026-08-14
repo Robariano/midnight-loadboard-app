@@ -1,5 +1,6 @@
 import { getServiceClient } from "../../../../lib/supabase";
 import { sendCoverageFlagNoticeEmail } from "../../../../lib/email";
+import { sendLoadOnHoldEmail } from "../../../../lib/email";
 export async function GET(req, { params }) {
   const supabase = getServiceClient();
   const { data: attestation, error } = await supabase
@@ -44,6 +45,17 @@ export async function POST(req, { params }) {
     });
     if (attestation.load_id) {
       await supabase.from("loads").update({ status: "on_hold" }).eq("id", attestation.load_id);
+      const { data: load } = await supabase
+        .from("loads")
+        .select("shipper_email, pickup_city, delivery_city, manage_token")
+        .eq("id", attestation.load_id)
+        .single();
+      if (load?.shipper_email) {
+        const manageUrl = `https://midnightloadboard.com/loads/manage/${load.manage_token}`;
+        sendLoadOnHoldEmail(load.shipper_email, load.pickup_city, load.delivery_city, manageUrl).catch((err) =>
+          console.error("[email] Failed to send load-on-hold notice:", err.message)
+        );
+      }
     }
     // Increment carrier flag counts (fetch then update — simple approach for MVP)
     const { data: carrier } = await supabase
