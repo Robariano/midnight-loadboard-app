@@ -36,6 +36,9 @@ export default function RootLayout({ children }) {
             <a href="/confirm-coverage" style={{ color: "#1d4ed8", fontSize: 13, fontWeight: 700, textDecoration: "none" }}>
               Confirm Coverage
             </a>
+            <a href="/check-broker" style={{ color: "#1d4ed8", fontSize: 13, fontWeight: 700, textDecoration: "none" }}>
+              Check a Broker
+            </a>
             <a href="/post-load" style={{ color: "#1d4ed8", fontSize: 13, fontWeight: 700, textDecoration: "none" }}>
               Post a Load
             </a>
