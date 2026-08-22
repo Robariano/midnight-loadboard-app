@@ -1,6 +1,11 @@
 import { lookupCarrierByDot, lookupCarrierByMc } from "../../../lib/fmcsa";
 import { checkRateLimit } from "../../../lib/rate-limit";
 
+// Public broker/carrier lookup - anyone can check whether a DOT or MC
+// number belongs to a real, active entity on file with FMCSA. Reuses the
+// same lookup functions already used for the admin carrier review screen -
+// FMCSA's registration database covers carriers, brokers, and freight
+// forwarders under the same system, so this works for broker numbers too.
 export async function POST(req) {
   const rateLimit = await checkRateLimit(req, "check_broker", { maxPerWindow: 15, windowMinutes: 60 });
   if (!rateLimit.allowed) {
@@ -29,18 +34,7 @@ export async function POST(req) {
         { status: 404 }
       );
     }
-
-    // TEMPORARY DEBUG: also fetch and return the raw authority response so
-    // we can see FMCSA's actual field names and fix the mapping correctly.
-    // Remove this block once the fix is confirmed.
-    const webKey = process.env.FMCSA_WEB_KEY;
-    const rawRes = await fetch(
-      `https://mobile.fmcsa.dot.gov/qc/services/carriers/${snapshot.dotNumber}/authority?webKey=${webKey}`,
-      { headers: { Accept: "application/json" } }
-    );
-    const rawJson = await rawRes.json().catch(() => null);
-
-    return Response.json({ snapshot, _debug_raw_authority: rawJson });
+    return Response.json({ snapshot });
   } catch (err) {
     return Response.json({ error: "Couldn't reach FMCSA right now. Try again in a moment." }, { status: 502 });
   }
