@@ -13,7 +13,8 @@ const inputStyle = {
 };
 
 export default function CheckBroker() {
-    const [dotNumber, setDotNumber] = useState("");
+    const [numberType, setNumberType] = useState("dot");
+    const [numberValue, setNumberValue] = useState("");
     const [status, setStatus] = useState(null);
     const [snapshot, setSnapshot] = useState(null);
     const [error, setError] = useState(null);
@@ -23,10 +24,13 @@ export default function CheckBroker() {
         setStatus("checking");
         setError(null);
         setSnapshot(null);
+        const body = numberType === "dot"
+          ? { dot_number: numberValue }
+          : { mc_number: numberValue };
         const res = await fetch("/api/check-broker", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ dot_number: dotNumber }),
+                body: JSON.stringify(body),
         });
         const data = await res.json().catch(() => ({}));
         if (res.ok) {
@@ -43,26 +47,45 @@ export default function CheckBroker() {
           <h1 style={{ color: "#14181f" }}>Check a Broker</h1>
       <p style={{ color: "#4b5568", marginBottom: 24 }}>
         Before you take a load, confirm the broker is a real, active, registered entity — free, no
-        account needed. Enter their DOT number below. This confirms registration status only, not
-        reputation or payment history — always use your own judgment alongside this check.
+        account needed. This confirms registration status only, not reputation or payment history —
+        always use your own judgment alongside this check.
       </p>
 
       <form onSubmit={handleCheck}>
+        <div style={{ display: "flex", gap: 8, marginBottom: 12 }}>
+          <button type="button" onClick={() => setNumberType("dot")} style={{
+            flex: 1, padding: "8px", borderRadius: 6, cursor: "pointer",
+            border: numberType === "dot" ? "2px solid #1d4ed8" : "1px solid #e2e5ea",
+            background: numberType === "dot" ? "#eef2ff" : "#f7f8fa",
+            color: "#14181f", fontWeight: 700, fontSize: 13,
+          }}>
+            I have their DOT number
+          </button>
+          <button type="button" onClick={() => setNumberType("mc")} style={{
+            flex: 1, padding: "8px", borderRadius: 6, cursor: "pointer",
+            border: numberType === "mc" ? "2px solid #1d4ed8" : "1px solid #e2e5ea",
+            background: numberType === "mc" ? "#eef2ff" : "#f7f8fa",
+            color: "#14181f", fontWeight: 700, fontSize: 13,
+          }}>
+            I have their MC number
+          </button>
+        </div>
+
         <label style={{ display: "block", fontSize: 13, color: "#4b5568", marginBottom: 4 }}>
-          DOT Number
+          {numberType === "dot" ? "DOT Number" : "MC Number"}
         </label>
         <input
           style={inputStyle}
           type="text"
-          value={dotNumber}
-          onChange={(e) => setDotNumber(e.target.value)}
-          placeholder="e.g. 123456"
+          value={numberValue}
+          onChange={(e) => setNumberValue(e.target.value)}
+          placeholder={numberType === "dot" ? "e.g. 123456" : "e.g. 654321"}
         />
         <button type="submit" disabled={status === "checking"} style={{
           width: "100%", padding: "14px", background: "#1d4ed8", color: "#fff",
           border: "none", borderRadius: 8, fontWeight: 700, fontSize: 15, cursor: "pointer",
         }}>
-          {status === "checking" ? "Checking..." : "Check This DOT Number"}
+          {status === "checking" ? "Checking..." : "Check This Number"}
         </button>
       </form>
 
