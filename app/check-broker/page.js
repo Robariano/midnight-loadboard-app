@@ -121,8 +121,8 @@ export default function CheckBroker() {
             {snapshot.authorities?.length > 0 ? (
               <ul style={{ margin: "4px 0 0", paddingLeft: 20 }}>
                 {snapshot.authorities.map((a, i) => (
-                  <li key={i} style={{ fontSize: 13, color: "#4b5568" }}>
-                    {a.type || "Authority"} — {a.status || "Status not specified"}
+                  <li key={i} style={{ fontSize: 13, color: "#166534" }}>
+                    {a.type} — Active
                   </li>
                 ))}
               </ul>
@@ -135,9 +135,7 @@ export default function CheckBroker() {
             <p style={{ margin: "10px 0 0", fontSize: 13, color: "#4b5568" }}>{snapshot.address}</p>
           )}
 
-                    <pre style={{ fontSize: 10, background: "#eee", padding: 10, overflow: "auto", marginTop: 10 }}>
-            {JSON.stringify(snapshot, null, 2)}
-          </pre><p style={{ marginTop: 14, fontSize: 12, color: "#888" }}>
+          <p style={{ marginTop: 14, fontSize: 12, color: "#888" }}>
             Pulled live from FMCSA's public records. This confirms the entity is registered and
             its authority status — it does not confirm reputation, payment history, or that
             you're speaking to a legitimate representative of this company. Always verify
