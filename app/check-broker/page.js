@@ -135,7 +135,9 @@ export default function CheckBroker() {
             <p style={{ margin: "10px 0 0", fontSize: 13, color: "#4b5568" }}>{snapshot.address}</p>
           )}
 
-          <p style={{ marginTop: 14, fontSize: 12, color: "#888" }}>
+                    <pre style={{ fontSize: 10, background: "#eee", padding: 10, overflow: "auto", marginTop: 10 }}>
+            {JSON.stringify(snapshot, null, 2)}
+          </pre><p style={{ marginTop: 14, fontSize: 12, color: "#888" }}>
             Pulled live from FMCSA's public records. This confirms the entity is registered and
             its authority status — it does not confirm reputation, payment history, or that
             you're speaking to a legitimate representative of this company. Always verify
