@@ -12,18 +12,79 @@ const inputStyle = {
     fontSize: 14,
 };
 
+function BrokerRatingForm({ dotNumber, onSubmitted }) {
+    const [rating, setRating] = useState(5);
+    const [comment, setComment] = useState("");
+    const [raterName, setRaterName] = useState("");
+    const [result, setResult] = useState(null);
+
+  async function submit() {
+        const res = await fetch("/api/broker-ratings", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ dot_number: dotNumber, rating, comment, rater_name: raterName }),
+        });
+        const data = await res.json().catch(() => ({}));
+        setResult(data);
+        if (data.rating) onSubmitted();
+  }
+
+  if (result?.rating) {
+        return <p style={{ color: "#166534", fontSize: 13 }}>Thanks — your rating was recorded.</p>;
+  }
+
+  return (
+        <div style={{ borderTop: "1px solid #e2e5ea", paddingTop: 12, marginTop: 12 }}>
+          <p style={{ fontSize: 13, color: "#14181f", marginBottom: 8 }}>Rate your experience with this broker</p>
+      {result?.error && <p style={{ color: "#991b1b", fontSize: 12, marginBottom: 8 }}>{result.error}</p>}
+      <select value={rating} onChange={(e) => setRating(Number(e.target.value))} style={{
+        padding: 8, marginBottom: 8, background: "#ffffff", border: "1px solid #e2e5ea",
+        borderRadius: 6, color: "#14181f", fontSize: 13,
+      }}>
+        {[5, 4, 3, 2, 1].map((n) => <option key={n} value={n}>{"*".repeat(n)} ({n})</option>)}
+      </select>
+      <input value={raterName} onChange={(e) => setRaterName(e.target.value)}
+        placeholder="Your name (optional)"
+        style={{ display: "block", width: "100%", padding: 8, marginBottom: 8, background: "#ffffff",
+          border: "1px solid #e2e5ea", borderRadius: 6, color: "#14181f", fontSize: 13 }} />
+      <textarea value={comment} onChange={(e) => setComment(e.target.value)}
+        placeholder="How'd it go? (optional)" rows={2}
+        style={{ display: "block", width: "100%", padding: 8, marginBottom: 8, background: "#ffffff",
+          border: "1px solid #e2e5ea", borderRadius: 6, color: "#14181f", fontSize: 13, resize: "vertical" }} />
+      <button onClick={submit} style={{
+        background: "#166534", color: "#fff", border: "none", borderRadius: 6,
+        padding: "8px 16px", fontSize: 13, fontWeight: 700, cursor: "pointer",
+      }}>
+        Submit rating
+      </button>
+      <p style={{ fontSize: 11, color: "#8a92a0", marginTop: 8 }}>
+        Anyone can submit a rating here — this isn't tied to a verified transaction. Treat it as
+        informal, crowd-sourced feedback, not a guarantee.
+      </p>
+    </div>
+  );
+}
+
 export default function CheckBroker() {
     const [numberType, setNumberType] = useState("dot");
     const [numberValue, setNumberValue] = useState("");
     const [status, setStatus] = useState(null);
     const [snapshot, setSnapshot] = useState(null);
+    const [ratingsData, setRatingsData] = useState(null);
     const [error, setError] = useState(null);
+
+  async function loadRatings(dotNumber) {
+        const res = await fetch(`/api/broker-ratings?dot_number=${encodeURIComponent(dotNumber)}`);
+        const data = await res.json().catch(() => ({}));
+        setRatingsData(data);
+  }
 
   async function handleCheck(e) {
         e.preventDefault();
         setStatus("checking");
         setError(null);
         setSnapshot(null);
+        setRatingsData(null);
         const body = numberType === "dot"
           ? { dot_number: numberValue }
           : { mc_number: numberValue };
@@ -36,6 +97,7 @@ export default function CheckBroker() {
         if (res.ok) {
                 setSnapshot(data.snapshot);
                 setStatus("done");
+                if (data.snapshot?.dotNumber) loadRatings(String(data.snapshot.dotNumber));
         } else {
                 setError(data.error || "Something went wrong.");
                 setStatus("error");
@@ -103,7 +165,7 @@ export default function CheckBroker() {
             <p style={{ fontSize: 13, color: "#4b5568", margin: "0 0 10px" }}>DBA: {snapshot.dbaName}</p>
           )}
 
-                    <p style={{ margin: "6px 0", fontSize: 14 }}>
+          <p style={{ margin: "6px 0", fontSize: 14 }}>
             <strong>FMCSA operating status:</strong>{" "}
             <span style={{ color: snapshot.allowToOperate ? "#166534" : "#4b5568" }}>
               {snapshot.allowToOperate ? "Active" : "Not flagged as active for-hire authority"}
@@ -133,6 +195,29 @@ export default function CheckBroker() {
 
           {snapshot.address && (
             <p style={{ margin: "10px 0 0", fontSize: 13, color: "#4b5568" }}>{snapshot.address}</p>
+          )}
+
+          {ratingsData && (
+            <div style={{ marginTop: 14, borderTop: "1px solid #e2e5ea", paddingTop: 12 }}>
+              <p style={{ fontSize: 14, fontWeight: 700, color: "#14181f", marginBottom: 6 }}>
+                Driver feedback{ratingsData.count > 0 ? ` — ${ratingsData.average.toFixed(1)} / 5 (${ratingsData.count} rating${ratingsData.count === 1 ? "" : "s"})` : ""}
+              </p>
+              {ratingsData.count === 0 && (
+                <p style={{ fontSize: 13, color: "#4b5568" }}>No ratings yet — be the first to share your experience.</p>
+              )}
+              {ratingsData.ratings?.map((r) => (
+                <div key={r.id} style={{ marginBottom: 8, fontSize: 13 }}>
+                  <span style={{ color: "#166534" }}>{"*".repeat(r.rating)}</span>{" "}
+                  <span style={{ color: "#8a92a0" }}>{new Date(r.created_at).toLocaleDateString()}</span>
+                  {r.rater_name && <span style={{ color: "#4b5568" }}> — {r.rater_name}</span>}
+                  {r.comment && <p style={{ margin: "2px 0 0", color: "#14181f" }}>{r.comment}</p>}
+                </div>
+              ))}
+              <BrokerRatingForm
+                dotNumber={String(snapshot.dotNumber)}
+                onSubmitted={() => loadRatings(String(snapshot.dotNumber))}
+              />
+            </div>
           )}
 
           <p style={{ marginTop: 14, fontSize: 12, color: "#888" }}>
