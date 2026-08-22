@@ -17,7 +17,6 @@ export default function CheckBroker() {
     const [numberValue, setNumberValue] = useState("");
     const [status, setStatus] = useState(null);
     const [snapshot, setSnapshot] = useState(null);
-    const [debugRaw, setDebugRaw] = useState(null);
     const [error, setError] = useState(null);
 
   async function handleCheck(e) {
@@ -25,7 +24,6 @@ export default function CheckBroker() {
         setStatus("checking");
         setError(null);
         setSnapshot(null);
-        setDebugRaw(null);
         const body = numberType === "dot"
           ? { dot_number: numberValue }
           : { mc_number: numberValue };
@@ -37,7 +35,6 @@ export default function CheckBroker() {
         const data = await res.json().catch(() => ({}));
         if (res.ok) {
                 setSnapshot(data.snapshot);
-                setDebugRaw(data._debug_raw_authority);
                 setStatus("done");
         } else {
                 setError(data.error || "Something went wrong.");
@@ -118,14 +115,24 @@ export default function CheckBroker() {
               {snapshot.outOfService ? `Yes (${snapshot.outOfServiceDate || "date unknown"})` : "No"}
             </span>
           </p>
+
+          <div style={{ marginTop: 10 }}>
+            <strong style={{ fontSize: 14 }}>Authority on file:</strong>{" "}
+            {snapshot.authorities?.length > 0 ? (
+              <ul style={{ margin: "4px 0 0", paddingLeft: 20 }}>
+                {snapshot.authorities.map((a, i) => (
+                  <li key={i} style={{ fontSize: 13, color: "#4b5568" }}>
+                    {a.type || "Authority"} — {a.status || "Status not specified"}
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <span style={{ fontSize: 13, color: "#4b5568" }}>None on file with FMCSA</span>
+            )}
+          </div>
+
           {snapshot.address && (
             <p style={{ margin: "10px 0 0", fontSize: 13, color: "#4b5568" }}>{snapshot.address}</p>
-          )}
-
-          {debugRaw && (
-            <pre style={{ fontSize: 10, background: "#eee", padding: 10, overflow: "auto", marginTop: 10 }}>
-              {JSON.stringify(debugRaw, null, 2)}
-            </pre>
           )}
 
           <p style={{ marginTop: 14, fontSize: 12, color: "#888" }}>
