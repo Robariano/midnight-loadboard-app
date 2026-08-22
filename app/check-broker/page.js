@@ -103,10 +103,10 @@ export default function CheckBroker() {
             <p style={{ fontSize: 13, color: "#4b5568", margin: "0 0 10px" }}>DBA: {snapshot.dbaName}</p>
           )}
 
-          <p style={{ margin: "6px 0", fontSize: 14 }}>
-            <strong>Allowed to operate:</strong>{" "}
-            <span style={{ color: snapshot.allowToOperate ? "#166534" : "#991b1b" }}>
-              {snapshot.allowToOperate ? "Yes" : "No"}
+                    <p style={{ margin: "6px 0", fontSize: 14 }}>
+            <strong>FMCSA operating status:</strong>{" "}
+            <span style={{ color: snapshot.allowToOperate ? "#166534" : "#4b5568" }}>
+              {snapshot.allowToOperate ? "Active" : "Not flagged as active for-hire authority"}
             </span>
           </p>
           <p style={{ margin: "6px 0", fontSize: 14 }}>
