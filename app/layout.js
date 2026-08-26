@@ -42,6 +42,9 @@ export default function RootLayout({ children }) {
             <a href="/roadside" style={{ color: "#1d4ed8", fontSize: 13, fontWeight: 700, textDecoration: "none" }}>
               Roadside &amp; Repair
             </a>
+            <a href="/my-documents" style={{ color: "#1d4ed8", fontSize: 13, fontWeight: 700, textDecoration: "none" }}>
+              My Documents
+            </a>
             <a href="/post-load" style={{ color: "#1d4ed8", fontSize: 13, fontWeight: 700, textDecoration: "none" }}>
               Post a Load
             </a>
