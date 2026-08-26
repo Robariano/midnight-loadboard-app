@@ -42,17 +42,18 @@ export async function POST(req) {
 
   if (uploadError) return Response.json({ error: uploadError.message }, { status: 500 });
 
-  const { data: urlData } = supabase.storage
+    const { data: urlData, error: urlError } = await supabase.storage
     .from("driver-documents")
-    .getPublicUrl(filePath);
+    .createSignedUrl(filePath, 60 * 60 * 24 * 365);
+
+  if (urlError) return Response.json({ error: urlError.message }, { status: 500 });
 
   const { data, error } = await supabase
     .from("driver_documents")
     .insert({
       carrier_id: carrierId,
       document_type: documentType,
-      file_url: urlData.publicUrl,
-      original_filename: file.name,
+      file_url: urlData.signedUrl,      original_filename: file.name,
       notes: notes || null,
     })
     .select()
