@@ -1,6 +1,7 @@
 import { getServiceClient } from "../../../lib/supabase";
 import { hashPassword, createSessionCookie } from "../../../lib/carrier-auth";
 import { checkRateLimit } from "../../../lib/rate-limit";
+import { lookupCarrierByDot, lookupCarrierByMc } from "../../../lib/fmcsa";
 
 export async function POST(req) {
         const body = await req.json();
@@ -48,6 +49,38 @@ export async function POST(req) {
     if (error) {
                 console.error(error);
                 return Response.json({ error: error.message }, { status: 500 });
+    }
+
+    // Run the FMCSA check right away so it's already sitting on this
+    // carrier's row by the time an admin opens the Carrier Review panel —
+    // same live data the "Check FMCSA" button pulls (lib/fmcsa.js), just
+    // saved automatically instead of requiring a manual click. Awaited
+    // (not fire-and-forget) because this is a Vercel serverless function —
+    // work kicked off after the response is sent isn't guaranteed to
+    // finish. Never blocks signup itself: any failure here (no FMCSA
+    // record, FMCSA_WEB_KEY missing, API error) is caught and recorded on
+    // the row instead of failing the request — the admin can always
+    // re-check manually later via the existing button.
+    if (body.dot_number || body.mc_number) {
+                try {
+                    const snapshot = body.dot_number
+                        ? await lookupCarrierByDot(body.dot_number)
+                        : await lookupCarrierByMc(body.mc_number);
+                    await supabase
+                            .from("carriers")
+                            .update({
+                                            fmcsa_checked_at: new Date().toISOString(),
+                                            fmcsa_snapshot: snapshot,
+                                            fmcsa_error: snapshot ? null : "No FMCSA record found for the submitted DOT/MC number.",
+                            })
+                            .eq("id", data.id);
+                } catch (fmcsaErr) {
+                    console.error("FMCSA auto-check failed:", fmcsaErr);
+                    await supabase
+                            .from("carriers")
+                            .update({ fmcsa_checked_at: new Date().toISOString(), fmcsa_error: fmcsaErr.message })
+                            .eq("id", data.id);
+                }
     }
 
     const res = Response.json({ carrier: data }, { status: 201 });

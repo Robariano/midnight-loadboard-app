@@ -128,17 +128,24 @@ export default function AdminCarriers() {
                   background: "transparent", color: "#1d4ed8", border: "1px solid #1d4ed8",
                   borderRadius: 6, padding: "6px 14px", fontSize: 12, fontWeight: 700, cursor: "pointer",
 }}>
-{fmcsa[c.id]?.loading ? "Checking FMCSA..." : "Check FMCSA"}
+{fmcsa[c.id]?.loading ? "Checking FMCSA..." : (c.fmcsa_checked_at ? "Re-check FMCSA" : "Check FMCSA")}
 </button>
             )}
 </div>
 
-{fmcsa[c.id]?.error && (
-              <p style={{ color: "#991b1b", fontSize: 12, marginTop: 10 }}>{fmcsa[c.id].error}</p>
+{/* A fresh click on the button above (fmcsa[c.id]) always wins over what
+    was already stored on the row (c.fmcsa_snapshot/c.fmcsa_error) — this
+    lets an admin see an immediate re-check without a page reload, while
+    a carrier that was never manually re-checked this session still shows
+    the result captured automatically at signup. */}
+{(fmcsa[c.id]?.error || (!fmcsa[c.id]?.snapshot && c.fmcsa_error)) && (
+              <p style={{ color: "#991b1b", fontSize: 12, marginTop: 10 }}>
+{fmcsa[c.id]?.error || c.fmcsa_error}
+</p>
           )}
 
-{fmcsa[c.id]?.snapshot && (
-              <FmcsaSnapshot snapshot={fmcsa[c.id].snapshot} submittedName={c.company_name} />
+{(fmcsa[c.id]?.snapshot || c.fmcsa_snapshot) && (
+              <FmcsaSnapshot snapshot={fmcsa[c.id]?.snapshot || c.fmcsa_snapshot} submittedName={c.company_name} />
           )}
 </div>
       ))}
