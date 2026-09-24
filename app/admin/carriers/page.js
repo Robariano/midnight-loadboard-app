@@ -145,7 +145,11 @@ export default function AdminCarriers() {
           )}
 
 {(fmcsa[c.id]?.snapshot || c.fmcsa_snapshot) && (
-              <FmcsaSnapshot snapshot={fmcsa[c.id]?.snapshot || c.fmcsa_snapshot} submittedName={c.company_name} />
+              <FmcsaSnapshot
+                snapshot={fmcsa[c.id]?.snapshot || c.fmcsa_snapshot}
+                submittedName={c.company_name}
+                submittedPhone={c.contact_phone}
+              />
           )}
 </div>
       ))}
@@ -153,12 +157,24 @@ export default function AdminCarriers() {
   );
 }
 
-function FmcsaSnapshot({ snapshot, submittedName }) {
+function FmcsaSnapshot({ snapshot, submittedName, submittedPhone }) {
     const nameMismatch =
           submittedName &&
           snapshot.legalName &&
           !submittedName.toLowerCase().includes(snapshot.legalName.toLowerCase().split(" ")[0]) &&
           !snapshot.legalName.toLowerCase().includes(submittedName.toLowerCase().split(" ")[0]);
+
+    // Digits-only comparison (FMCSA and submitted formats both vary --
+    // punctuation, area code parens, etc. -- so strip everything but
+    // digits before comparing). This is aimed at the double-brokering /
+    // stolen-identity scam pattern: someone submits a real carrier's
+    // DOT number but their own contact phone, which won't match what
+    // FMCSA has on file for the real carrier.
+    const digitsOnly = (v) => String(v || "").replace(/\D/g, "");
+    const phoneMismatch =
+          submittedPhone &&
+          snapshot.telephone &&
+          digitsOnly(submittedPhone) !== digitsOnly(snapshot.telephone);
 
   return (
         <div style={{
@@ -180,6 +196,24 @@ function FmcsaSnapshot({ snapshot, submittedName }) {
           Submitted name doesn't obviously match the FMCSA legal name - worth a second look.
             </p>
       )}
+      <p style={{ fontSize: 12, color: "#4b5568", margin: "0 0 4px" }}>
+        FMCSA phone on file: {snapshot.telephone || "-"}{submittedPhone ? ` (submitted: ${submittedPhone})` : ""}
+</p>
+{phoneMismatch && (
+          <p style={{ fontSize: 12, color: "#92400e", margin: "0 0 4px" }}>
+          Submitted phone number doesn't match FMCSA's number on file - call the FMCSA number
+          directly before trusting this one. This is the main red flag for someone operating
+          under a real carrier's stolen DOT/MC number.
+            </p>
+      )}
+      <p style={{ fontSize: 12, color: "#4b5568", margin: "0 0 4px" }}>
+        FMCSA address on file: {snapshot.address || "-"}
+</p>
+      <p style={{ fontSize: 12, margin: "0 0 4px", color: snapshot.bipdInsuranceOnFile ? "#166534" : "#92400e" }}>
+        Liability insurance on file: {snapshot.bipdInsuranceOnFile ? "Yes" : "Not showing as on file"}
+{"  ·  "}
+Cargo insurance on file: {snapshot.cargoInsuranceOnFile ? "Yes" : "Not showing as on file"}
+</p>
       <p style={{ fontSize: 12, color: "#4b5568", margin: "0 0 4px" }}>
         Complaints on file: {snapshot.complaintCount}
 </p>
