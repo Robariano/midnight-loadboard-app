@@ -1,5 +1,6 @@
 "use client";
-import { useState } from "react";
+import { Suspense, useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 
 const inputStyle = {
     width: "100%",
@@ -65,7 +66,18 @@ function BrokerRatingForm({ dotNumber, onSubmitted }) {
   );
 }
 
+// Default export wraps the real component in Suspense, since useSearchParams
+// requires that boundary even in a fully client-rendered page like this one.
 export default function CheckBroker() {
+  return (
+    <Suspense fallback={<p style={{ color: "#4b5568" }}>Loading...</p>}>
+      <CheckBrokerInner />
+    </Suspense>
+  );
+}
+
+function CheckBrokerInner() {
+    const searchParams = useSearchParams();
     const [numberType, setNumberType] = useState("dot");
     const [numberValue, setNumberValue] = useState("");
     const [status, setStatus] = useState(null);
@@ -79,15 +91,12 @@ export default function CheckBroker() {
         setRatingsData(data);
   }
 
-  async function handleCheck(e) {
-        e.preventDefault();
+  async function runCheck(type, value) {
         setStatus("checking");
         setError(null);
         setSnapshot(null);
         setRatingsData(null);
-        const body = numberType === "dot"
-          ? { dot_number: numberValue }
-          : { mc_number: numberValue };
+        const body = type === "dot" ? { dot_number: value } : { mc_number: value };
         const res = await fetch("/api/check-broker", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -103,6 +112,30 @@ export default function CheckBroker() {
                 setStatus("error");
         }
   }
+
+  async function handleCheck(e) {
+        e.preventDefault();
+        await runCheck(numberType, numberValue);
+  }
+
+  // Lets a link from elsewhere on the site (e.g. a carrier's public
+  // profile) jump straight here pre-filled and already run - so "check
+  // this carrier's FMCSA safety record" is one click, not "copy the DOT
+  // number, come here, paste it, hit check."
+  useEffect(() => {
+        const dot = searchParams.get("dot");
+        const mc = searchParams.get("mc");
+        if (dot) {
+                setNumberType("dot");
+                setNumberValue(dot);
+                runCheck("dot", dot);
+        } else if (mc) {
+                setNumberType("mc");
+                setNumberValue(mc);
+                runCheck("mc", mc);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
         <div>

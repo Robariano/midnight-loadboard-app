@@ -71,14 +71,24 @@ export default async function CarrierProfile({ params }) {
         DOT {carrier.dot_number || "—"} · MC {carrier.mc_number || "—"}
       </p>
         {carrier.verified_status === "verified" && (
-        <p style={{ color: "#8a92a0", fontSize: 12, marginTop: -18, marginBottom: 24 }}>
-          This reflects the documents this carrier submitted to us — it is not an independent
-          confirmation of ownership or an FMCSA verification. Always check{" "}
-          <a href="https://safer.fmcsa.dot.gov/CompanySnapshot.aspx" target="_blank" rel="noreferrer" style={{ color: "#5c5cff" }}>
-            FMCSA's records
-          </a>{" "}
-          directly.
-        </p>
+        <div style={{ marginTop: -18, marginBottom: 24 }}>
+          <p style={{ color: "#8a92a0", fontSize: 12, margin: "0 0 8px" }}>
+            This reflects the documents this carrier submitted to us — it is not an independent
+            confirmation of ownership or an FMCSA verification.
+          </p>
+          {(carrier.dot_number || carrier.mc_number) && (
+            <a
+              href={`/check-broker?${carrier.dot_number ? `dot=${encodeURIComponent(carrier.dot_number)}` : `mc=${encodeURIComponent(carrier.mc_number)}`}`}
+              style={{
+                display: "inline-block", color: "#1d4ed8", fontSize: 13, fontWeight: 700,
+                textDecoration: "none", border: "1px solid #1d4ed8", borderRadius: 6,
+                padding: "6px 12px",
+              }}
+            >
+              Check FMCSA safety record &rarr;
+            </a>
+          )}
+        </div>
       )}
 
       <div style={{
