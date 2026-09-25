@@ -37,7 +37,9 @@ export default function Roadside() {
         <div>
           <h1 style={{ color: "#14181f" }}>Roadside &amp; Repair</h1>
       <p style={{ color: "#4b5568", marginBottom: 20 }}>
-        Find real repair and towing help near you — free, no account needed.
+        Find real repair and towing help near you — free, no account needed. A breakdown
+        doesn't just cost you a tow bill, it costs you a delivery — getting back on the road
+        fast protects the reliability every broker and shipper is counting on.
       </p>
 
       <div style={{
