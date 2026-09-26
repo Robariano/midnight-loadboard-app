@@ -36,7 +36,7 @@ function BrokerRatingForm({ dotNumber, onSubmitted }) {
 
   return (
         <div style={{ borderTop: "1px solid #e2e5ea", paddingTop: 12, marginTop: 12 }}>
-          <p style={{ fontSize: 13, color: "#14181f", marginBottom: 8 }}>Rate your experience with this broker</p>
+          <p style={{ fontSize: 13, color: "#14181f", marginBottom: 8 }}>Rate your experience with this company</p>
       {result?.error && <p style={{ color: "#991b1b", fontSize: 12, marginBottom: 8 }}>{result.error}</p>}
       <select value={rating} onChange={(e) => setRating(Number(e.target.value))} style={{
         padding: 8, marginBottom: 8, background: "#ffffff", border: "1px solid #e2e5ea",
@@ -139,11 +139,12 @@ function CheckBrokerInner() {
 
   return (
         <div>
-          <h1 style={{ color: "#14181f" }}>Check a Broker</h1>
+          <h1 style={{ color: "#14181f" }}>Check FMCSA Registration</h1>
       <p style={{ color: "#4b5568", marginBottom: 24 }}>
-        Before you take a load, confirm the broker is a real, active, registered entity — free, no
-        account needed. This confirms registration status only, not reputation or payment history —
-        always use your own judgment alongside this check.
+        Confirm any DOT or MC number is real, active, and registered with FMCSA — free, no account
+        needed. Works either direction: a driver confirming a broker before taking a load, or a
+        broker confirming a carrier before dispatching one to it. This confirms registration status
+        only, not reputation or payment history — always use your own judgment alongside this check.
       </p>
 
       <form onSubmit={handleCheck}>
@@ -233,7 +234,7 @@ function CheckBrokerInner() {
           {ratingsData && (
             <div style={{ marginTop: 14, borderTop: "1px solid #e2e5ea", paddingTop: 12 }}>
               <p style={{ fontSize: 14, fontWeight: 700, color: "#14181f", marginBottom: 6 }}>
-                Driver feedback{ratingsData.count > 0 ? ` — ${ratingsData.average.toFixed(1)} / 5 (${ratingsData.count} rating${ratingsData.count === 1 ? "" : "s"})` : ""}
+                Community feedback{ratingsData.count > 0 ? ` — ${ratingsData.average.toFixed(1)} / 5 (${ratingsData.count} rating${ratingsData.count === 1 ? "" : "s"})` : ""}
               </p>
               {ratingsData.count === 0 && (
                 <p style={{ fontSize: 13, color: "#4b5568" }}>No ratings yet — be the first to share your experience.</p>
@@ -257,8 +258,8 @@ function CheckBrokerInner() {
             Pulled live from FMCSA's public records. This confirms the entity is registered and
             its authority status — it does not confirm reputation, payment history, or that
             you're speaking to a legitimate representative of this company. Always verify
-            independently (call their listed number, check their bond directly) before trusting
-            a load.
+            independently (call their listed number, check their insurance or bond directly)
+            before trusting a load.
           </p>
         </div>
       )}

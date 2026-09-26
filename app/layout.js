@@ -37,7 +37,7 @@ export default function RootLayout({ children }) {
               Confirm Coverage
             </a>
             <a href="/check-broker" style={{ color: "#1d4ed8", fontSize: 13, fontWeight: 700, textDecoration: "none" }}>
-              Check a Broker
+              Check FMCSA Registration
             </a>
             <a href="/roadside" style={{ color: "#1d4ed8", fontSize: 13, fontWeight: 700, textDecoration: "none" }}>
               Roadside &amp; Repair
