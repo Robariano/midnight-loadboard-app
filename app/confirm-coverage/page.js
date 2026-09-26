@@ -3,9 +3,6 @@ import { useEffect, useState } from "react";
 
 export default function ConfirmCoverage() {
   const [me, setMe] = useState(undefined);
-  // Only used in the not-logged-in branch below, but declared up top per
-  // the rules of hooks (every hook has to run on every render).
-  const [publicWho, setPublicWho] = useState("driver");
 
   useEffect(() => {
     fetch("/api/carriers/me")
@@ -39,54 +36,24 @@ export default function ConfirmCoverage() {
   }
 
   // Not logged in at all — this is the "no account needed" public tool
-  // described in Midnight Loadboard's marketing. Two audiences share this
-  // page: a driver checking their own coverage live, or a carrier/fleet
-  // owner/dispatcher sending a confirmation to a driver they're assigning
-  // (previously this second path forced a login — now it works the same
-  // way PublicCheck already did: type in the company, no account needed).
+  // described in Midnight Loadboard's marketing. Assign-a-driver only: a
+  // driver almost never goes looking to self-check their own coverage
+  // unprompted (nobody audits their own insurance until something forces
+  // the question), so the version worth surfacing here is the one where
+  // the carrier or dispatcher — who actually has the incentive to catch a
+  // gap — does the sending, and the driver just answers one question they
+  // were handed. PublicCheck still exists (used above for a logged-in but
+  // not-yet-verified carrier) but isn't worth a toggle here anymore.
   return (
     <div>
       <h1 style={{ color: "#14181f", marginBottom: 4 }}>Confirm Driver Coverage</h1>
       <p style={{ color: "#4b5568", fontSize: 13, marginBottom: 16 }}>
-        Free, private, 30 seconds — no account needed either way.
+        Free, private, 30 seconds — no account needed. Tell us who the driver runs under and their
+        email — we'll send them a private link to confirm, and only tell you whether it came back
+        flagged, not their answer.
       </p>
 
-      <div style={{ display: "flex", gap: 8, marginBottom: 16 }}>
-        <button type="button" onClick={() => setPublicWho("driver")} style={{
-          flex: 1, padding: "8px", borderRadius: 6, cursor: "pointer",
-          border: publicWho === "driver" ? "2px solid #1d4ed8" : "1px solid #e2e5ea",
-          background: publicWho === "driver" ? "#eef2ff" : "#f7f8fa",
-          color: "#14181f", fontWeight: 700, fontSize: 12.5,
-        }}>
-          I'm the driver, checking my own coverage
-        </button>
-        <button type="button" onClick={() => setPublicWho("carrier")} style={{
-          flex: 1, padding: "8px", borderRadius: 6, cursor: "pointer",
-          border: publicWho === "carrier" ? "2px solid #1d4ed8" : "1px solid #e2e5ea",
-          background: publicWho === "carrier" ? "#eef2ff" : "#f7f8fa",
-          color: "#14181f", fontWeight: 700, fontSize: 12.5,
-        }}>
-          I'm the carrier or dispatcher, sending this to a driver
-        </button>
-      </div>
-
-      {publicWho === "driver" ? (
-        <>
-          <p style={{ color: "#4b5568", fontSize: 13, marginBottom: 12 }}>
-            Tell us who you're driving for and answer one question — the carrier never sees your
-            answer, only whether the load ends up flagged.
-          </p>
-          <PublicCheck />
-        </>
-      ) : (
-        <>
-          <p style={{ color: "#4b5568", fontSize: 13, marginBottom: 12 }}>
-            Tell us who the driver runs under and their email — we'll send them a private link to
-            confirm, and only tell you whether it came back flagged, not their answer.
-          </p>
-          <PublicAssign />
-        </>
-      )}
+      <PublicAssign />
 
       <p style={{ color: "#8a92a0", fontSize: 12, marginTop: 20 }}>
         Already a verified carrier on Midnight Loadboard?{" "}
