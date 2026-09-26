@@ -3,6 +3,9 @@ import { useEffect, useState } from "react";
 
 export default function ConfirmCoverage() {
   const [me, setMe] = useState(undefined);
+  // Only used in the not-logged-in branch below, but declared up top per
+  // the rules of hooks (every hook has to run on every render).
+  const [publicWho, setPublicWho] = useState("driver");
 
   useEffect(() => {
     fetch("/api/carriers/me")
@@ -36,18 +39,59 @@ export default function ConfirmCoverage() {
   }
 
   // Not logged in at all — this is the "no account needed" public tool
-  // described in Midnight Loadboard's marketing.
+  // described in Midnight Loadboard's marketing. Two audiences share this
+  // page: a driver checking their own coverage live, or a carrier/fleet
+  // owner/dispatcher sending a confirmation to a driver they're assigning
+  // (previously this second path forced a login — now it works the same
+  // way PublicCheck already did: type in the company, no account needed).
   return (
     <div>
       <h1 style={{ color: "#14181f", marginBottom: 4 }}>Confirm Driver Coverage</h1>
-      <p style={{ color: "#4b5568", fontSize: 13, marginBottom: 20 }}>
-        Free, private, 30 seconds. Tell us who you're driving for and answer one question — the
-        carrier never sees your answer, only whether the load ends up flagged.
+      <p style={{ color: "#4b5568", fontSize: 13, marginBottom: 16 }}>
+        Free, private, 30 seconds — no account needed either way.
       </p>
-      <PublicCheck />
+
+      <div style={{ display: "flex", gap: 8, marginBottom: 16 }}>
+        <button type="button" onClick={() => setPublicWho("driver")} style={{
+          flex: 1, padding: "8px", borderRadius: 6, cursor: "pointer",
+          border: publicWho === "driver" ? "2px solid #1d4ed8" : "1px solid #e2e5ea",
+          background: publicWho === "driver" ? "#eef2ff" : "#f7f8fa",
+          color: "#14181f", fontWeight: 700, fontSize: 12.5,
+        }}>
+          I'm the driver, checking my own coverage
+        </button>
+        <button type="button" onClick={() => setPublicWho("carrier")} style={{
+          flex: 1, padding: "8px", borderRadius: 6, cursor: "pointer",
+          border: publicWho === "carrier" ? "2px solid #1d4ed8" : "1px solid #e2e5ea",
+          background: publicWho === "carrier" ? "#eef2ff" : "#f7f8fa",
+          color: "#14181f", fontWeight: 700, fontSize: 12.5,
+        }}>
+          I'm the carrier or dispatcher, sending this to a driver
+        </button>
+      </div>
+
+      {publicWho === "driver" ? (
+        <>
+          <p style={{ color: "#4b5568", fontSize: 13, marginBottom: 12 }}>
+            Tell us who you're driving for and answer one question — the carrier never sees your
+            answer, only whether the load ends up flagged.
+          </p>
+          <PublicCheck />
+        </>
+      ) : (
+        <>
+          <p style={{ color: "#4b5568", fontSize: 13, marginBottom: 12 }}>
+            Tell us who the driver runs under and their email — we'll send them a private link to
+            confirm, and only tell you whether it came back flagged, not their answer.
+          </p>
+          <PublicAssign />
+        </>
+      )}
+
       <p style={{ color: "#8a92a0", fontSize: 12, marginTop: 20 }}>
-        Are you a carrier looking to send this check to a driver you're assigning?{" "}
-        <a href="/login?next=/confirm-coverage" style={{ color: "#1d4ed8" }}>Log in</a>.
+        Already a verified carrier on Midnight Loadboard?{" "}
+        <a href="/login?next=/confirm-coverage" style={{ color: "#1d4ed8" }}>Log in</a>{" "}
+        for a saved version of this tied to your account.
       </p>
     </div>
   );
@@ -147,6 +191,163 @@ function PublicCheck() {
         }}>
         No / not sure
       </button>
+    </div>
+  );
+}
+
+// The public "assign a driver" version — same emailed-link flow as the
+// logged-in VerifiedCarrierTool below, but for a carrier, fleet owner, or
+// dispatcher acting on their behalf (no Midnight Loadboard account
+// required). Identifies the company by DOT/name the same way PublicCheck
+// does, creating an unclaimed record if it's not on file yet, via
+// /api/public-assign-coverage.
+function PublicAssign() {
+  const [carrierName, setCarrierName] = useState("");
+  const [dotNumber, setDotNumber] = useState("");
+  const [driverName, setDriverName] = useState("");
+  const [driverContact, setDriverContact] = useState("");
+  const [driverConsent, setDriverConsent] = useState(false);
+  const [result, setResult] = useState(null);
+  const [submitting, setSubmitting] = useState(false);
+
+  async function submit() {
+    setSubmitting(true);
+    const res = await fetch("/api/public-assign-coverage", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        carrier_name: carrierName,
+        dot_number: dotNumber,
+        driver_name: driverName,
+        driver_contact: driverContact,
+        driver_consent_confirmed: driverConsent,
+      }),
+    });
+    const data = await res.json();
+    setResult(data);
+    setSubmitting(false);
+  }
+
+  function reset() {
+    setResult(null);
+    setDriverName("");
+    setDriverContact("");
+    setDriverConsent(false);
+    // Carrier name/DOT deliberately kept — the same dispatcher is likely
+    // sending another confirmation for the same client's next load.
+  }
+
+  // A pure validation error (missing field, bad email, consent not
+  // checked) comes back with no confirmUrl at all — keep the form up with
+  // the error shown, same as PublicCheck does, instead of hiding it.
+  const showForm = !result || (result.error && !result.confirmUrl);
+
+  return (
+    <div style={{
+      background: "#f7f8fa", border: "1px solid #e2e5ea", borderRadius: 12,
+      padding: "16px 20px",
+    }}>
+      {showForm && (
+        <>
+          {result?.error && (
+            <p style={{ color: "#991b1b", fontSize: 13, marginBottom: 10 }}>{result.error}</p>
+          )}
+
+          <label style={{ display: "block", fontSize: 12, color: "#4b5568", marginBottom: 6 }}>
+            Company name the driver is running under
+          </label>
+          <input value={carrierName} onChange={(e) => setCarrierName(e.target.value)}
+            placeholder="e.g. Acme Trucking LLC"
+            style={{
+              width: "100%", padding: 8, marginBottom: 8, background: "#ffffff",
+              border: "1px solid #e2e5ea", borderRadius: 6, color: "#14181f", fontSize: 13,
+            }} />
+          <label style={{ display: "block", fontSize: 12, color: "#4b5568", marginBottom: 6 }}>
+            DOT number (optional, helps us match the right company)
+          </label>
+          <input value={dotNumber} onChange={(e) => setDotNumber(e.target.value)}
+            placeholder="e.g. 1234567"
+            style={{
+              width: "100%", padding: 8, marginBottom: 14, background: "#ffffff",
+              border: "1px solid #e2e5ea", borderRadius: 6, color: "#14181f", fontSize: 13,
+            }} />
+
+          <label style={{ display: "block", fontSize: 12, color: "#4b5568", marginBottom: 6 }}>
+            Driver's name
+          </label>
+          <input value={driverName} onChange={(e) => setDriverName(e.target.value)}
+            placeholder="Driver's name"
+            style={{
+              width: "100%", padding: 8, marginBottom: 8, background: "#ffffff",
+              border: "1px solid #e2e5ea", borderRadius: 6, color: "#14181f", fontSize: 13,
+            }} />
+          <label style={{ display: "block", fontSize: 12, color: "#4b5568", marginBottom: 6 }}>
+            Driver's email
+          </label>
+          <input value={driverContact} onChange={(e) => setDriverContact(e.target.value)}
+            placeholder="driver@example.com"
+            style={{
+              width: "100%", padding: 8, marginBottom: 8, background: "#ffffff",
+              border: "1px solid #e2e5ea", borderRadius: 6, color: "#14181f", fontSize: 13,
+            }} />
+          <p style={{ fontSize: 11, color: "#6b7280", marginTop: -4, marginBottom: 10 }}>
+            Texting isn't available right now — we'll email the driver a private confirmation link instead.
+          </p>
+
+          <label style={{ display: "flex", gap: 8, alignItems: "flex-start", fontSize: 12, color: "#6b7280", marginBottom: 10 }}>
+            <input type="checkbox" checked={driverConsent}
+              onChange={(e) => setDriverConsent(e.target.checked)}
+              style={{ marginTop: 2 }} />
+            <span>
+              I confirm this driver has agreed, as part of our working relationship, to receive
+              this one-time email to verify insurance coverage for this load.
+            </span>
+          </label>
+
+          <button onClick={submit} disabled={submitting || !driverConsent}
+            style={{
+              background: !driverConsent ? "#d1e7dd" : "#166534",
+              color: "#fff", border: "none", borderRadius: 6,
+              padding: "8px 16px", fontSize: 13, fontWeight: 700,
+              cursor: (!driverConsent || submitting) ? "not-allowed" : "pointer",
+            }}>
+            {submitting ? "Sending..." : "Send confirmation"}
+          </button>
+        </>
+      )}
+
+      {!showForm && result.assignedLinkSent && (
+        <div>
+          <p style={{ color: "#166534", fontSize: 12, marginBottom: 8 }}>
+            Confirmation email sent to the driver automatically.
+          </p>
+          <p style={{ color: "#4b5568", fontSize: 12, marginBottom: 6 }}>
+            You can also share this link directly if needed:
+          </p>
+          <LinkBox url={result.confirmUrl} />
+          <button onClick={reset} style={{
+            marginTop: 12, background: "transparent", color: "#4b5568", border: "1px solid #e2e5ea",
+            borderRadius: 6, padding: "8px 16px", fontSize: 13, cursor: "pointer",
+          }}>
+            Send another
+          </button>
+        </div>
+      )}
+
+      {!showForm && result.assignedLinkSent === false && result.confirmUrl && (
+        <div>
+          <p style={{ color: "#991b1b", fontSize: 13, marginBottom: 6 }}>
+            {result.error || "The confirmation email couldn't be sent."} Share this link with the driver yourself:
+          </p>
+          <LinkBox url={result.confirmUrl} />
+          <button onClick={reset} style={{
+            marginTop: 12, background: "transparent", color: "#4b5568", border: "1px solid #e2e5ea",
+            borderRadius: 6, padding: "8px 16px", fontSize: 13, cursor: "pointer",
+          }}>
+            Send another
+          </button>
+        </div>
+      )}
     </div>
   );
 }
