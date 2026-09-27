@@ -45,7 +45,7 @@ export default function RootLayout({ children }) {
             <a href="/my-documents" style={{ color: "#1d4ed8", fontSize: 13, fontWeight: 700, textDecoration: "none" }}>
               My Documents
             </a>
-            <a href="/need-a-dispatcher" style={{ color: "#1d4ed8", fontSize: 13, fontWeight: 700, textDecoration: "none" }}>
+            <a href="/dispatch" style={{ color: "#1d4ed8", fontSize: 13, fontWeight: 700, textDecoration: "none" }}>
               Need a Dispatcher?
             </a>
             <a href="/post-load" style={{ color: "#1d4ed8", fontSize: 13, fontWeight: 700, textDecoration: "none" }}>
