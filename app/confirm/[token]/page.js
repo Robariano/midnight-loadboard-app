@@ -66,6 +66,7 @@ export default function ConfirmPage({ params }) {
   const [info, setInfo] = useState(null);
   const [error, setError] = useState(null);
   const [submitted, setSubmitted] = useState(false);
+  const [submittedResponse, setSubmittedResponse] = useState(null);
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
@@ -86,6 +87,7 @@ export default function ConfirmPage({ params }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ response }),
       });
+      setSubmittedResponse(response);
       setSubmitted(true);
     } catch {
       setSubmitting(false);
@@ -113,20 +115,53 @@ export default function ConfirmPage({ params }) {
   if (!info) return <Spinner />;
 
   if (submitted) {
+    const uncertain = submittedResponse === "neither";
     return (
-      <div
-        style={{
-          background: "#e9f7ef",
-          border: "1px solid #166534",
-          borderRadius: 12,
-          padding: 24,
-          textAlign: "center",
-        }}
-      >
-        <h1 style={{ color: "#166534", fontSize: 20, margin: "0 0 8px" }}>✓ Confirmed</h1>
-        <p style={{ color: "#4b5568", fontSize: 14, margin: 0, lineHeight: 1.6 }}>
-          Thanks — your response has been recorded privately. It cannot be seen by the carrier. You can
-          close this page now.
+      <div>
+        <div
+          style={{
+            background: "#e9f7ef",
+            border: "1px solid #166534",
+            borderRadius: 12,
+            padding: 24,
+            textAlign: "center",
+          }}
+        >
+          <h1 style={{ color: "#166534", fontSize: 20, margin: "0 0 8px" }}>✓ Confirmed</h1>
+          <p style={{ color: "#4b5568", fontSize: 14, margin: 0, lineHeight: 1.6 }}>
+            Thanks — your response has been recorded privately. It cannot be seen by the carrier.
+          </p>
+        </div>
+
+        {uncertain && (
+          <div
+            style={{
+              background: "#fdecec",
+              border: "1px solid #991b1b",
+              borderRadius: 12,
+              padding: 20,
+              marginTop: 14,
+              textAlign: "center",
+            }}
+          >
+            <p style={{ color: "#991b1b", fontWeight: 700, fontSize: 14, margin: "0 0 6px" }}>
+              Don't assume you're covered
+            </p>
+            <p style={{ color: "#991b1b", fontSize: 13, margin: 0, lineHeight: 1.6 }}>
+              This has been flagged for the carrier to look into, but that review doesn't happen before
+              you drive. Call {info.carrier?.company_name || "the carrier"} directly and confirm you're
+              actually listed on their policy before you take this load.
+            </p>
+          </div>
+        )}
+
+        <p style={{ fontSize: 13, color: "#4b5568", textAlign: "center", marginTop: 16, lineHeight: 1.6 }}>
+          Midnight Loadboard also lists open loads and lets you check any broker's FMCSA registration for
+          free —{" "}
+          <a href="/loads" style={{ color: "#1d4ed8" }}>
+            browse loads
+          </a>
+          .
         </p>
       </div>
     );
