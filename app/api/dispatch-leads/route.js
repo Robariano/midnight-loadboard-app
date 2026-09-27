@@ -2,7 +2,7 @@ import { getServiceClient } from "../../../lib/supabase";
 import { checkRateLimit } from "../../../lib/rate-limit";
 
 // Genuinely public lead form - no login needed. Captures two real cases
-// (see app/need-a-dispatcher/page.js and the migration for why they're
+// (see app/dispatch/_DispatcherForm.js and the migration for why they're
 // handled differently):
 //   1. A carrier who already holds their own MC/DOT authority - can be
 //      signed directly as a dispatch client.

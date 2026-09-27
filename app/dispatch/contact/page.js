@@ -1,5 +1,5 @@
 import { DispatchSubNav, cardStyle, BRAND } from "../_shared";
-import NeedADispatcher from "../../need-a-dispatcher/page";
+import DispatcherLeadForm from "../_DispatcherForm";
 
 export const metadata = {
   title: "Contact | Steady Wake Dispatch",
@@ -7,10 +7,10 @@ export const metadata = {
     "Get your first load booked with Steady Wake Dispatch — call, email, or send your info directly.",
 };
 
-// Reuses the existing /need-a-dispatcher form as-is (same component, same
-// POST to /api/dispatch-leads, same admin panel at
-// app/admin/dispatch-leads/page.js) so this branded page and the older
-// bare form both feed the one place Rob already checks.
+// Renders the shared lead form (app/dispatch/_DispatcherForm.js), which
+// posts to /api/dispatch-leads and shows up in the admin panel at
+// app/admin/dispatch-leads/page.js. /need-a-dispatcher now just redirects
+// here instead of duplicating this form.
 export default function DispatchContact() {
   return (
     <div>
@@ -42,7 +42,7 @@ export default function DispatchContact() {
         </div>
       </div>
 
-      <NeedADispatcher />
+      <DispatcherLeadForm />
     </div>
   );
 }
