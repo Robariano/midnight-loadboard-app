@@ -257,7 +257,17 @@ function CheckBrokerInner() {
           <p style={{ marginTop: 14, fontSize: 12, color: "#888" }}>
             Pulled live from FMCSA's public records. This confirms the entity is registered and
             its authority status — it does not confirm reputation, payment history, or that
-            you're speaking to a legitimate representative of this company. Always verify
+            you're speaking to a legitimate representative of this company. For a broker or
+            carrier you haven't worked with before, also check their payment history — services
+            like{" "}
+            <a href="https://www.ansonia.com" target="_blank" rel="noopener noreferrer" style={{ color: "#1d4ed8" }}>
+              Ansonia
+            </a>
+            ,{" "}
+            <a href="https://www.transcredit.com" target="_blank" rel="noopener noreferrer" style={{ color: "#1d4ed8" }}>
+              TransCredit
+            </a>
+            , or a DAT broker credit report track how reliably they actually pay. Always verify
             independently (call their listed number, check their insurance or bond directly)
             before trusting a load.
           </p>
