@@ -1,4 +1,4 @@
-import { DispatchSubNav, cardStyle, primaryBtn } from "../_shared";
+import { DispatchSubNav, cardStyle, primaryBtn, dispatchHref } from "../_shared";
 
 export const metadata = {
   title: "Dispatch Services | Steady Wake Dispatch",
@@ -78,7 +78,7 @@ export default function DispatchServices() {
       </div>
 
       <div style={{ textAlign: "center", padding: "12px 0 8px" }}>
-        <a href="/dispatch/contact" style={primaryBtn}>Get Started →</a>
+        <a href={dispatchHref("/contact")} style={primaryBtn}>Get Started →</a>
       </div>
     </div>
   );

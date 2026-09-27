@@ -1,4 +1,4 @@
-import { DispatchSubNav, cardStyle, primaryBtn, secondaryBtn, statBox, BRAND } from "./_shared";
+import { DispatchSubNav, cardStyle, primaryBtn, secondaryBtn, statBox, BRAND, dispatchHref } from "./_shared";
 
 export const metadata = {
   title: "Steady Wake Dispatch | Freight Dispatching in Durango, CO",
@@ -19,8 +19,8 @@ export default function DispatchHome() {
         dispatching for owner-operators — dry van and flatbed.
       </p>
       <div style={{ display: "flex", gap: 12, marginBottom: 32, flexWrap: "wrap" }}>
-        <a href="/dispatch/contact" style={primaryBtn}>Get Started →</a>
-        <a href="/dispatch/services" style={secondaryBtn}>See What's Included</a>
+        <a href={dispatchHref("/contact")} style={primaryBtn}>Get Started →</a>
+        <a href={dispatchHref("/services")} style={secondaryBtn}>See What's Included</a>
       </div>
 
       {/* Stats, echoing the odometer figures from Rob's own draft site */}
@@ -69,7 +69,7 @@ export default function DispatchHome() {
         <p style={{ color: "#14181f", fontSize: 16, fontWeight: 700, marginBottom: 16 }}>
           Ready to get your first load booked?
         </p>
-        <a href="/dispatch/contact" style={primaryBtn}>Get Started →</a>
+        <a href={dispatchHref("/contact")} style={primaryBtn}>Get Started →</a>
         <p style={{ color: "#6b7280", fontSize: 12, marginTop: 20 }}>
           Or call directly: <a href={BRAND.phoneHref} style={{ color: "#92400e", fontWeight: 700 }}>{BRAND.phone}</a>
         </p>

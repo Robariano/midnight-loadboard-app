@@ -1,4 +1,4 @@
-import { DispatchSubNav, cardStyle, primaryBtn } from "../_shared";
+import { DispatchSubNav, cardStyle, primaryBtn, dispatchHref } from "../_shared";
 
 export const metadata = {
   title: "About | Steady Wake Dispatch",
@@ -58,13 +58,13 @@ export default function DispatchAbout() {
             I started Steady Wake Dispatch because owner-operators deserve a dispatcher who's honest,
             communicates fast, and treats every load like it matters — because it does. If that sounds
             like what you're looking for,{" "}
-            <a href="/dispatch/contact" style={{ color: "#92400e", fontWeight: 700 }}>get in touch</a>.
+            <a href={dispatchHref("/contact")} style={{ color: "#92400e", fontWeight: 700 }}>get in touch</a>.
           </p>
         </div>
       </div>
 
       <div style={{ textAlign: "center", padding: "40px 0 8px" }}>
-        <a href="/dispatch/contact" style={primaryBtn}>Get Started →</a>
+        <a href={dispatchHref("/contact")} style={primaryBtn}>Get Started →</a>
       </div>
     </div>
   );

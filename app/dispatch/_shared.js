@@ -6,6 +6,29 @@
 // carries Steady Wake's own identity — amber accent instead of
 // Midnight Loadboard's blue — rather than being folded into the
 // platform's own brand.
+//
+// It's also served, via middleware.js at the repo root, as the real
+// steadywakedispatch.com domain's own clean URLs (steadywakedispatch.com/,
+// /services, /about, /contact) instead of only living under
+// midnightloadboard.com/dispatch/*. dispatchHref() below builds the
+// right link for whichever domain the page is currently being viewed on.
+import { headers } from "next/headers";
+
+const STEADY_WAKE_HOSTS = new Set(["steadywakedispatch.com", "www.steadywakedispatch.com"]);
+
+// path is "" (home), "/services", "/about", or "/contact".
+export function dispatchHref(path = "") {
+  let host = "";
+  try {
+    host = (headers().get("host") || "").split(":")[0].toLowerCase();
+  } catch {
+    host = "";
+  }
+  if (STEADY_WAKE_HOSTS.has(host)) {
+    return path === "" ? "/" : path;
+  }
+  return `/dispatch${path}`;
+}
 
 export const BRAND = {
   name: "Steady Wake Dispatch",
@@ -59,10 +82,10 @@ export const statBox = {
 };
 
 const subNavLinks = [
-  { href: "/dispatch", label: "Home" },
-  { href: "/dispatch/services", label: "Services" },
-  { href: "/dispatch/about", label: "About" },
-  { href: "/dispatch/contact", label: "Contact" },
+  { path: "", label: "Home" },
+  { path: "/services", label: "Services" },
+  { path: "/about", label: "About" },
+  { path: "/contact", label: "Contact" },
 ];
 
 export function DispatchSubNav({ active }) {
@@ -109,8 +132,8 @@ export function DispatchSubNav({ active }) {
       >
         {subNavLinks.map((l) => (
           <a
-            key={l.href}
-            href={l.href}
+            key={l.path}
+            href={dispatchHref(l.path)}
             style={{
               fontSize: 13,
               fontWeight: 700,
