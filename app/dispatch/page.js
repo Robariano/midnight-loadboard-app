@@ -1,9 +1,9 @@
-import { DispatchSubNav, DispatchBadge, cardStyle, primaryBtn, secondaryBtn, stepNumber } from "./_shared";
+import { DispatchSubNav, cardStyle, primaryBtn, secondaryBtn, statBox, BRAND } from "./_shared";
 
 export const metadata = {
-  title: "Freight Dispatch Services in Durango, CO | Midnight Loadboard",
+  title: "Steady Wake Dispatch | Freight Dispatching in Durango, CO",
   description:
-    "A real dispatcher finding you loads, negotiating rates, and handling the paperwork — based in Durango, Colorado. Not an automated system, not a call center.",
+    "Reliable dispatching built on real experience — Navy veteran, 16 years hands-on trucking experience, dispatching for owner-operators out of Durango, Colorado.",
 };
 
 export default function DispatchHome() {
@@ -11,97 +11,68 @@ export default function DispatchHome() {
     <div>
       <DispatchSubNav active="Home" />
 
-      <DispatchBadge />
-      <h1 style={{ color: "#14181f", fontSize: 32, lineHeight: 1.25, marginBottom: 12 }}>
-        Need a dispatcher? Get a real person on your freight — today.
+      <h1 style={{ color: "#14181f", fontSize: 32, lineHeight: 1.2, marginBottom: 12 }}>
+        Reliable dispatching, built on real experience.
       </h1>
-      <p style={{ color: "#4b5568", fontSize: 16, lineHeight: 1.6, marginBottom: 28, maxWidth: 560 }}>
-        Finding loads, negotiating rates, and handling the back-office work so you can stay behind the
-        wheel. Based in Durango, Colorado — this isn't a load board listing or an automated matching
-        system, it's a direct line to the person actually doing the dispatching.
+      <p style={{ color: "#4b5568", fontSize: 16, lineHeight: 1.6, marginBottom: 24, maxWidth: 560 }}>
+        Navy veteran. 16 years hands-on trucking experience. I bring that same discipline to
+        dispatching for owner-operators — dry van and flatbed.
       </p>
-      <div style={{ display: "flex", gap: 12, marginBottom: 48, flexWrap: "wrap" }}>
-        <a href="/dispatch/contact" style={primaryBtn}>Get Matched With a Dispatcher →</a>
+      <div style={{ display: "flex", gap: 12, marginBottom: 32, flexWrap: "wrap" }}>
+        <a href="/dispatch/contact" style={primaryBtn}>Get Started →</a>
         <a href="/dispatch/services" style={secondaryBtn}>See What's Included</a>
       </div>
 
-      {/* Why this exists */}
-      <div style={{ ...cardStyle, marginBottom: 48 }}>
+      {/* Stats, echoing the odometer figures from Rob's own draft site */}
+      <div style={{ display: "flex", gap: 14, flexWrap: "wrap", marginBottom: 40 }}>
+        <div style={statBox}>
+          <p style={{ fontSize: 34, fontWeight: 700, margin: 0, color: "#fbbf24" }}>16</p>
+          <p style={{ fontSize: 13, color: "#c7ccd6", margin: "4px 0 0" }}>
+            Years hands-on tractor-trailer experience
+          </p>
+        </div>
+        <div style={statBox}>
+          <p style={{ fontSize: 34, fontWeight: 700, margin: 0, color: "#fbbf24" }}>7%</p>
+          <p style={{ fontSize: 13, color: "#c7ccd6", margin: "4px 0 0" }}>
+            Starting rate per load, while building the track record
+          </p>
+        </div>
+      </div>
+
+      <div style={{ ...cardStyle, marginBottom: 32 }}>
         <p style={{ color: "#14181f", fontWeight: 700, fontSize: 15, marginBottom: 10 }}>
-          Why work with a dispatcher instead of chasing loads yourself
+          Every broker checked before you commit
         </p>
         <p style={{ color: "#4b5568", fontSize: 14, lineHeight: 1.7, margin: 0 }}>
-          Every hour spent scrolling load boards, calling brokers, and re-typing the same paperwork is an
-          hour you're not driving — or an hour you're driving without a plan for the next load. A
-          dispatcher's job is to keep freight lined up ahead of you, push back on lowball rates, and keep
-          the documentation clean, so the time you do spend on the phone is time spent actually running
-          your business.
+          I personally check every broker against FMCSA's federal database before you're ever booked
+          on their load — so you always know exactly how you're being protected, not just taking my
+          word for it. No load is worth driving on unconfirmed coverage.
         </p>
       </div>
 
-      {/* How it works */}
-      <p style={{ color: "#14181f", fontWeight: 700, fontSize: 18, marginBottom: 20 }}>How it works</p>
-      <div style={{ display: "flex", flexDirection: "column", gap: 16, marginBottom: 48 }}>
-        <div style={cardStyle}>
-          <div style={stepNumber}>1</div>
-          <p style={{ color: "#14181f", fontWeight: 700, fontSize: 14, marginBottom: 6 }}>
-            Tell us about your operation
-          </p>
-          <p style={{ color: "#4b5568", fontSize: 13, lineHeight: 1.6, margin: 0 }}>
-            Your equipment, your lanes, and whether you run under your own authority or someone else's —
-            takes about two minutes.
-          </p>
-        </div>
-        <div style={cardStyle}>
-          <div style={{ ...stepNumber, background: "#166534" }}>2</div>
-          <p style={{ color: "#14181f", fontWeight: 700, fontSize: 14, marginBottom: 6 }}>
-            You hear back directly — not through a form email
-          </p>
-          <p style={{ color: "#4b5568", fontSize: 13, lineHeight: 1.6, margin: 0 }}>
-            No automated queue. A real conversation about what you're looking for and whether it's a
-            good fit before anything is decided.
-          </p>
-        </div>
-        <div style={cardStyle}>
-          <div style={{ ...stepNumber, background: "#92400e" }}>3</div>
-          <p style={{ color: "#14181f", fontWeight: 700, fontSize: 14, marginBottom: 6 }}>
-            Freight starts moving
-          </p>
-          <p style={{ color: "#4b5568", fontSize: 13, lineHeight: 1.6, margin: 0 }}>
-            Loads sourced, rates negotiated, rate confirmations and paperwork handled — you drive, we
-            handle the rest.
-          </p>
-        </div>
+      <p style={{ color: "#14181f", fontWeight: 700, fontSize: 16, marginBottom: 16 }}>Why owner-operators choose Steady Wake</p>
+      <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 40 }}>
+        {[
+          "Real trucking experience, not just a certificate — 16 years in the seat.",
+          "Broker vetting built into every load — checked personally against FMCSA's own database.",
+          "Honest 7% starting rate — no bait-and-switch pricing later.",
+          "Navy discipline: reliable, direct, and accountable.",
+        ].map((line) => (
+          <div key={line} style={{ display: "flex", gap: 10, alignItems: "flex-start" }}>
+            <span style={{ color: "#92400e", fontWeight: 700, marginTop: 1 }}>✓</span>
+            <p style={{ color: "#4b5568", fontSize: 14, margin: 0, lineHeight: 1.5 }}>{line}</p>
+          </div>
+        ))}
       </div>
 
-      {/* Trust */}
-      <div style={{ ...cardStyle, marginBottom: 48, display: "flex", gap: 32, flexWrap: "wrap" }}>
-        <div>
-          <p style={{ color: "#166534", fontWeight: 700, fontSize: 14, marginBottom: 4 }}>Founder-run</p>
-          <p style={{ color: "#4b5568", fontSize: 13, margin: 0 }}>
-            You're talking to the person doing the work, not a rotating call center.
-          </p>
-        </div>
-        <div>
-          <p style={{ color: "#166534", fontWeight: 700, fontSize: 14, marginBottom: 4 }}>No long-term lock-in</p>
-          <p style={{ color: "#4b5568", fontSize: 13, margin: 0 }}>
-            Worth submitting even if you're just weighing your options.
-          </p>
-        </div>
-        <div>
-          <p style={{ color: "#166534", fontWeight: 700, fontSize: 14, marginBottom: 4 }}>Built by someone who's driven</p>
-          <p style={{ color: "#4b5568", fontSize: 13, margin: 0 }}>
-            CDL holder, Navy veteran, raised around freight in Durango — <a href="/dispatch/about" style={{ color: "#1d4ed8" }}>the full story</a>.
-          </p>
-        </div>
-      </div>
-
-      {/* Final CTA */}
       <div style={{ textAlign: "center", padding: "12px 0 8px" }}>
         <p style={{ color: "#14181f", fontSize: 16, fontWeight: 700, marginBottom: 16 }}>
-          Ready to get freight lined up?
+          Ready to get your first load booked?
         </p>
-        <a href="/dispatch/contact" style={primaryBtn}>Get Matched With a Dispatcher →</a>
+        <a href="/dispatch/contact" style={primaryBtn}>Get Started →</a>
+        <p style={{ color: "#6b7280", fontSize: 12, marginTop: 20 }}>
+          Or call directly: <a href={BRAND.phoneHref} style={{ color: "#92400e", fontWeight: 700 }}>{BRAND.phone}</a>
+        </p>
       </div>
     </div>
   );

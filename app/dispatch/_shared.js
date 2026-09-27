@@ -1,7 +1,19 @@
-// Shared style tokens + sub-nav for the Dispatch Services mini-site
-// (app/dispatch/*). Kept in one place so Home/About/Services/Contact
-// stay visually consistent with each other and with the rest of
-// Midnight Loadboard (same palette as app/page.js, app/roadside/page.js).
+// Shared style tokens + sub-nav for Steady Wake Dispatch — Rob's real
+// dispatch business (steadywakedispatch@gmail.com, (970) 903-9226,
+// Durango, CO — the name on the actual client services agreement).
+// This mini-site lives inside Midnight Loadboard's app (app/dispatch/*)
+// so it reuses the working lead-capture backend and admin panel, but
+// carries Steady Wake's own identity — amber accent instead of
+// Midnight Loadboard's blue — rather than being folded into the
+// platform's own brand.
+
+export const BRAND = {
+  name: "Steady Wake Dispatch",
+  phone: "(970) 903-9226",
+  phoneHref: "tel:+19709039226",
+  email: "steadywakedispatch@gmail.com",
+  location: "Durango, CO",
+};
 
 export const cardStyle = {
   background: "#f7f8fa",
@@ -13,7 +25,7 @@ export const cardStyle = {
 export const primaryBtn = {
   display: "inline-block",
   padding: "14px 24px",
-  background: "#1d4ed8",
+  background: "#92400e",
   color: "#fff",
   borderRadius: 8,
   fontWeight: 700,
@@ -25,26 +37,25 @@ export const secondaryBtn = {
   display: "inline-block",
   padding: "14px 24px",
   background: "transparent",
-  color: "#1d4ed8",
-  border: "1px solid #1d4ed8",
+  color: "#92400e",
+  border: "1px solid #92400e",
   borderRadius: 8,
   fontWeight: 700,
   fontSize: 14,
   textDecoration: "none",
 };
 
-export const stepNumber = {
-  display: "inline-flex",
-  alignItems: "center",
-  justifyContent: "center",
-  width: 28,
-  height: 28,
-  borderRadius: "50%",
-  background: "#1d4ed8",
+// Dark stat tile — a nod to the odometer-style figures on Rob's own
+// draft site (steady-wake-website.html) without importing its full
+// dark theme, which would clash with the rest of Midnight Loadboard's
+// light chrome that wraps every page here.
+export const statBox = {
+  background: "#14181f",
+  borderRadius: 12,
+  padding: "18px 22px",
   color: "#fff",
-  fontWeight: 700,
-  fontSize: 13,
-  marginBottom: 12,
+  flex: 1,
+  minWidth: 160,
 };
 
 const subNavLinks = [
@@ -54,58 +65,66 @@ const subNavLinks = [
   { href: "/dispatch/contact", label: "Contact" },
 ];
 
-// A light sub-nav so the four dispatch pages read as one small site
-// within Midnight Loadboard, the way a local business site would —
-// not just four disconnected pages under the main nav.
 export function DispatchSubNav({ active }) {
   return (
-    <div
-      style={{
-        display: "flex",
-        gap: 6,
-        flexWrap: "wrap",
-        marginBottom: 32,
-        borderBottom: "1px solid #e2e5ea",
-        paddingBottom: 14,
-      }}
-    >
-      {subNavLinks.map((l) => (
-        <a
-          key={l.href}
-          href={l.href}
+    <div>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "baseline",
+          justifyContent: "space-between",
+          flexWrap: "wrap",
+          gap: 10,
+          marginBottom: 14,
+        }}
+      >
+        <p
           style={{
             fontSize: 13,
             fontWeight: 700,
-            textDecoration: "none",
-            padding: "6px 12px",
-            borderRadius: 20,
-            color: active === l.label ? "#fff" : "#1d4ed8",
-            background: active === l.label ? "#1d4ed8" : "#eef2ff",
+            color: "#92400e",
+            letterSpacing: "0.04em",
+            textTransform: "uppercase",
+            margin: 0,
           }}
         >
-          {l.label}
-        </a>
-      ))}
+          Steady Wake Dispatch
+        </p>
+        <p style={{ fontSize: 12, color: "#6b7280", margin: 0 }}>
+          {BRAND.location} ·{" "}
+          <a href={BRAND.phoneHref} style={{ color: "#92400e", fontWeight: 700, textDecoration: "none" }}>
+            {BRAND.phone}
+          </a>
+        </p>
+      </div>
+      <div
+        style={{
+          display: "flex",
+          gap: 6,
+          flexWrap: "wrap",
+          marginBottom: 32,
+          borderBottom: "1px solid #e2e5ea",
+          paddingBottom: 14,
+        }}
+      >
+        {subNavLinks.map((l) => (
+          <a
+            key={l.href}
+            href={l.href}
+            style={{
+              fontSize: 13,
+              fontWeight: 700,
+              textDecoration: "none",
+              padding: "6px 12px",
+              borderRadius: 20,
+              color: active === l.label ? "#fff" : "#92400e",
+              background: active === l.label ? "#92400e" : "#fdf1e4",
+            }}
+          >
+            {l.label}
+          </a>
+        ))}
+      </div>
     </div>
-  );
-}
-
-export function DispatchBadge() {
-  return (
-    <span
-      style={{
-        display: "inline-block",
-        fontSize: 12,
-        fontWeight: 700,
-        color: "#166534",
-        background: "#e9f7ef",
-        border: "1px solid #166534",
-        borderRadius: 20,
-        padding: "4px 12px",
-        marginBottom: 16,
-      }}
-    >
-      Durango, Colorado · Run by the founder, not a call center
-    </span>
   );
 }
