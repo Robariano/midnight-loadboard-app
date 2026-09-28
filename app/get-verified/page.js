@@ -109,6 +109,10 @@ export default function GetVerified() {
                       <label style={labelStyle}>Phone</label>
         <input style={inputStyle} value={form.contact_phone}
           onChange={(e) => update("contact_phone", e.target.value)} />
+        <p style={{ fontSize: 11, color: "#6b7280", marginTop: -4, marginBottom: 10 }}>
+          We may text this number about your account (e.g. a reminder before your insurance on file
+          expires). Msg &amp; data rates may apply. Reply STOP to opt out, HELP for help.
+        </p>
 
                       <label style={labelStyle}>DOT Number</label>
         <input style={inputStyle} value={form.dot_number}

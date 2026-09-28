@@ -18,10 +18,11 @@ export default function TermsOfService() {
 
       <h2 style={{ color: "#14181f", fontSize: 18, marginTop: 24 }}>SMS notifications</h2>
       <p style={{ color: "#14181f", lineHeight: 1.6 }}>
-        When a carrier assigns a driver to a load, we send that driver a single text message with a
-        private link to confirm coverage. Message and data rates may apply. Reply STOP to opt out of
-        future messages, or HELP for help. This is a transactional notification tied to a specific
-        load assignment, not a marketing message.
+        If you become a verified carrier, the phone number you provide on your carrier account is
+        used solely for account-related text alerts &mdash; for example, a reminder before your
+        on-file insurance expires, so your verified status doesn't lapse. Message and data rates may
+        apply. Reply STOP to opt out of future messages, or HELP for help. These are transactional
+        account notifications, never marketing messages.
       </p>
 
       <h2 style={{ color: "#14181f", fontSize: 18, marginTop: 24 }}>No warranty</h2>
