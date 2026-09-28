@@ -1,5 +1,6 @@
 import { getServiceClient } from "../../../lib/supabase";
 import { checkRateLimit } from "../../../lib/rate-limit";
+import { sendDispatchLeadAlertSMS } from "../../../lib/twilio";
 
 // Genuinely public lead form - no login needed. Captures two real cases
 // (see app/dispatch/_DispatcherForm.js and the migration for why they're
@@ -59,5 +60,22 @@ export async function POST(req) {
   });
 
   if (error) return Response.json({ error: error.message }, { status: 500 });
+
+  // Best-effort text alert so this lead does not sit unseen in the admin
+  // dashboard — never lets a Twilio problem fail the visitor's submission.
+  try {
+    await sendDispatchLeadAlertSMS({
+      companyName,
+      hasOwnAuthority,
+      mcNumber,
+      dotNumber,
+      leasedUnderCompany,
+      contactPhone,
+      contactEmail,
+    });
+  } catch (smsError) {
+    console.error("Failed to send dispatch lead alert SMS:", smsError);
+  }
+
   return Response.json({ ok: true }, { status: 201 });
 }
