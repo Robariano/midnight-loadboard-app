@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { SOURCE_STORAGE_KEY } from "./_SourceTracker";
 
 // The actual lead-capture form, unchanged from the original
 // app/need-a-dispatcher/page.js — moved here so it has one home now that
@@ -35,6 +36,12 @@ export default function DispatcherLeadForm() {
     e.preventDefault();
     setStatus("submitting");
     setError(null);
+    let source = null;
+    try {
+      source = window.localStorage.getItem(SOURCE_STORAGE_KEY);
+    } catch {
+      // ignore — source tracking is best-effort, never worth failing the form over
+    }
     const res = await fetch("/api/dispatch-leads", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -48,6 +55,7 @@ export default function DispatcherLeadForm() {
         contact_email: contactEmail,
         contact_phone: contactPhone,
         notes,
+        source,
       }),
     });
     const data = await res.json().catch(() => ({}));

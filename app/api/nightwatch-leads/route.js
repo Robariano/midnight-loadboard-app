@@ -22,6 +22,7 @@ export async function POST(req) {
   const contactEmail = String(body.contact_email || "").trim();
   const contactPhone = String(body.contact_phone || "").trim();
   const notes = String(body.notes || "").trim();
+  const source = String(body.source || "").trim();
 
   if (!companyName) {
     return Response.json({ error: "Enter your name or your company's name." }, { status: 400 });
@@ -37,6 +38,7 @@ export async function POST(req) {
     contact_email: contactEmail || null,
     contact_phone: contactPhone || null,
     notes: notes || null,
+    source: source || null,
   });
 
   if (error) return Response.json({ error: error.message }, { status: 500 });

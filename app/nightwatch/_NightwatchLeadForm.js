@@ -28,6 +28,12 @@ export default function NightwatchLeadForm() {
     e.preventDefault();
     setStatus("submitting");
     setError(null);
+    let source = null;
+    try {
+      source = new URLSearchParams(window.location.search).get("src");
+    } catch {
+      // ignore — source tracking is best-effort, never worth failing the form over
+    }
     const res = await fetch("/api/nightwatch-leads", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -37,6 +43,7 @@ export default function NightwatchLeadForm() {
         contact_email: contactEmail,
         contact_phone: contactPhone,
         notes,
+        source,
       }),
     });
     const data = await res.json().catch(() => ({}));

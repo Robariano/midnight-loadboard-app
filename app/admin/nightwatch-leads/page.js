@@ -73,6 +73,7 @@ export default function AdminNightwatchLeads() {
           )}
           <p style={{ fontSize: 11, color: "#8a92a0", margin: "6px 0 10px" }}>
             Submitted {new Date(l.created_at).toLocaleString()}
+            {l.source ? ` · from: ${l.source}` : ""}
           </p>
           <div style={{ display: "flex", gap: 8 }}>
             {l.status !== "contacted" && (

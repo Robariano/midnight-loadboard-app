@@ -13,6 +13,7 @@
 // midnightloadboard.com/dispatch/*. dispatchHref() below builds the
 // right link for whichever domain the page is currently being viewed on.
 import { headers } from "next/headers";
+import SourceTracker from "./_SourceTracker";
 
 const STEADY_WAKE_HOSTS = new Set(["steadywakedispatch.com", "www.steadywakedispatch.com"]);
 
@@ -91,6 +92,7 @@ const subNavLinks = [
 export function DispatchSubNav({ active }) {
   return (
     <div>
+      <SourceTracker />
       <div
         style={{
           display: "flex",

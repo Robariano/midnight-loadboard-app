@@ -85,6 +85,23 @@ your Vercel project settings):
   automatically use it to authenticate the daily insurance-expiration check (see `vercel.json`) —
   nothing else to configure.
 
+## Tracking where a lead came from
+
+Both lead-capture forms (`/dispatch/contact` for Steady Wake, `/nightwatch` for
+broker early access) can tell you which link someone clicked, if you tag the
+link when you post it: add `?src=<whatever-you-want>` to the end.
+
+Example: sharing the dispatch link in the "Small Fleet Owners" Facebook group?
+Post `midnightloadboard.com/dispatch?src=small-fleet-owners-fb` instead of the
+bare link. When someone fills out the form, the admin panel
+(`/admin/dispatch-leads` or `/admin/nightwatch-leads`) will show
+"from: small-fleet-owners-fb" on their entry. Run
+`supabase-migration-lead-source-tracking.sql` once (SQL Editor > New Query >
+paste > Run) if you haven't already — it adds the `source` column both forms
+write to.
+
+No tag on the link just means the "from:" line is left off — nothing breaks.
+
 ## Next steps / things not yet built
 
 - **Done this session:** carrier auth now requires a private `carrier_secret` (issued at signup) alongside the public Carrier ID before claiming a load or updating anything - closes the impersonation gap without a full account system. Self-service re-verification is live at `/reverify/[id]`: carriers can resubmit updated docs themselves using that same secret, the daily insurance-expiration cron now actually pauses lapsed carriers to `pending_reverification` and emails them the link, and admins have a manual "Request Re-verification" button plus a copyable reverify link per carrier. Flag escalation (`/admin/flags`, resolve/escalate) was also already fully built in an earlier session.
