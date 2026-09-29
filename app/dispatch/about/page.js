@@ -3,7 +3,7 @@ import { DispatchSubNav, cardStyle, primaryBtn, dispatchHref } from "../_shared"
 export const metadata = {
   title: "About | Steady Wake Dispatch",
   description:
-    "Navy veteran, 16 years hands-on tractor-trailer experience, active CDL, certified dispatcher — why Steady Wake Dispatch exists.",
+    "Navy veteran, 12 years driving dry van, active CDL, certified dispatcher — why Steady Wake Dispatch exists.",
 };
 
 export default function DispatchAbout() {
@@ -18,7 +18,7 @@ export default function DispatchAbout() {
           <dt style={{ color: "#6b7280" }}>Background</dt>
           <dd style={{ color: "#14181f", fontWeight: 700 }}>U.S. Navy Veteran</dd>
           <dt style={{ color: "#6b7280" }}>Experience</dt>
-          <dd style={{ color: "#14181f", fontWeight: 700 }}>16 yrs hands-on trucking, incl. 12 yrs beverage distribution</dd>
+          <dd style={{ color: "#14181f", fontWeight: 700 }}>12 yrs driving dry van (beverage distribution)</dd>
           <dt style={{ color: "#6b7280" }}>License</dt>
           <dd style={{ color: "#14181f", fontWeight: 700 }}>Active CDL</dd>
           <dt style={{ color: "#6b7280" }}>Training</dt>
@@ -31,7 +31,7 @@ export default function DispatchAbout() {
       <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
         <div style={cardStyle}>
           <p style={{ color: "#4b5568", fontSize: 14, lineHeight: 1.7, margin: 0 }}>
-            I'm a Navy veteran with 16 years of hands-on tractor-trailer experience, including 12 years
+            I've been around trucking for nearly 30 years — Navy veteran, with 12 years driving dry van
             in beverage distribution — tight schedules, no room for slacking. I also spent time in the
             Navy blocking and bracing cargo on flatbeds, so I understand load securement for that
             freight too. I still hold my active CDL, which means I know exactly what it's like to be

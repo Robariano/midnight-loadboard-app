@@ -3,7 +3,7 @@ import { DispatchSubNav, cardStyle, primaryBtn, secondaryBtn, statBox, BRAND, di
 export const metadata = {
   title: "Steady Wake Dispatch | Freight Dispatching in Durango, CO",
   description:
-    "Reliable dispatching built on real experience — Navy veteran, 16 years hands-on trucking experience, dispatching for owner-operators out of Durango, Colorado.",
+    "Reliable dispatching built on real experience — Navy veteran, 12 years driving dry van, now dispatching for owner-operators out of Durango, Colorado.",
 };
 
 export default function DispatchHome() {
@@ -15,7 +15,7 @@ export default function DispatchHome() {
         Reliable dispatching, built on real experience.
       </h1>
       <p style={{ color: "#4b5568", fontSize: 16, lineHeight: 1.6, marginBottom: 24, maxWidth: 560 }}>
-        Navy veteran. 16 years hands-on trucking experience. I bring that same discipline to
+        Navy veteran. Nearly 30 years around trucking, including 12 years driving dry van. I bring that same discipline to
         dispatching for owner-operators — dry van and flatbed.
       </p>
       <div style={{ display: "flex", gap: 12, marginBottom: 32, flexWrap: "wrap" }}>
@@ -26,9 +26,9 @@ export default function DispatchHome() {
       {/* Stats, echoing the odometer figures from Rob's own draft site */}
       <div style={{ display: "flex", gap: 14, flexWrap: "wrap", marginBottom: 40 }}>
         <div style={statBox}>
-          <p style={{ fontSize: 34, fontWeight: 700, margin: 0, color: "#fbbf24" }}>16</p>
+          <p style={{ fontSize: 34, fontWeight: 700, margin: 0, color: "#fbbf24" }}>12</p>
           <p style={{ fontSize: 13, color: "#c7ccd6", margin: "4px 0 0" }}>
-            Years hands-on tractor-trailer experience
+            Years driving dry van experience
           </p>
         </div>
         <div style={statBox}>
@@ -53,7 +53,7 @@ export default function DispatchHome() {
       <p style={{ color: "#14181f", fontWeight: 700, fontSize: 16, marginBottom: 16 }}>Why owner-operators choose Steady Wake</p>
       <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 40 }}>
         {[
-          "Real trucking experience, not just a certificate — 16 years in the seat.",
+          "Real trucking experience, not just a certificate — 12 years driving, hands-on in trucking ever since.",
           "Broker vetting built into every load — checked personally against FMCSA's own database.",
           "Honest 7% starting rate — no bait-and-switch pricing later.",
           "Navy discipline: reliable, direct, and accountable.",
