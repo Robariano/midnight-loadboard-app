@@ -1,6 +1,15 @@
 "use client";
 import { useState, useEffect } from "react";
 
+// Real-time progress for whoever's watching this load, without needing a
+// phone call to the carrier - the lightweight version of the load status
+// tracking idea (manual updates, not GPS/ELD-fed).
+const STATUS_UPDATE_TEXT = {
+  picked_up: "The carrier has picked up this load.",
+  in_transit: "This load is in transit.",
+  delivered: "This load has been delivered.",
+};
+
 const inputStyle = {
     width: "100%",
     padding: "10px 12px",
@@ -122,11 +131,18 @@ export default function ManageLoad({ params }) {
 </p>
 
 {!isOpen && !isOnHold && (
-          <p style={{ color: load.status === "cancelled" ? "#991b1b" : "#166534", marginBottom: 16 }}>
+          <div style={{ marginBottom: 16 }}>
+            <p style={{ color: load.status === "cancelled" ? "#991b1b" : "#166534", marginBottom: 4 }}>
 {load.status === "cancelled"
              ? "This load has been cancelled."
               : "This load has already been claimed by a carrier and can no longer be edited here."}
 </p>
+            {STATUS_UPDATE_TEXT[load.status] && (
+              <p style={{ color: "#4b5568", fontSize: 14, margin: 0 }}>
+                {STATUS_UPDATE_TEXT[load.status]}
+              </p>
+            )}
+          </div>
       )}
 
 {isOnHold && (

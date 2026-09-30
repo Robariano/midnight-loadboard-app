@@ -1,7 +1,10 @@
 import { getServiceClient } from "../../../../../lib/supabase";
 
 // Marks a load as delivered once coverage has been confirmed. This is the
-// step that unlocks leaving a rating for the carrier.
+// step that unlocks leaving a rating for the carrier. Deliverable directly
+// from "confirmed" (skipping the picked-up/in-transit steps is allowed -
+// they're a convenience for tracking progress, not a requirement) or from
+// either intermediate status.
 export async function POST(req, { params }) {
   const loadId = params.id;
   const supabase = getServiceClient();
@@ -10,7 +13,7 @@ export async function POST(req, { params }) {
     .from("loads")
     .update({ status: "delivered" })
     .eq("id", loadId)
-    .eq("status", "confirmed") // only deliverable once coverage was confirmed
+    .in("status", ["confirmed", "picked_up", "in_transit"])
     .select()
     .single();
 

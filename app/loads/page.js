@@ -6,6 +6,8 @@ const badgeColor = {
   claimed: { bg: "#fef3e2", color: "#92400e" },
   coverage_pending: { bg: "#fef3e2", color: "#92400e" },
   confirmed: { bg: "#e9f7ef", color: "#166534" },
+  picked_up: { bg: "#e0ecfc", color: "#1d4ed8" },
+  in_transit: { bg: "#e0ecfc", color: "#1d4ed8" },
   on_hold: { bg: "#fdecec", color: "#991b1b" },
   delivered: { bg: "#f0f2f5", color: "#4b5568" },
 };
@@ -104,13 +106,17 @@ export default function Loads() {
     setClaimResult(data);
   }
 
-  async function markDelivered(loadId) {
-    const res = await fetch(`/api/loads/${loadId}/complete`, { method: "POST" });
+  async function updateLoadStatus(loadId, endpoint) {
+    const res = await fetch(`/api/loads/${loadId}/${endpoint}`, { method: "POST" });
     const data = await res.json();
     if (data.load) {
       setLoads((prev) => prev.map((l) => (l.id === loadId ? { ...l, status: data.load.status } : l)));
     }
   }
+
+  const markPickedUp = (loadId) => updateLoadStatus(loadId, "mark-picked-up");
+  const markInTransit = (loadId) => updateLoadStatus(loadId, "mark-in-transit");
+  const markDelivered = (loadId) => updateLoadStatus(loadId, "complete");
 
   return (
     <div>
@@ -237,7 +243,37 @@ export default function Loads() {
               )}
             </p>
 
-            {load.status === "confirmed" && (
+            {(load.status === "confirmed" || load.status === "picked_up") && (
+              <div style={{ display: "flex", gap: 10, alignItems: "center", marginBottom: 8 }}>
+                {load.status === "confirmed" && (
+                  <button onClick={() => markPickedUp(load.id)}
+                    style={{
+                      background: "#1d4ed8", color: "#fff", border: "none", borderRadius: 6,
+                      padding: "8px 16px", fontSize: 13, fontWeight: 700, cursor: "pointer",
+                    }}>
+                    Mark picked up
+                  </button>
+                )}
+                {load.status === "picked_up" && (
+                  <button onClick={() => markInTransit(load.id)}
+                    style={{
+                      background: "#1d4ed8", color: "#fff", border: "none", borderRadius: 6,
+                      padding: "8px 16px", fontSize: 13, fontWeight: 700, cursor: "pointer",
+                    }}>
+                    Mark in transit
+                  </button>
+                )}
+                <button onClick={() => markDelivered(load.id)}
+                  style={{
+                    background: "none", border: "1px solid #e2e5ea", borderRadius: 6,
+                    padding: "8px 16px", fontSize: 13, color: "#4b5568", cursor: "pointer",
+                  }}>
+                  Skip to delivered
+                </button>
+              </div>
+            )}
+
+            {load.status === "in_transit" && (
               <button onClick={() => markDelivered(load.id)}
                 style={{
                   background: "#1d4ed8", color: "#fff", border: "none", borderRadius: 6,
