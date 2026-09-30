@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 
-const DOCUMENT_TYPES = ["Invoice", "Proof of Delivery", "Inspection Report", "Insurance Certificate", "Medical Card", "Other"];
+const DOCUMENT_TYPES = ["Bill of Lading", "Rate Confirmation", "Lumper Receipt", "Invoice", "Proof of Delivery", "Inspection Report", "Insurance Certificate", "Medical Card", "Other"];
 
 export default function MyDocuments() {
     const [documents, setDocuments] = useState(null);
@@ -61,6 +61,46 @@ export default function MyDocuments() {
     loadShares();
   }
 
+  const [openSendFor, setOpenSendFor] = useState(null);
+  const [sendEmail, setSendEmail] = useState("");
+  const [sendLabel, setSendLabel] = useState("");
+  const [sendNote, setSendNote] = useState("");
+  const [sendStatus, setSendStatus] = useState(null);
+  const [sendError, setSendError] = useState(null);
+
+  function openSend(docId) {
+    setOpenSendFor(docId);
+    setSendEmail("");
+    setSendLabel("");
+    setSendNote("");
+    setSendStatus(null);
+    setSendError(null);
+  }
+
+  async function handleSendDocument(e, docId) {
+    e.preventDefault();
+    if (!sendEmail.trim()) { setSendError("Enter an email address."); return; }
+    setSendStatus("sending");
+    setSendError(null);
+    const res = await fetch(`/api/driver-documents/${docId}/send`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        recipient_email: sendEmail.trim(),
+        recipient_label: sendLabel.trim(),
+        note: sendNote.trim(),
+      }),
+    });
+    const data = await res.json().catch(() => ({}));
+    if (res.ok) {
+      setSendStatus("done");
+      loadDocuments();
+    } else {
+      setSendError(data.error || "Couldn't send it.");
+      setSendStatus("error");
+    }
+  }
+
 
   async function handleUpload(e) {
         e.preventDefault();
@@ -110,7 +150,12 @@ export default function MyDocuments() {
         <label style={{ display: "block", fontSize: 13, color: "#4b5568", marginBottom: 6 }}>
           File
         </label>
-        <input type="file" onChange={(e) => setFile(e.target.files[0])} style={{ marginBottom: 12 }} />
+        <input type="file" accept="image/*,application/pdf" capture="environment"
+          onChange={(e) => setFile(e.target.files[0])} style={{ marginBottom: 12 }} />
+        <p style={{ fontSize: 12, color: "#8a92a0", marginTop: -8, marginBottom: 12 }}>
+          On your phone this opens your camera directly - snap a photo of the paperwork, or choose
+          an existing file instead.
+        </p>
 
         <label style={{ display: "block", fontSize: 13, color: "#4b5568", marginBottom: 6 }}>
           Notes (optional)
@@ -148,11 +193,78 @@ export default function MyDocuments() {
             Saved {new Date(d.submitted_at).toLocaleString()}
           </p>
           {d.notes && <p style={{ fontSize: 13, color: "#4b5568", margin: "0 0 6px" }}>{d.notes}</p>}
-          <a href={d.file_url} target="_blank" rel="noopener noreferrer" style={{
-            color: "#1d4ed8", fontSize: 13, fontWeight: 700, textDecoration: "none",
-          }}>
-            View file
-          </a>
+          <div style={{ display: "flex", gap: 14, alignItems: "center", marginBottom: (d.sends && d.sends.length) ? 8 : 0 }}>
+            <a href={d.file_url} target="_blank" rel="noopener noreferrer" style={{
+              color: "#1d4ed8", fontSize: 13, fontWeight: 700, textDecoration: "none",
+            }}>
+              View file
+            </a>
+            <button onClick={() => openSend(d.id)} style={{
+              background: "none", border: "1px solid #e2e5ea", borderRadius: 6,
+              padding: "3px 10px", fontSize: 12, color: "#1d4ed8", cursor: "pointer",
+            }}>
+              Send
+            </button>
+          </div>
+
+          {d.sends && d.sends.length > 0 && (
+            <p style={{ fontSize: 12, color: "#8a92a0", margin: "0 0 6px" }}>
+              {d.sends.map((s) => (s.recipient_label || s.recipient_email)).join(", ")}
+              {" - last sent "}
+              {new Date(d.sends[0].sent_at).toLocaleString()}
+            </p>
+          )}
+
+          {openSendFor === d.id && (
+            <form onSubmit={(e) => handleSendDocument(e, d.id)} style={{
+              background: "#ffffff", border: "1px solid #e2e5ea", borderRadius: 8,
+              padding: "10px 12px", marginTop: 8,
+            }}>
+              <label style={{ display: "block", fontSize: 12, color: "#4b5568", marginBottom: 4 }}>
+                Send to (email)
+              </label>
+              <input value={sendEmail} onChange={(e) => setSendEmail(e.target.value)}
+                placeholder="dispatch@rtsfinancial.com" type="email"
+                style={{
+                  width: "100%", padding: 7, marginBottom: 8, background: "#ffffff",
+                  border: "1px solid #e2e5ea", borderRadius: 6, color: "#14181f", fontSize: 13,
+                }} />
+              <label style={{ display: "block", fontSize: 12, color: "#4b5568", marginBottom: 4 }}>
+                Who is this? (optional, e.g. "RTS Financial")
+              </label>
+              <input value={sendLabel} onChange={(e) => setSendLabel(e.target.value)}
+                style={{
+                  width: "100%", padding: 7, marginBottom: 8, background: "#ffffff",
+                  border: "1px solid #e2e5ea", borderRadius: 6, color: "#14181f", fontSize: 13,
+                }} />
+              <label style={{ display: "block", fontSize: 12, color: "#4b5568", marginBottom: 4 }}>
+                Note (optional)
+              </label>
+              <input value={sendNote} onChange={(e) => setSendNote(e.target.value)}
+                placeholder="Load #4471"
+                style={{
+                  width: "100%", padding: 7, marginBottom: 10, background: "#ffffff",
+                  border: "1px solid #e2e5ea", borderRadius: 6, color: "#14181f", fontSize: 13,
+                }} />
+              <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+                <button type="submit" disabled={sendStatus === "sending"} style={{
+                  background: "#1d4ed8", color: "#fff", border: "none", borderRadius: 6,
+                  padding: "8px 14px", fontSize: 13, fontWeight: 700, cursor: "pointer",
+                }}>
+                  {sendStatus === "sending" ? "Sending..." : "Send email"}
+                </button>
+                <button type="button" onClick={() => setOpenSendFor(null)} style={{
+                  background: "none", border: "none", fontSize: 13, color: "#4b5568", cursor: "pointer",
+                }}>
+                  Cancel
+                </button>
+              </div>
+              {sendStatus === "done" && (
+                <p style={{ color: "#166534", marginTop: 8, fontSize: 13 }}>Sent.</p>
+              )}
+              {sendError && <p style={{ color: "#991b1b", marginTop: 8, fontSize: 13 }}>{sendError}</p>}
+            </form>
+          )}
         </div>
       ))}
 

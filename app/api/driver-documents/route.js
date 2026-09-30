@@ -17,7 +17,25 @@ export async function GET(req) {
     .order("submitted_at", { ascending: false });
 
   if (error) return Response.json({ error: error.message }, { status: 500 });
-  return Response.json({ documents: data });
+
+  // Attach each document's send history (who it's been emailed to, and when)
+  // so the carrier has the same "sent to X on Y" record as the share links.
+  const documentIds = (data || []).map((d) => d.id);
+  let sendsByDocument = {};
+  if (documentIds.length) {
+    const { data: sends } = await supabase
+      .from("document_sends")
+      .select("id, document_id, recipient_email, recipient_label, note, sent_at")
+      .in("document_id", documentIds)
+      .order("sent_at", { ascending: false });
+    for (const s of sends || []) {
+      if (!sendsByDocument[s.document_id]) sendsByDocument[s.document_id] = [];
+      sendsByDocument[s.document_id].push(s);
+    }
+  }
+
+  const documents = (data || []).map((d) => ({ ...d, sends: sendsByDocument[d.id] || [] }));
+  return Response.json({ documents });
 }
 
 export async function POST(req) {
