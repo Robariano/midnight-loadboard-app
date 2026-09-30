@@ -102,6 +102,24 @@ write to.
 
 No tag on the link just means the "from:" line is left off — nothing breaks.
 
+## Sharing verification status with a broker (no blockchain, just a tracked link)
+
+Carriers can now share their documents with one specific broker via a private
+link instead of emailing a PDF — from `/my-documents`, enter who it's for
+("Coyote Point Brokerage") and click "Create link". The link shows only that
+carrier's verification status and documents (never anyone else's), and every
+time it's opened, the carrier sees exactly when and how many times — right on
+their `/my-documents` page. Links auto-expire after 30 days, or the carrier
+can turn one off early.
+
+Run `supabase-migration-document-shares.sql` once (SQL Editor > New Query >
+paste > Run) if you haven't already — it creates the `document_shares` table
+this feature uses.
+
+(This is the idea from the "NightHaul" concept — proving something's true
+without handing over the whole document — built with a plain database and a
+random link token. No blockchain or cryptocurrency involved.)
+
 ## Next steps / things not yet built
 
 - **Done this session:** carrier auth now requires a private `carrier_secret` (issued at signup) alongside the public Carrier ID before claiming a load or updating anything - closes the impersonation gap without a full account system. Self-service re-verification is live at `/reverify/[id]`: carriers can resubmit updated docs themselves using that same secret, the daily insurance-expiration cron now actually pauses lapsed carriers to `pending_reverification` and emails them the link, and admins have a manual "Request Re-verification" button plus a copyable reverify link per carrier. Flag escalation (`/admin/flags`, resolve/escalate) was also already fully built in an earlier session.

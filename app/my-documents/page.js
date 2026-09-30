@@ -22,6 +22,46 @@ export default function MyDocuments() {
 
   useEffect(() => { loadDocuments(); }, []);
 
+  const [shares, setShares] = useState([]);
+  const [recipientLabel, setRecipientLabel] = useState("");
+  const [shareStatus, setShareStatus] = useState(null);
+  const [shareError, setShareError] = useState(null);
+
+  function loadShares() {
+    fetch("/api/document-shares")
+      .then((r) => r.json())
+      .then((d) => setShares(d.shares || []));
+  }
+
+  useEffect(() => { loadShares(); }, []);
+
+  async function handleCreateShare(e) {
+    e.preventDefault();
+    if (!recipientLabel.trim()) { setShareError("Enter who you're sharing this with."); return; }
+    setShareStatus("creating");
+    setShareError(null);
+    const res = await fetch("/api/document-shares", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ recipient_label: recipientLabel.trim() }),
+    });
+    const data = await res.json().catch(() => ({}));
+    if (res.ok) {
+      setRecipientLabel("");
+      setShareStatus("done");
+      loadShares();
+    } else {
+      setShareError(data.error || "Couldn't create the link.");
+      setShareStatus("error");
+    }
+  }
+
+  async function handleRevoke(id) {
+    await fetch(`/api/document-shares/${id}/revoke`, { method: "POST" });
+    loadShares();
+  }
+
+
   async function handleUpload(e) {
         e.preventDefault();
         if (!file) { setError("Choose a file first."); return; }
@@ -115,6 +155,79 @@ export default function MyDocuments() {
           </a>
         </div>
       ))}
+
+      <h2 style={{ color: "#14181f", fontSize: 16, marginTop: 32 }}>Share with a broker</h2>
+      <p style={{ color: "#4b5568", marginBottom: 16, fontSize: 13 }}>
+        Instead of emailing your documents, send a private link. You'll see exactly when they
+        looked at it, and you can turn the link off any time.
+      </p>
+
+      <form onSubmit={handleCreateShare} style={{
+        background: "#f7f8fa", border: "1px solid #e2e5ea", borderRadius: 10,
+        padding: "16px 18px", marginBottom: 20, display: "flex", gap: 10, alignItems: "flex-end",
+      }}>
+        <div style={{ flex: 1 }}>
+          <label style={{ display: "block", fontSize: 13, color: "#4b5568", marginBottom: 6 }}>
+            Who is this for? (e.g. broker name)
+          </label>
+          <input value={recipientLabel} onChange={(e) => setRecipientLabel(e.target.value)}
+            placeholder="Coyote Point Brokerage"
+            style={{
+              width: "100%", padding: 8, background: "#ffffff",
+              border: "1px solid #e2e5ea", borderRadius: 6, color: "#14181f", fontSize: 14,
+            }} />
+        </div>
+        <button type="submit" disabled={shareStatus === "creating"} style={{
+          background: "#1d4ed8", color: "#fff", border: "none", borderRadius: 6,
+          padding: "10px 18px", fontSize: 14, fontWeight: 700, cursor: "pointer", whiteSpace: "nowrap",
+        }}>
+          {shareStatus === "creating" ? "Creating..." : "Create link"}
+        </button>
+      </form>
+      {shareError && <p style={{ color: "#991b1b", marginBottom: 16, fontSize: 13 }}>{shareError}</p>}
+
+      {shares.length === 0 && (
+        <p style={{ color: "#4b5568", fontSize: 14 }}>No share links yet.</p>
+      )}
+      {shares.map((s) => {
+        const isRevoked = !!s.revoked_at;
+        const isExpired = new Date(s.expires_at) < new Date();
+        const shareUrl = typeof window !== "undefined"
+          ? `${window.location.origin}/shared/${s.share_token}`
+          : `/shared/${s.share_token}`;
+        return (
+          <div key={s.id} style={{
+            background: "#f7f8fa", border: "1px solid #e2e5ea", borderRadius: 10,
+            padding: "12px 16px", marginBottom: 8, opacity: (isRevoked || isExpired) ? 0.6 : 1,
+          }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+              <p style={{ fontWeight: 700, fontSize: 14, margin: "0 0 2px", color: "#14181f" }}>
+                {s.recipient_label}
+              </p>
+              {!isRevoked && !isExpired && (
+                <button onClick={() => handleRevoke(s.id)} style={{
+                  background: "none", border: "1px solid #e2e5ea", borderRadius: 6,
+                  padding: "4px 10px", fontSize: 12, color: "#991b1b", cursor: "pointer",
+                }}>
+                  Turn off
+                </button>
+              )}
+            </div>
+            <p style={{ fontSize: 12, color: "#8a92a0", margin: "0 0 6px" }}>
+              {isRevoked ? "Turned off" : isExpired ? "Expired" : `Expires ${new Date(s.expires_at).toLocaleDateString()}`}
+              {" \u00b7 "}
+              {s.view_count === 0
+                ? "Not viewed yet"
+                : `Viewed ${s.view_count} time${s.view_count === 1 ? "" : "s"}, last on ${new Date(s.last_viewed_at).toLocaleString()}`}
+            </p>
+            {!isRevoked && !isExpired && (
+              <p style={{ fontSize: 13, color: "#1d4ed8", margin: 0, wordBreak: "break-all" }}>
+                {shareUrl}
+              </p>
+            )}
+          </div>
+        );
+      })}
     </div>
   );
 }
