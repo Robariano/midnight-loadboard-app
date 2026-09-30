@@ -107,7 +107,7 @@ export default function GetVerified() {
           onChange={(e) => setConfirmPassword(e.target.value)} />
 
                       <label style={labelStyle}>Phone</label>
-        <input style={inputStyle} value={form.contact_phone}
+        <input style={inputStyle} required type="tel" value={form.contact_phone}
           onChange={(e) => update("contact_phone", e.target.value)} />
         <p style={{ fontSize: 11, color: "#6b7280", marginTop: -4, marginBottom: 10 }}>
           We may text this number about your account (e.g. a reminder before your insurance on file
