@@ -23,6 +23,13 @@ const filterInputStyle = {
 
 const EQUIPMENT_TYPES = ["Dry Van", "Flatbed", "Reefer", "Tanker", "Step Deck", "Other"];
 
+const US_STATES = [
+  "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "DC", "FL", "GA", "HI", "ID", "IL", "IN",
+  "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH",
+  "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT",
+  "VT", "VA", "WA", "WV", "WI", "WY",
+];
+
 // How close (in miles) counts as "near" a load's pickup/delivery city before
 // showing a location-based nudge. Cities are geocoded to their center point,
 // not an exact dock address, so this stays generous on purpose.
@@ -61,8 +68,8 @@ export default function Loads() {
 
   const [trackOpen, setTrackOpen] = useState(false);
   const [trackForm, setTrackForm] = useState({
-    pickup_city: "", delivery_city: "", pickup_date: "", equipment_type: "",
-    rate: "", shipper_name: "", notes: "",
+    pickup_city: "", pickup_state: "", delivery_city: "", delivery_state: "", pickup_date: "",
+    equipment_type: "", rate: "", shipper_name: "", notes: "",
   });
   const [trackStatus, setTrackStatus] = useState(null);
   const [trackResult, setTrackResult] = useState(null);
@@ -172,16 +179,25 @@ export default function Loads() {
   async function submitTrack(e) {
     e.preventDefault();
     setTrackStatus("saving");
+    // Combine the separate city + state dropdown into one "City, ST" string
+    // for the API - keeps the geocoder from ever having to guess a state.
     const res = await fetch("/api/loads/track", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(trackForm),
+      body: JSON.stringify({
+        ...trackForm,
+        pickup_city: `${trackForm.pickup_city.trim()}, ${trackForm.pickup_state}`,
+        delivery_city: `${trackForm.delivery_city.trim()}, ${trackForm.delivery_state}`,
+      }),
     });
     const data = await res.json().catch(() => ({}));
     if (res.ok) {
       setTrackResult(data);
       setTrackStatus("done");
-      setTrackForm({ pickup_city: "", delivery_city: "", pickup_date: "", equipment_type: "", rate: "", shipper_name: "", notes: "" });
+      setTrackForm({
+        pickup_city: "", pickup_state: "", delivery_city: "", delivery_state: "", pickup_date: "",
+        equipment_type: "", rate: "", shipper_name: "", notes: "",
+      });
       fetchLoads();
     } else {
       setTrackStatus("error");
@@ -225,15 +241,31 @@ export default function Loads() {
             }}>
               <div>
                 <label style={{ display: "block", fontSize: 11, color: "#4b5568", marginBottom: 4 }}>Pickup city & state</label>
-                <input required value={trackForm.pickup_city} placeholder="e.g. Durango, CO"
-                  onChange={(e) => setTrackForm((f) => ({ ...f, pickup_city: e.target.value }))}
-                  style={{ ...filterInputStyle, width: 150 }} />
+                <div style={{ display: "flex", gap: 6 }}>
+                  <input required value={trackForm.pickup_city} placeholder="City"
+                    onChange={(e) => setTrackForm((f) => ({ ...f, pickup_city: e.target.value }))}
+                    style={{ ...filterInputStyle, width: 100 }} />
+                  <select required value={trackForm.pickup_state}
+                    onChange={(e) => setTrackForm((f) => ({ ...f, pickup_state: e.target.value }))}
+                    style={{ ...filterInputStyle, width: 68 }}>
+                    <option value="">State</option>
+                    {US_STATES.map((s) => <option key={s} value={s}>{s}</option>)}
+                  </select>
+                </div>
               </div>
               <div>
                 <label style={{ display: "block", fontSize: 11, color: "#4b5568", marginBottom: 4 }}>Delivery city & state</label>
-                <input required value={trackForm.delivery_city} placeholder="e.g. Aztec, NM"
-                  onChange={(e) => setTrackForm((f) => ({ ...f, delivery_city: e.target.value }))}
-                  style={{ ...filterInputStyle, width: 150 }} />
+                <div style={{ display: "flex", gap: 6 }}>
+                  <input required value={trackForm.delivery_city} placeholder="City"
+                    onChange={(e) => setTrackForm((f) => ({ ...f, delivery_city: e.target.value }))}
+                    style={{ ...filterInputStyle, width: 100 }} />
+                  <select required value={trackForm.delivery_state}
+                    onChange={(e) => setTrackForm((f) => ({ ...f, delivery_state: e.target.value }))}
+                    style={{ ...filterInputStyle, width: 68 }}>
+                    <option value="">State</option>
+                    {US_STATES.map((s) => <option key={s} value={s}>{s}</option>)}
+                  </select>
+                </div>
               </div>
               <div>
                 <label style={{ display: "block", fontSize: 11, color: "#4b5568", marginBottom: 4 }}>Pickup date</label>

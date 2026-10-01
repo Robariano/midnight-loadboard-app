@@ -13,6 +13,13 @@ const inputStyle = {
 };
 const labelStyle = { display: "block", fontSize: 13, color: "#4b5568", marginBottom: 4 };
 
+const US_STATES = [
+  "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "DC", "FL", "GA", "HI", "ID", "IL", "IN",
+  "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH",
+  "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT",
+  "VT", "VA", "WA", "WV", "WI", "WY",
+];
+
 // Hidden from sighted users and unreachable by keyboard tab order - real
 // visitors never touch this field. Simple bots that fill in every input
 // often fill this one too, which is how we catch them (see /api/loads).
@@ -21,7 +28,9 @@ const honeypotStyle = { position: "absolute", left: "-9999px", width: 1, height:
 export default function PostLoad() {
       const [form, setForm] = useState({
               pickup_city: "",
+              pickup_state: "",
               delivery_city: "",
+              delivery_state: "",
               pickup_date: "",
               equipment_type: "Dry Van",
               rate: "",
@@ -41,10 +50,17 @@ export default function PostLoad() {
   async function handleSubmit(e) {
           e.preventDefault();
           setStatus("submitting");
+          // Combine the separate city + state dropdown into one "City, ST"
+          // string for the API - keeps the geocoder from ever having to
+          // guess a state.
           const res = await fetch("/api/loads", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(form),
+                    body: JSON.stringify({
+                              ...form,
+                              pickup_city: `${form.pickup_city.trim()}, ${form.pickup_state}`,
+                              delivery_city: `${form.delivery_city.trim()}, ${form.delivery_state}`,
+                    }),
           });
           setStatus(res.ok ? "success" : "error");
   }
@@ -71,12 +87,26 @@ export default function PostLoad() {
             </p>
       <form onSubmit={handleSubmit}>
                     <label style={labelStyle}>Pickup City & State</label>
-        <input style={inputStyle} required value={form.pickup_city} placeholder="e.g. Durango, CO"
-          onChange={(e) => update("pickup_city", e.target.value)} />
+        <div style={{ display: "flex", gap: 8, marginBottom: 14 }}>
+          <input style={{ ...inputStyle, marginBottom: 0, flex: 1 }} required value={form.pickup_city} placeholder="City"
+            onChange={(e) => update("pickup_city", e.target.value)} />
+          <select style={{ ...inputStyle, marginBottom: 0, width: 90 }} required value={form.pickup_state}
+            onChange={(e) => update("pickup_state", e.target.value)}>
+            <option value="">State</option>
+            {US_STATES.map((s) => <option key={s} value={s}>{s}</option>)}
+          </select>
+        </div>
 
                       <label style={labelStyle}>Delivery City & State</label>
-        <input style={inputStyle} required value={form.delivery_city} placeholder="e.g. Aztec, NM"
-          onChange={(e) => update("delivery_city", e.target.value)} />
+        <div style={{ display: "flex", gap: 8, marginBottom: 14 }}>
+          <input style={{ ...inputStyle, marginBottom: 0, flex: 1 }} required value={form.delivery_city} placeholder="City"
+            onChange={(e) => update("delivery_city", e.target.value)} />
+          <select style={{ ...inputStyle, marginBottom: 0, width: 90 }} required value={form.delivery_state}
+            onChange={(e) => update("delivery_state", e.target.value)}>
+            <option value="">State</option>
+            {US_STATES.map((s) => <option key={s} value={s}>{s}</option>)}
+          </select>
+        </div>
 
                       <label style={labelStyle}>Pickup Date</label>
         <input style={inputStyle} type="date" required value={form.pickup_date}
