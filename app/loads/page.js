@@ -435,8 +435,8 @@ export default function Loads() {
                   )}
                   <button onClick={() => markDelivered(load.id)}
                     style={{
-                      background: "none", border: "1px solid #e2e5ea", borderRadius: 6,
-                      padding: "8px 16px", fontSize: 13, color: "#4b5568", cursor: "pointer",
+                      background: "#fff", border: "1.5px solid #1d4ed8", borderRadius: 6,
+                      padding: "8px 16px", fontSize: 13, fontWeight: 700, color: "#1d4ed8", cursor: "pointer",
                     }}>
                     Skip to delivered
                   </button>
