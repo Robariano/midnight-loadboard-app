@@ -40,7 +40,7 @@ export default function Loads() {
   const [minRate, setMinRate] = useState("");
   const [pickupAfter, setPickupAfter] = useState("");
   const [sort, setSort] = useState("");
-  const [showAllStatuses, setShowAllStatuses] = useState(false);
+  const [showAllStatuses, setShowAllStatuses] = useState(true);
 
   useEffect(() => {
     fetch("/api/carriers/me")
@@ -121,7 +121,7 @@ export default function Loads() {
   return (
     <div>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
-        <h1 style={{ color: "#14181f", margin: 0 }}>Available Loads</h1>
+        <h1 style={{ color: "#14181f", margin: 0 }}>My Loads</h1>
         {me !== undefined && (
           <p style={{ color: "#4b5568", fontSize: 13, margin: 0 }}>
             {me ? (

@@ -135,8 +135,8 @@ export default function Home() {
         </p>
         <a href="/confirm-coverage" style={primaryBtn}>Confirm Coverage →</a>
         <p style={{ color: "#6b7280", fontSize: 12, marginTop: 20 }}>
-          Also verifying loads through Midnight Loadboard directly?{" "}
-          <a href="/loads" style={{ color: "#1d4ed8" }}>Browse open loads →</a>
+          Managing a load through Midnight Loadboard?{" "}
+          <a href="/loads" style={{ color: "#1d4ed8" }}>Go to My Loads →</a>
         </p>
       </div>
     </div>
