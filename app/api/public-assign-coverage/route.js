@@ -3,7 +3,7 @@ import { checkRateLimit } from "../../../lib/rate-limit";
 import { sendCoverageConfirmationEmail, looksLikeEmail } from "../../../lib/email";
 import { v4 as uuidv4 } from "uuid";
 
-// Genuinely public "assign a driver" flow — no Nightdesk carrier
+// Genuinely public "assign a driver" flow — no Nightlane carrier
 // login required. Lets a carrier, fleet owner, or a dispatcher acting on
 // their behalf (e.g. Steady Wake, sending this to their own client's
 // driver) send a private coverage-confirmation email, the same way the
@@ -50,7 +50,7 @@ export async function POST(req) {
   const supabase = getServiceClient();
 
   // Same find-or-create-carrier logic as /api/public-coverage-check, so a
-  // company without a Nightdesk account yet still gets a record
+  // company without a Nightlane account yet still gets a record
   // the attestation (and any resulting flag) attaches to.
   let carrier = null;
 

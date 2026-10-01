@@ -77,7 +77,7 @@ export async function POST(req, { params }) {
     }
   } else if (attestation.load_id) {
     // Covered — load moves to confirmed (only applies to loads claimed on
-    // Nightdesk itself; standalone attestations have no load to update)
+    // Nightlane itself; standalone attestations have no load to update)
     await supabase.from("loads").update({ status: "confirmed" }).eq("id", attestation.load_id);
   }
   return Response.json({ ok: true });

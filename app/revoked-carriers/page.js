@@ -1,11 +1,11 @@
 import { getServiceClient } from "../../lib/supabase";
 
 export const metadata = {
-  title: "Revoked Credentials — Nightdesk",
+  title: "Revoked Credentials — Nightlane",
 };
 
 // Public trust page. Anyone can look up whether a carrier's verified
-// status has been revoked on Nightdesk — no login required.
+// status has been revoked on Nightlane — no login required.
 // Deliberately shows only public-safe fields: company name, DOT/MC
 // numbers, and revoked status. No contact info, no documents, no
 // internal flag counts.
@@ -33,14 +33,14 @@ export default async function RevokedCarriers() {
     <div>
       <h1 style={{ color: "#14181f" }}>Revoked Credentials</h1>
       <p style={{ color: "#4b5568", lineHeight: 1.6 }}>
-        Nightdesk revokes a carrier's verified status if their authority, insurance, or
+        Nightlane revokes a carrier's verified status if their authority, insurance, or
         safety standing no longer checks out, or if they've been flagged for repeatedly assigning
         loads to drivers who weren't actually covered. This page is public so any shipper or
         carrier can double-check a company's standing before doing business with them.
       </p>
       <p style={{ color: "#4b5568", lineHeight: 1.6, marginBottom: 24 }}>
         A revoked carrier can reapply for verification at any time by correcting the issue that
-        led to revocation. This list only reflects verification status on Nightdesk — it
+        led to revocation. This list only reflects verification status on Nightlane — it
         is not a substitute for checking a carrier's FMCSA record directly.
       </p>
 
