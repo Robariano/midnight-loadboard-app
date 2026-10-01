@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 import { sendLoadPostedEmail, looksLikeEmail } from "../../../lib/email";
 import { checkRateLimit } from "../../../lib/rate-limit";
 import { getCarrierIdFromRequest } from "../../../lib/carrier-auth";
-import { geocodeCity } from "../../../lib/geocode";
+import { geocodeLoadCities } from "../../../lib/geocode";
 
 export async function POST(req) {
         const body = await req.json();
@@ -32,10 +32,10 @@ export async function POST(req) {
 
     // Best-effort - a slow or failed geocode just means no map coordinates
     // get saved, never blocks the load from posting.
-    const [pickupGeo, deliveryGeo] = await Promise.all([
-                geocodeCity(body.pickup_city),
-                geocodeCity(body.delivery_city),
-    ]);
+    const { pickup: pickupGeo, delivery: deliveryGeo } = await geocodeLoadCities(
+                body.pickup_city,
+                body.delivery_city
+    );
 
     const { data, error } = await supabase
             .from("loads")
