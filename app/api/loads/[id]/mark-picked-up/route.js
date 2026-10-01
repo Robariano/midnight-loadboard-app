@@ -1,5 +1,6 @@
 import { getServiceClient } from "../../../../../lib/supabase";
 import { getCarrierIdFromRequest } from "../../../../../lib/carrier-auth";
+import { sendLoadStatusUpdateEmail, looksLikeEmail } from "../../../../../lib/email";
 
 // First step of load status tracking: the carrier marks a load picked up
 // once the driver has the freight loaded, so anyone watching (the shipper
@@ -26,6 +27,18 @@ export async function POST(req, { params }) {
       { error: "This load can't be marked picked up yet — coverage must be confirmed first." },
       { status: 409 }
     );
+  }
+
+  // Best-effort - a failed or slow email never blocks the status update
+  // itself, which has already been saved at this point.
+  if (looksLikeEmail(data.shipper_email)) {
+    const baseUrl = process.env.APP_BASE_URL || "https://midnightloadboard.com";
+    const manageUrl = `${baseUrl}/loads/manage/${data.manage_token}`;
+    try {
+      await sendLoadStatusUpdateEmail(data.shipper_email, data.pickup_city, data.delivery_city, "picked_up", manageUrl);
+    } catch (err) {
+      console.error(`[email] Failed to send picked_up update for load ${data.id}:`, err.message);
+    }
   }
 
   return Response.json({ load: data });
