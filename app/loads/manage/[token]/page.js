@@ -145,6 +145,10 @@ export default function ManageLoad({ params }) {
           </div>
       )}
 
+      {load.status === "delivered" && load.carrier && (
+        <RatingForm token={token} carrierName={load.carrier.company_name} />
+      )}
+
 {isOnHold && (
         <div style={{ marginBottom: 16 }}>
           <p style={{ color: "#991b1b", marginBottom: 12 }}>
@@ -195,5 +199,47 @@ export default function ManageLoad({ params }) {
   </form>
       )}
 </div>
+  );
+}
+
+function RatingForm({ token, carrierName }) {
+  const [rating, setRating] = useState(5);
+  const [comment, setComment] = useState("");
+  const [raterName, setRaterName] = useState("");
+  const [result, setResult] = useState(null);
+
+  async function submit() {
+    const res = await fetch(`/api/loads/manage/${token}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ rating, comment, rater_name: raterName }),
+    });
+    const data = await res.json().catch(() => ({}));
+    setResult(data);
+  }
+
+  if (result?.rating) {
+    return <p style={{ color: "#166534", fontSize: 13 }}>Thanks — your rating for {carrierName} was recorded.</p>;
+  }
+
+  return (
+    <div style={{ borderTop: "1px solid #e2e5ea", paddingTop: 12, marginTop: 16 }}>
+      <p style={{ fontSize: 14, color: "#14181f", marginBottom: 8, fontWeight: 700 }}>Rate {carrierName} on this load</p>
+      {result?.error && <p style={{ color: "#991b1b", fontSize: 12, marginBottom: 8 }}>{result.error}</p>}
+      <select value={rating} onChange={(e) => setRating(Number(e.target.value))} style={inputStyle}>
+        {[5, 4, 3, 2, 1].map((n) => <option key={n} value={n}>{"*".repeat(n)} ({n})</option>)}
+      </select>
+      <input value={raterName} onChange={(e) => setRaterName(e.target.value)}
+        placeholder="Your name (optional)" style={inputStyle} />
+      <textarea value={comment} onChange={(e) => setComment(e.target.value)}
+        placeholder="How'd it go? (optional)" rows={2} style={{ ...inputStyle, minHeight: 60 }} />
+      <button onClick={submit}
+        style={{
+          width: "100%", padding: "14px", background: "#166534", color: "#fff",
+          border: "none", borderRadius: 8, fontWeight: 700, fontSize: 15, cursor: "pointer",
+        }}>
+        Submit Rating
+      </button>
+    </div>
   );
 }

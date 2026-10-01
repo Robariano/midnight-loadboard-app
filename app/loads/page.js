@@ -283,10 +283,6 @@ export default function Loads() {
               </button>
             )}
 
-            {load.status === "delivered" && load.carrier && (
-              <RatingForm loadId={load.id} carrierName={load.carrier.company_name} />
-            )}
-
             {load.status === "open" && claiming !== load.id && (
               <button
                 onClick={() => {
@@ -458,61 +454,6 @@ function SelfAttestPrompt({ token }) {
       <button onClick={() => respond("neither")}
         style={{ background: "#fdecec", color: "#991b1b", border: "1px solid #991b1b", borderRadius: 6, padding: "6px 12px", fontSize: 12 }}>
         No / not sure
-      </button>
-    </div>
-  );
-}
-
-function RatingForm({ loadId, carrierName }) {
-  const [rating, setRating] = useState(5);
-  const [comment, setComment] = useState("");
-  const [raterName, setRaterName] = useState("");
-  const [result, setResult] = useState(null);
-
-  async function submit() {
-    const res = await fetch(`/api/loads/${loadId}/rate`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ rating, comment, rater_name: raterName }),
-    });
-    const data = await res.json();
-    setResult(data);
-  }
-
-  if (result?.rating) {
-    return <p style={{ color: "#166534", fontSize: 13 }}>Thanks - your rating for {carrierName} was recorded.</p>;
-  }
-
-  return (
-    <div style={{ borderTop: "1px solid #e2e5ea", paddingTop: 12, marginTop: 8 }}>
-      <p style={{ fontSize: 13, color: "#14181f", marginBottom: 8 }}>Rate {carrierName} on this load</p>
-      {result?.error && <p style={{ color: "#991b1b", fontSize: 12, marginBottom: 8 }}>{result.error}</p>}
-      <select value={rating} onChange={(e) => setRating(Number(e.target.value))}
-        style={{
-          padding: 8, marginBottom: 8, background: "#ffffff", border: "1px solid #e2e5ea",
-          borderRadius: 6, color: "#14181f", fontSize: 13,
-        }}>
-        {[5, 4, 3, 2, 1].map((n) => <option key={n} value={n}>{"*".repeat(n)} ({n})</option>)}
-      </select>
-
-      <input value={raterName} onChange={(e) => setRaterName(e.target.value)}
-        placeholder="Your name (optional)"
-        style={{
-          display: "block", width: "100%", padding: 8, marginBottom: 8, background: "#ffffff",
-          border: "1px solid #e2e5ea", borderRadius: 6, color: "#14181f", fontSize: 13,
-        }} />
-      <textarea value={comment} onChange={(e) => setComment(e.target.value)}
-        placeholder="How'd it go? (optional)" rows={2}
-        style={{
-          display: "block", width: "100%", padding: 8, marginBottom: 8, background: "#ffffff",
-          border: "1px solid #e2e5ea", borderRadius: 6, color: "#14181f", fontSize: 13, resize: "vertical",
-        }} />
-      <button onClick={submit}
-        style={{
-          background: "#166534", color: "#fff", border: "none", borderRadius: 6,
-          padding: "8px 16px", fontSize: 13, fontWeight: 700, cursor: "pointer",
-        }}>
-        Submit rating
       </button>
     </div>
   );
