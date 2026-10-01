@@ -23,6 +23,23 @@ const filterInputStyle = {
 
 const EQUIPMENT_TYPES = ["Dry Van", "Flatbed", "Reefer", "Tanker", "Step Deck", "Other"];
 
+// How close (in miles) counts as "near" a load's pickup/delivery city before
+// showing a location-based nudge. Cities are geocoded to their center point,
+// not an exact dock address, so this stays generous on purpose.
+const NEARBY_MILES = 15;
+
+function milesBetween(lat1, lng1, lat2, lng2) {
+  const R = 3958.8; // Earth's radius in miles
+  const toRad = (deg) => (deg * Math.PI) / 180;
+  const dLat = toRad(lat2 - lat1);
+  const dLng = toRad(lng2 - lng1);
+  const a =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLng / 2) ** 2;
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return R * c;
+}
+
 export default function Loads() {
   const [loads, setLoads] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -49,6 +66,17 @@ export default function Loads() {
   });
   const [trackStatus, setTrackStatus] = useState(null);
   const [trackResult, setTrackResult] = useState(null);
+
+  // One-time, best-effort location check so the status buttons below can
+  // nudge "looks like you're here" instead of requiring the driver to
+  // remember to tap them. Browser asks permission; a decline or an
+  // unsupported browser just means no nudge ever shows up - nothing breaks.
+  const [myCoords, setMyCoords] = useState(null);
+
+  function isNear(lat, lng) {
+    if (!myCoords || lat == null || lng == null) return false;
+    return milesBetween(myCoords.lat, myCoords.lng, lat, lng) <= NEARBY_MILES;
+  }
 
   useEffect(() => {
     fetch("/api/carriers/me")
@@ -78,6 +106,21 @@ export default function Loads() {
     fetchLoads();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (myCoords || typeof navigator === "undefined" || !navigator.geolocation) return;
+    const needsLocation = loads.some(
+      (l) => l.status === "confirmed" || l.status === "picked_up" || l.status === "in_transit"
+    );
+    if (!needsLocation) return;
+
+    navigator.geolocation.getCurrentPosition(
+      (pos) => setMyCoords({ lat: pos.coords.latitude, lng: pos.coords.longitude }),
+      () => {}, // denied or unavailable - just skip the nudge silently
+      { enableHighAccuracy: false, timeout: 8000, maximumAge: 5 * 60 * 1000 }
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loads]);
 
   function applyFilters(e) {
     e.preventDefault();
@@ -354,43 +397,71 @@ export default function Loads() {
             </p>
 
             {(load.status === "confirmed" || load.status === "picked_up") && (
-              <div style={{ display: "flex", gap: 10, alignItems: "center", marginBottom: 8 }}>
-                {load.status === "confirmed" && (
-                  <button onClick={() => markPickedUp(load.id)}
-                    style={{
-                      background: "#1d4ed8", color: "#fff", border: "none", borderRadius: 6,
-                      padding: "8px 16px", fontSize: 13, fontWeight: 700, cursor: "pointer",
-                    }}>
-                    Mark picked up
-                  </button>
-                )}
-                {load.status === "picked_up" && (
-                  <button onClick={() => markInTransit(load.id)}
-                    style={{
-                      background: "#1d4ed8", color: "#fff", border: "none", borderRadius: 6,
-                      padding: "8px 16px", fontSize: 13, fontWeight: 700, cursor: "pointer",
-                    }}>
-                    Mark in transit
-                  </button>
-                )}
-                <button onClick={() => markDelivered(load.id)}
-                  style={{
-                    background: "none", border: "1px solid #e2e5ea", borderRadius: 6,
-                    padding: "8px 16px", fontSize: 13, color: "#4b5568", cursor: "pointer",
+              <div style={{ marginBottom: 8 }}>
+                {load.status === "confirmed" && isNear(load.pickup_lat, load.pickup_lng) && (
+                  <p style={{
+                    background: "#e9f7ef", color: "#166534", fontSize: 12, fontWeight: 700,
+                    borderRadius: 6, padding: "6px 10px", margin: "0 0 8px", display: "inline-block",
                   }}>
-                  Skip to delivered
-                </button>
+                    📍 Looks like you&apos;re near pickup
+                  </p>
+                )}
+                {load.status === "picked_up" && isNear(load.delivery_lat, load.delivery_lng) && (
+                  <p style={{
+                    background: "#e9f7ef", color: "#166534", fontSize: 12, fontWeight: 700,
+                    borderRadius: 6, padding: "6px 10px", margin: "0 0 8px", display: "inline-block",
+                  }}>
+                    📍 Looks like you&apos;re near the delivery location
+                  </p>
+                )}
+                <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
+                  {load.status === "confirmed" && (
+                    <button onClick={() => markPickedUp(load.id)}
+                      style={{
+                        background: "#1d4ed8", color: "#fff", border: "none", borderRadius: 6,
+                        padding: "8px 16px", fontSize: 13, fontWeight: 700, cursor: "pointer",
+                      }}>
+                      Mark picked up
+                    </button>
+                  )}
+                  {load.status === "picked_up" && (
+                    <button onClick={() => markInTransit(load.id)}
+                      style={{
+                        background: "#1d4ed8", color: "#fff", border: "none", borderRadius: 6,
+                        padding: "8px 16px", fontSize: 13, fontWeight: 700, cursor: "pointer",
+                      }}>
+                      Mark in transit
+                    </button>
+                  )}
+                  <button onClick={() => markDelivered(load.id)}
+                    style={{
+                      background: "none", border: "1px solid #e2e5ea", borderRadius: 6,
+                      padding: "8px 16px", fontSize: 13, color: "#4b5568", cursor: "pointer",
+                    }}>
+                    Skip to delivered
+                  </button>
+                </div>
               </div>
             )}
 
             {load.status === "in_transit" && (
-              <button onClick={() => markDelivered(load.id)}
-                style={{
-                  background: "#1d4ed8", color: "#fff", border: "none", borderRadius: 6,
-                  padding: "8px 16px", fontSize: 13, fontWeight: 700, cursor: "pointer", marginBottom: 8,
-                }}>
-                Mark delivered
-              </button>
+              <div style={{ marginBottom: 8 }}>
+                {isNear(load.delivery_lat, load.delivery_lng) && (
+                  <p style={{
+                    background: "#e9f7ef", color: "#166534", fontSize: 12, fontWeight: 700,
+                    borderRadius: 6, padding: "6px 10px", margin: "0 0 8px", display: "inline-block",
+                  }}>
+                    📍 Looks like you&apos;re near the delivery location
+                  </p>
+                )}
+                <button onClick={() => markDelivered(load.id)}
+                  style={{
+                    background: "#1d4ed8", color: "#fff", border: "none", borderRadius: 6,
+                    padding: "8px 16px", fontSize: 13, fontWeight: 700, cursor: "pointer",
+                  }}>
+                  Mark delivered
+                </button>
+              </div>
             )}
 
             {load.status === "open" && claiming !== load.id && (

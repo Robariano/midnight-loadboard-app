@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 import { sendLoadPostedEmail, looksLikeEmail } from "../../../lib/email";
 import { checkRateLimit } from "../../../lib/rate-limit";
 import { getCarrierIdFromRequest } from "../../../lib/carrier-auth";
+import { geocodeCity } from "../../../lib/geocode";
 
 export async function POST(req) {
         const body = await req.json();
@@ -29,6 +30,13 @@ export async function POST(req) {
     // once, in the confirmation email, and never shown again.
     const manageToken = uuidv4();
 
+    // Best-effort - a slow or failed geocode just means no map coordinates
+    // get saved, never blocks the load from posting.
+    const [pickupGeo, deliveryGeo] = await Promise.all([
+                geocodeCity(body.pickup_city),
+                geocodeCity(body.delivery_city),
+    ]);
+
     const { data, error } = await supabase
             .from("loads")
             .insert({
@@ -44,6 +52,10 @@ export async function POST(req) {
                             shipper_email: body.shipper_email,
                             status: "open",
                             manage_token: manageToken,
+                            pickup_lat: pickupGeo?.lat ?? null,
+                            pickup_lng: pickupGeo?.lng ?? null,
+                            delivery_lat: deliveryGeo?.lat ?? null,
+                            delivery_lng: deliveryGeo?.lng ?? null,
             })
             .select()
             .single();

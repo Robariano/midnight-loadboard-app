@@ -1,6 +1,7 @@
 import { getServiceClient } from "../../../../lib/supabase";
 import { getCarrierIdFromRequest } from "../../../../lib/carrier-auth";
 import { v4 as uuidv4 } from "uuid";
+import { geocodeCity } from "../../../../lib/geocode";
 
 // Lets a carrier log a load they already have - found on DAT, Truckstop, a
 // phone call, anywhere - so they can use status tracking on it the same way
@@ -26,6 +27,13 @@ export async function POST(req) {
   const supabase = getServiceClient();
   const manageToken = uuidv4();
 
+  // Best-effort - a slow or failed geocode just means no map coordinates
+  // get saved, never blocks tracking the load.
+  const [pickupGeo, deliveryGeo] = await Promise.all([
+    geocodeCity(body.pickup_city),
+    geocodeCity(body.delivery_city),
+  ]);
+
   const { data, error } = await supabase
     .from("loads")
     .insert({
@@ -41,6 +49,10 @@ export async function POST(req) {
       claimed_by_carrier_id: carrierId,
       claimed_at: new Date().toISOString(),
       manage_token: manageToken,
+      pickup_lat: pickupGeo?.lat ?? null,
+      pickup_lng: pickupGeo?.lng ?? null,
+      delivery_lat: deliveryGeo?.lat ?? null,
+      delivery_lng: deliveryGeo?.lng ?? null,
     })
     .select()
     .single();
