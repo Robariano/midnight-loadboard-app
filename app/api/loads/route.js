@@ -56,6 +56,7 @@ export async function POST(req) {
                             pickup_lng: pickupGeo?.lng ?? null,
                             delivery_lat: deliveryGeo?.lat ?? null,
                             delivery_lng: deliveryGeo?.lng ?? null,
+                            hard_to_cover: body.hard_to_cover === true,
             })
             .select()
             .single();
@@ -117,6 +118,9 @@ export async function GET(req) {
 
     const equipmentType = params.get("equipment_type");
         if (equipmentType) query = query.eq("equipment_type", equipmentType);
+
+    const hardToCover = params.get("hard_to_cover");
+        if (hardToCover === "true") query = query.eq("hard_to_cover", true);
 
     const pickupAfter = params.get("pickup_after");
         if (pickupAfter) query = query.gte("pickup_date", pickupAfter);
