@@ -8,7 +8,7 @@ export async function GET(req) {
   const supabase = getServiceClient();
     const { data: carrier } = await supabase
       .from("carriers")
-      .select("id, company_name, verified_status")
+      .select("id, company_name, verified_status, created_at")
       .eq("id", carrierId)
       .maybeSingle();
 

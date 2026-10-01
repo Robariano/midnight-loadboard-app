@@ -35,6 +35,11 @@ const US_STATES = [
 // not an exact dock address, so this stays generous on purpose.
 const NEARBY_MILES = 15;
 
+// A carrier's account is "new" for this many days after signup - long enough
+// to still be hunting for a first broker relationship, short enough that the
+// nudge goes away once they're established.
+const NEW_CARRIER_DAYS = 30;
+
 function milesBetween(lat1, lng1, lat2, lng2) {
   const R = 3958.8; // Earth's radius in miles
   const toRad = (deg) => (deg * Math.PI) / 180;
@@ -85,6 +90,13 @@ export default function Loads() {
     if (!myCoords || lat == null || lng == null) return false;
     return milesBetween(myCoords.lat, myCoords.lng, lat, lng) <= NEARBY_MILES;
   }
+
+  // New carriers don't have a broker relationship or a track record yet -
+  // taking on a load nobody else wants is one of the fastest ways to earn
+  // both, so point them at the filter instead of making them discover it.
+  const isNewCarrier =
+    !!me?.created_at &&
+    (Date.now() - new Date(me.created_at).getTime()) / (1000 * 60 * 60 * 24) <= NEW_CARRIER_DAYS;
 
   useEffect(() => {
     fetch("/api/carriers/me")
@@ -318,6 +330,19 @@ export default function Loads() {
           {trackStatus === "error" && (
             <p style={{ color: "#991b1b", fontSize: 13, marginTop: 8 }}>{trackResult?.error || "Something went wrong."}</p>
           )}
+        </div>
+      )}
+
+      {isNewCarrier && (
+        <div style={{
+          background: "#fff7ed", border: "1px solid #fed7aa", borderRadius: 10,
+          padding: "12px 16px", marginBottom: 16,
+        }}>
+          <p style={{ color: "#9a3412", fontSize: 13, margin: 0 }}>
+            <strong>New here?</strong> Brokers give repeat business to carriers they trust, and taking on loads
+            that are hard to cover is one of the fastest ways to earn that. Try the{" "}
+            <strong>🔥 Hard to cover only</strong> filter below.
+          </p>
         </div>
       )}
 
