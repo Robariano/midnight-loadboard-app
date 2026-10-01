@@ -2,6 +2,7 @@ import { getServiceClient } from "../../../lib/supabase";
 import { v4 as uuidv4 } from "uuid";
 import { sendLoadPostedEmail, looksLikeEmail } from "../../../lib/email";
 import { checkRateLimit } from "../../../lib/rate-limit";
+import { getCarrierIdFromRequest } from "../../../lib/carrier-auth";
 
 export async function POST(req) {
         const body = await req.json();
@@ -70,16 +71,29 @@ export async function POST(req) {
 export async function GET(req) {
         const supabase = getServiceClient();
         const params = req.nextUrl.searchParams;
+    const carrierId = getCarrierIdFromRequest(req);
 
     let query = supabase.from("loads").select("*, carrier:carriers(id, company_name)");
 
     // Default to only showing open loads unless the caller explicitly asks
-    // for everything (browse page wants "open" by default so carriers aren't
-    // shown loads someone else already claimed).
+    // for everything. "All" doesn't mean every carrier's claimed loads to
+    // every visitor though - that would leak other carriers' rates and
+    // assignments. It means: open loads (public, anyone can browse those)
+    // plus whatever the logged-in carrier has claimed themselves. Someone
+    // not logged in just gets open loads either way.
     const status = params.get("status");
-        if (status && status !== "all") {
+        if (status === "all") {
+                    query = carrierId
+              ? query.or(`status.eq.open,claimed_by_carrier_id.eq.${carrierId}`)
+              : query.eq("status", "open");
+        } else if (status) {
                     query = query.eq("status", status);
-        } else if (!status) {
+                    if (status !== "open") {
+                      query = carrierId
+                        ? query.eq("claimed_by_carrier_id", carrierId)
+                        : query.eq("id", "00000000-0000-0000-0000-000000000000"); // not logged in: no claimed loads visible
+                    }
+        } else {
                     query = query.eq("status", "open");
         }
 

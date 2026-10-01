@@ -42,6 +42,14 @@ export default function Loads() {
   const [sort, setSort] = useState("");
   const [showAllStatuses, setShowAllStatuses] = useState(true);
 
+  const [trackOpen, setTrackOpen] = useState(false);
+  const [trackForm, setTrackForm] = useState({
+    pickup_city: "", delivery_city: "", pickup_date: "", equipment_type: "",
+    rate: "", shipper_name: "", notes: "",
+  });
+  const [trackStatus, setTrackStatus] = useState(null);
+  const [trackResult, setTrackResult] = useState(null);
+
   useEffect(() => {
     fetch("/api/carriers/me")
       .then((r) => r.json())
@@ -118,6 +126,26 @@ export default function Loads() {
   const markInTransit = (loadId) => updateLoadStatus(loadId, "mark-in-transit");
   const markDelivered = (loadId) => updateLoadStatus(loadId, "complete");
 
+  async function submitTrack(e) {
+    e.preventDefault();
+    setTrackStatus("saving");
+    const res = await fetch("/api/loads/track", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(trackForm),
+    });
+    const data = await res.json().catch(() => ({}));
+    if (res.ok) {
+      setTrackResult(data);
+      setTrackStatus("done");
+      setTrackForm({ pickup_city: "", delivery_city: "", pickup_date: "", equipment_type: "", rate: "", shipper_name: "", notes: "" });
+      fetchLoads();
+    } else {
+      setTrackStatus("error");
+      setTrackResult(data);
+    }
+  }
+
   return (
     <div>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
@@ -132,6 +160,88 @@ export default function Loads() {
           </p>
         )}
       </div>
+
+      {me && (
+        <div style={{ marginBottom: 20 }}>
+          <button onClick={() => setTrackOpen((v) => !v)}
+            style={{
+              background: "transparent", color: "#1d4ed8", border: "1px solid #1d4ed8",
+              borderRadius: 6, padding: "8px 14px", fontSize: 13, fontWeight: 700, cursor: "pointer",
+            }}>
+            {trackOpen ? "Cancel" : "+ Track a load you already have"}
+          </button>
+          <p style={{ color: "#4b5568", fontSize: 12, margin: "6px 0 0" }}>
+            Got a load from DAT, Truckstop, or a phone call? Log it here to use status tracking and
+            document sending on it too - no posting, no claiming needed.
+          </p>
+
+          {trackOpen && (
+            <form onSubmit={submitTrack} style={{
+              background: "#f7f8fa", border: "1px solid #e2e5ea", borderRadius: 12,
+              padding: 16, marginTop: 12, display: "flex", flexWrap: "wrap", gap: 10, alignItems: "flex-end",
+            }}>
+              <div>
+                <label style={{ display: "block", fontSize: 11, color: "#4b5568", marginBottom: 4 }}>Pickup city</label>
+                <input required value={trackForm.pickup_city}
+                  onChange={(e) => setTrackForm((f) => ({ ...f, pickup_city: e.target.value }))}
+                  style={{ ...filterInputStyle, width: 130 }} />
+              </div>
+              <div>
+                <label style={{ display: "block", fontSize: 11, color: "#4b5568", marginBottom: 4 }}>Delivery city</label>
+                <input required value={trackForm.delivery_city}
+                  onChange={(e) => setTrackForm((f) => ({ ...f, delivery_city: e.target.value }))}
+                  style={{ ...filterInputStyle, width: 130 }} />
+              </div>
+              <div>
+                <label style={{ display: "block", fontSize: 11, color: "#4b5568", marginBottom: 4 }}>Pickup date</label>
+                <input required type="date" value={trackForm.pickup_date}
+                  onChange={(e) => setTrackForm((f) => ({ ...f, pickup_date: e.target.value }))}
+                  style={{ ...filterInputStyle, width: 140 }} />
+              </div>
+              <div>
+                <label style={{ display: "block", fontSize: 11, color: "#4b5568", marginBottom: 4 }}>Equipment</label>
+                <select required value={trackForm.equipment_type}
+                  onChange={(e) => setTrackForm((f) => ({ ...f, equipment_type: e.target.value }))}
+                  style={{ ...filterInputStyle, width: 130 }}>
+                  <option value="">Select...</option>
+                  {EQUIPMENT_TYPES.map((t) => <option key={t} value={t}>{t}</option>)}
+                </select>
+              </div>
+              <div>
+                <label style={{ display: "block", fontSize: 11, color: "#4b5568", marginBottom: 4 }}>Rate ($)</label>
+                <input type="number" value={trackForm.rate}
+                  onChange={(e) => setTrackForm((f) => ({ ...f, rate: e.target.value }))}
+                  style={{ ...filterInputStyle, width: 100 }} />
+              </div>
+              <div>
+                <label style={{ display: "block", fontSize: 11, color: "#4b5568", marginBottom: 4 }}>Got it from (optional)</label>
+                <input value={trackForm.shipper_name} placeholder="e.g. Eric / broker name"
+                  onChange={(e) => setTrackForm((f) => ({ ...f, shipper_name: e.target.value }))}
+                  style={{ ...filterInputStyle, width: 160 }} />
+              </div>
+              <button type="submit" disabled={trackStatus === "saving"} style={{
+                background: "#1d4ed8", color: "#fff", border: "none", borderRadius: 6,
+                padding: "9px 16px", fontSize: 13, fontWeight: 700, cursor: "pointer",
+              }}>
+                {trackStatus === "saving" ? "Saving..." : "Start Tracking"}
+              </button>
+            </form>
+          )}
+
+          {trackStatus === "done" && trackResult?.manageUrl && (
+            <div style={{ background: "#e9f7ef", border: "1px solid #166534", borderRadius: 8, padding: 12, marginTop: 12 }}>
+              <p style={{ color: "#166534", fontSize: 13, margin: "0 0 6px", fontWeight: 700 }}>
+                Now tracking. Share this private link with whoever you got the load from so they can see its status:
+              </p>
+              <input readOnly value={trackResult.manageUrl} onFocus={(e) => e.target.select()}
+                style={{ ...filterInputStyle, width: "100%" }} />
+            </div>
+          )}
+          {trackStatus === "error" && (
+            <p style={{ color: "#991b1b", fontSize: 13, marginTop: 8 }}>{trackResult?.error || "Something went wrong."}</p>
+          )}
+        </div>
+      )}
 
       <form
         onSubmit={applyFilters}
