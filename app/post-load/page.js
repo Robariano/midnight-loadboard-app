@@ -71,11 +71,11 @@ export default function PostLoad() {
             </p>
       <form onSubmit={handleSubmit}>
                     <label style={labelStyle}>Pickup City & State</label>
-        <input style={inputStyle} required value={form.pickup_city}
+        <input style={inputStyle} required value={form.pickup_city} placeholder="e.g. Durango, CO"
           onChange={(e) => update("pickup_city", e.target.value)} />
 
                       <label style={labelStyle}>Delivery City & State</label>
-        <input style={inputStyle} required value={form.delivery_city}
+        <input style={inputStyle} required value={form.delivery_city} placeholder="e.g. Aztec, NM"
           onChange={(e) => update("delivery_city", e.target.value)} />
 
                       <label style={labelStyle}>Pickup Date</label>

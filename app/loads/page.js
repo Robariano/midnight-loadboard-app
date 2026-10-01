@@ -224,16 +224,16 @@ export default function Loads() {
               padding: 16, marginTop: 12, display: "flex", flexWrap: "wrap", gap: 10, alignItems: "flex-end",
             }}>
               <div>
-                <label style={{ display: "block", fontSize: 11, color: "#4b5568", marginBottom: 4 }}>Pickup city</label>
-                <input required value={trackForm.pickup_city}
+                <label style={{ display: "block", fontSize: 11, color: "#4b5568", marginBottom: 4 }}>Pickup city & state</label>
+                <input required value={trackForm.pickup_city} placeholder="e.g. Durango, CO"
                   onChange={(e) => setTrackForm((f) => ({ ...f, pickup_city: e.target.value }))}
-                  style={{ ...filterInputStyle, width: 130 }} />
+                  style={{ ...filterInputStyle, width: 150 }} />
               </div>
               <div>
-                <label style={{ display: "block", fontSize: 11, color: "#4b5568", marginBottom: 4 }}>Delivery city</label>
-                <input required value={trackForm.delivery_city}
+                <label style={{ display: "block", fontSize: 11, color: "#4b5568", marginBottom: 4 }}>Delivery city & state</label>
+                <input required value={trackForm.delivery_city} placeholder="e.g. Aztec, NM"
                   onChange={(e) => setTrackForm((f) => ({ ...f, delivery_city: e.target.value }))}
-                  style={{ ...filterInputStyle, width: 130 }} />
+                  style={{ ...filterInputStyle, width: 150 }} />
               </div>
               <div>
                 <label style={{ display: "block", fontSize: 11, color: "#4b5568", marginBottom: 4 }}>Pickup date</label>
