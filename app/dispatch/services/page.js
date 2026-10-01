@@ -14,7 +14,7 @@ const services = [
   {
     title: "Broker verification",
     body:
-      "Every broker checked against FMCSA registration before you commit to a load — no exceptions. The same free tool Midnight Loadboard runs publicly is what gets used on your behalf: ",
+      "Every broker checked against FMCSA registration before you commit to a load — no exceptions. The same free tool Nightdesk runs publicly is what gets used on your behalf: ",
     link: { href: "/check-broker", label: "Check FMCSA Registration" },
   },
   {

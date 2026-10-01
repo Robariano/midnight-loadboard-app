@@ -1,7 +1,7 @@
 import NightwatchLeadForm from "./_NightwatchLeadForm";
 
 export const metadata = {
-  title: "Nightwatch for Brokers | Midnight Loadboard",
+  title: "Nightwatch for Brokers | Nightdesk",
   description:
     "Coming soon: continuous carrier verification for brokers — FMCSA authority, insurance, and safety data checked continuously, cross-referenced against flagged operators. Request early access.",
 };
@@ -89,7 +89,7 @@ export default function Nightwatch() {
 
       <p style={{ fontSize: 11, color: "#8a92a0", marginTop: 24, lineHeight: 1.6 }}>
         Safety data will be sourced from FMCSA SAFER &amp; the Safety Measurement System, layered
-        with our own identity and insurance checks. Midnight Loadboard is not affiliated with or
+        with our own identity and insurance checks. Nightdesk is not affiliated with or
         endorsed by FMCSA.
       </p>
     </div>

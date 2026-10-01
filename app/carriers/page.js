@@ -25,7 +25,7 @@ export default async function CarriersDirectory() {
     <div>
       <h1 style={{ color: "#fff", marginBottom: 4 }}>Verified carriers</h1>
      <p style={{ color: "#888", fontSize: 14, marginBottom: 24 }}>
-        Every carrier below has submitted documents for review and been approved on Midnight Loadboard.
+        Every carrier below has submitted documents for review and been approved on Nightdesk.
         Click one to see their verification details and shipper ratings — always confirm directly with
         FMCSA before relying on this alone.
       </p>

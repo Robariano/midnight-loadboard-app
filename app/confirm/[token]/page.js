@@ -156,7 +156,7 @@ export default function ConfirmPage({ params }) {
         )}
 
         <p style={{ fontSize: 13, color: "#4b5568", textAlign: "center", marginTop: 16, lineHeight: 1.6 }}>
-          Midnight Loadboard also lists open loads and lets you check any broker's FMCSA registration for
+          Nightdesk also lists open loads and lets you check any broker's FMCSA registration for
           free —{" "}
           <a href="/loads" style={{ color: "#1d4ed8" }}>
             browse loads

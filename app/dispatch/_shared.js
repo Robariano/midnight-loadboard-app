@@ -1,10 +1,10 @@
 // Shared style tokens + sub-nav for Steady Wake Dispatch — Rob's real
 // dispatch business (steadywakedispatch@gmail.com, (970) 903-9226,
 // Durango, CO — the name on the actual client services agreement).
-// This mini-site lives inside Midnight Loadboard's app (app/dispatch/*)
+// This mini-site lives inside Nightdesk's app (app/dispatch/*)
 // so it reuses the working lead-capture backend and admin panel, but
 // carries Steady Wake's own identity — amber accent instead of
-// Midnight Loadboard's blue — rather than being folded into the
+// Nightdesk's blue — rather than being folded into the
 // platform's own brand.
 //
 // It's also served, via middleware.js at the repo root, as the real
@@ -71,7 +71,7 @@ export const secondaryBtn = {
 
 // Dark stat tile — a nod to the odometer-style figures on Rob's own
 // draft site (steady-wake-website.html) without importing its full
-// dark theme, which would clash with the rest of Midnight Loadboard's
+// dark theme, which would clash with the rest of Nightdesk's
 // light chrome that wraps every page here.
 export const statBox = {
   background: "#14181f",
