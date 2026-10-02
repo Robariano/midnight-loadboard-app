@@ -588,13 +588,13 @@ export default function Loads() {
                         border: "1px solid #e2e5ea", borderRadius: 6, color: "#14181f", fontSize: 13,
                       }} />
                     <input value={driverContact} onChange={(e) => setDriverContact(e.target.value)}
-                      placeholder="Driver's email"
+                      placeholder="Driver's phone or email"
                       style={{
                         width: "100%", padding: 8, marginBottom: 8, background: "#ffffff",
                         border: "1px solid #e2e5ea", borderRadius: 6, color: "#14181f", fontSize: 13,
                       }} />
                     <p style={{ fontSize: 11, color: "#6b7280", marginTop: -4, marginBottom: 10 }}>
-                      Texting isn't available right now — we'll email the driver a private confirmation link instead.
+                      We'll text the driver a private confirmation link, or email it if you enter an email address instead.
                     </p>
 
                     <label style={{ display: "flex", gap: 8, alignItems: "flex-start", fontSize: 12, color: "#6b7280", marginBottom: 10 }}>
@@ -631,7 +631,7 @@ export default function Loads() {
                 {claimResult.assignedLinkSent && (
                   <div style={{ marginTop: 4 }}>
                     <p style={{ color: "#166534", fontSize: 12, marginBottom: 8 }}>
-                      Confirmation email sent to the driver automatically.
+                      Confirmation sent to the driver automatically.
                     </p>
                     <p style={{ color: "#4b5568", fontSize: 12, marginBottom: 6 }}>
                       You can also share this link directly if needed:
@@ -657,7 +657,7 @@ export default function Loads() {
                 {claimResult.assignedLinkSent === false && claimResult.confirmUrl && (
                   <div style={{ marginTop: 4 }}>
                     <p style={{ color: "#991b1b", fontSize: 13, marginBottom: 6 }}>
-                      {claimResult.error || "The confirmation email couldn't be sent."} Share this link with the driver yourself (text, call, email):
+                      {claimResult.error || "The confirmation couldn't be sent."} Share this link with the driver yourself (text, call, email):
                     </p>
                     <div style={{
                       display: "flex", alignItems: "center", gap: 8, background: "#ffffff",

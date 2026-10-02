@@ -1,6 +1,7 @@
  import { getServiceClient } from "../../../../../lib/supabase";
 import { v4 as uuidv4 } from "uuid";
 import { sendCoverageConfirmationEmail, looksLikeEmail } from "../../../../../lib/email";
+import { sendCoverageConfirmationSMS, looksLikePhoneNumber, normalizeToE164 } from "../../../../../lib/twilio";
 import { getCarrierIdFromRequest } from "../../../../../lib/carrier-auth";
 
 export async function POST(req, { params }) {
@@ -20,12 +21,15 @@ export async function POST(req, { params }) {
     );
   }
 
-  // NEW: require a real email for non-self-attestation assignments, since
-  // SMS sending isn't implemented (and Twilio's A2P campaign is currently
-  // rejected anyway) — a phone-only entry used to silently go nowhere.
-  if (!body.is_self_attestation && !looksLikeEmail(body.driver_contact)) {
+  // Driver contact can be a phone number (texted via Twilio, now that the
+  // A2P campaign is approved) or an email address (via Resend).
+  if (
+    !body.is_self_attestation &&
+    !looksLikePhoneNumber(body.driver_contact) &&
+    !looksLikeEmail(body.driver_contact)
+  ) {
     return Response.json(
-      { error: "Please enter a valid email address for the driver — texting isn't available right now." },
+      { error: "Please enter a valid phone number or email address for the driver." },
       { status: 400 }
     );
   }
@@ -58,18 +62,24 @@ export async function POST(req, { params }) {
     const baseUrl = process.env.APP_BASE_URL || "https://midnightloadboard.com";
     const confirmUrl = `${baseUrl}/confirm/${token}`;
 
+    const contact = body.driver_contact.trim();
+
     try {
-      await sendCoverageConfirmationEmail(body.driver_contact.trim(), body.driver_name, confirmUrl);
+      if (looksLikePhoneNumber(contact)) {
+        await sendCoverageConfirmationSMS(normalizeToE164(contact), body.driver_name, confirmUrl);
+      } else {
+        await sendCoverageConfirmationEmail(contact, body.driver_name, confirmUrl);
+      }
       return Response.json({ assignedLinkSent: true, confirmUrl: `/confirm/${token}`, token });
     } catch (err) {
-      console.error(`[email] Failed to email driver for load ${loadId}:`, err.message);
+      console.error(`[driver-notify] Failed to notify driver for load ${loadId}:`, err.message);
       // Attestation row already exists, so the carrier can still share the
       // link manually — surface the failure honestly instead of pretending it sent.
       return Response.json({
         assignedLinkSent: false,
         confirmUrl: `/confirm/${token}`,
         token,
-        error: "The confirmation email couldn't be sent. You can copy the link below and share it with your driver directly.",
+        error: "The confirmation couldn't be sent. You can copy the link below and share it with your driver directly.",
       });
     }
   }

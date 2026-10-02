@@ -49,8 +49,8 @@ export default function ConfirmCoverage() {
       <h1 style={{ color: "#14181f", marginBottom: 4 }}>Confirm Driver Coverage</h1>
       <p style={{ color: "#4b5568", fontSize: 13, marginBottom: 16 }}>
         Free, private, 30 seconds — no account needed. Tell us who the driver runs under and their
-        email — we'll send them a private link to confirm, and only tell you whether it came back
-        flagged, not their answer.
+        phone or email — we'll text (or email) them a private link to confirm, and only tell you
+        whether it came back flagged, not their answer.
       </p>
 
       <PublicAssign />
@@ -249,16 +249,16 @@ function PublicAssign() {
               border: "1px solid #e2e5ea", borderRadius: 6, color: "#14181f", fontSize: 13,
             }} />
           <label style={{ display: "block", fontSize: 12, color: "#4b5568", marginBottom: 6 }}>
-            Driver's email
+            Driver's phone or email
           </label>
           <input value={driverContact} onChange={(e) => setDriverContact(e.target.value)}
-            placeholder="driver@example.com"
+            placeholder="(555) 123-4567 or driver@example.com"
             style={{
               width: "100%", padding: 8, marginBottom: 8, background: "#ffffff",
               border: "1px solid #e2e5ea", borderRadius: 6, color: "#14181f", fontSize: 13,
             }} />
           <p style={{ fontSize: 11, color: "#6b7280", marginTop: -4, marginBottom: 10 }}>
-            Texting isn't available right now — we'll email the driver a private confirmation link instead.
+            We'll text the driver a private confirmation link, or email it if you enter an email address instead.
           </p>
 
           <label style={{ display: "flex", gap: 8, alignItems: "flex-start", fontSize: 12, color: "#6b7280", marginBottom: 10 }}>
@@ -267,7 +267,7 @@ function PublicAssign() {
               style={{ marginTop: 2 }} />
             <span>
               I confirm this driver has agreed, as part of our working relationship, to receive
-              this one-time email to verify insurance coverage for this load.
+              this one-time text or email to verify insurance coverage for this load.
             </span>
           </label>
 
@@ -286,7 +286,7 @@ function PublicAssign() {
       {!showForm && result.assignedLinkSent && (
         <div>
           <p style={{ color: "#166534", fontSize: 12, marginBottom: 8 }}>
-            Confirmation email sent to the driver automatically.
+            Confirmation sent to the driver automatically.
           </p>
           <p style={{ color: "#4b5568", fontSize: 12, marginBottom: 6 }}>
             You can also share this link directly if needed:
@@ -304,7 +304,7 @@ function PublicAssign() {
       {!showForm && result.assignedLinkSent === false && result.confirmUrl && (
         <div>
           <p style={{ color: "#991b1b", fontSize: 13, marginBottom: 6 }}>
-            {result.error || "The confirmation email couldn't be sent."} Share this link with the driver yourself:
+            {result.error || "The confirmation couldn't be sent."} Share this link with the driver yourself:
           </p>
           <LinkBox url={result.confirmUrl} />
           <button onClick={reset} style={{
@@ -382,13 +382,13 @@ function VerifiedCarrierTool() {
                   border: "1px solid #e2e5ea", borderRadius: 6, color: "#14181f", fontSize: 13,
                 }} />
               <input value={driverContact} onChange={(e) => setDriverContact(e.target.value)}
-                placeholder="Driver's email"
+                placeholder="Driver's phone or email"
                 style={{
                   width: "100%", padding: 8, marginBottom: 8, background: "#ffffff",
                   border: "1px solid #e2e5ea", borderRadius: 6, color: "#14181f", fontSize: 13,
                 }} />
               <p style={{ fontSize: 11, color: "#6b7280", marginTop: -4, marginBottom: 10 }}>
-                Texting isn't available right now — we'll email the driver a private confirmation link instead.
+                We'll text the driver a private confirmation link, or email it if you enter an email address instead.
               </p>
 
               <label style={{ display: "flex", gap: 8, alignItems: "flex-start", fontSize: 12, color: "#6b7280", marginBottom: 10 }}>
@@ -397,7 +397,7 @@ function VerifiedCarrierTool() {
                   style={{ marginTop: 2 }} />
                 <span>
                   I confirm this driver has agreed, as part of our working relationship, to receive
-                  this one-time email to verify insurance coverage for this load.
+                  this one-time text or email to verify insurance coverage for this load.
                 </span>
               </label>
             </>
@@ -426,7 +426,7 @@ function VerifiedCarrierTool() {
           {result.assignedLinkSent && (
             <div>
               <p style={{ color: "#166534", fontSize: 12, marginBottom: 8 }}>
-                Confirmation email sent to the driver automatically.
+                Confirmation sent to the driver automatically.
               </p>
               <p style={{ color: "#4b5568", fontSize: 12, marginBottom: 6 }}>
                 You can also share this link directly if needed:
@@ -437,7 +437,7 @@ function VerifiedCarrierTool() {
           {result.assignedLinkSent === false && result.confirmUrl && (
             <div>
               <p style={{ color: "#991b1b", fontSize: 13, marginBottom: 6 }}>
-                {result.error || "The confirmation email couldn't be sent."} Share this link with the driver yourself:
+                {result.error || "The confirmation couldn't be sent."} Share this link with the driver yourself:
               </p>
               <LinkBox url={result.confirmUrl} />
             </div>

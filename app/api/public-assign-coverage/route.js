@@ -1,6 +1,7 @@
 import { getServiceClient } from "../../../lib/supabase";
 import { checkRateLimit } from "../../../lib/rate-limit";
 import { sendCoverageConfirmationEmail, looksLikeEmail } from "../../../lib/email";
+import { sendCoverageConfirmationSMS, looksLikePhoneNumber, normalizeToE164 } from "../../../lib/twilio";
 import { v4 as uuidv4 } from "uuid";
 
 // Genuinely public "assign a driver" flow — no Nightlane carrier
@@ -34,15 +35,15 @@ export async function POST(req) {
   if (!driverName) {
     return Response.json({ error: "Please enter the driver's name." }, { status: 400 });
   }
-  if (!looksLikeEmail(driverContact)) {
+  if (!looksLikePhoneNumber(driverContact) && !looksLikeEmail(driverContact)) {
     return Response.json(
-      { error: "Please enter a valid email address for the driver — texting isn't available right now." },
+      { error: "Please enter a valid phone number or email address for the driver." },
       { status: 400 }
     );
   }
   if (!body.driver_consent_confirmed) {
     return Response.json(
-      { error: "You must confirm the driver has agreed to receive this email before assigning them." },
+      { error: "You must confirm the driver has agreed to receive this text/email before assigning them." },
       { status: 400 }
     );
   }
@@ -103,15 +104,19 @@ export async function POST(req) {
   const confirmUrl = `${baseUrl}/confirm/${token}`;
 
   try {
-    await sendCoverageConfirmationEmail(driverContact, driverName, confirmUrl);
+    if (looksLikePhoneNumber(driverContact)) {
+      await sendCoverageConfirmationSMS(normalizeToE164(driverContact), driverName, confirmUrl);
+    } else {
+      await sendCoverageConfirmationEmail(driverContact, driverName, confirmUrl);
+    }
     return Response.json({ assignedLinkSent: true, confirmUrl: `/confirm/${token}`, token });
   } catch (err) {
-    console.error("[email] Failed to email driver for public assign-coverage:", err.message);
+    console.error("[driver-notify] Failed to notify driver for public assign-coverage:", err.message);
     return Response.json({
       assignedLinkSent: false,
       confirmUrl: `/confirm/${token}`,
       token,
-      error: "The confirmation email couldn't be sent. You can copy the link below and share it with your driver directly.",
+      error: "The confirmation couldn't be sent. You can copy the link below and share it with your driver directly.",
     });
   }
 }
