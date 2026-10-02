@@ -68,6 +68,16 @@ export default function Nightwatch() {
         </p>
       </div>
 
+      <p style={{ fontSize: 13, marginBottom: 24 }}>
+        <a
+          href="/blog/chameleon-carriers-tql-chrobinson-lawsuit"
+          style={{ color: "#1d4ed8", fontWeight: 700, textDecoration: "none" }}
+        >
+          In the news: what a new RICO lawsuit against TQL and C.H. Robinson says about this
+          problem &rarr;
+        </a>
+      </p>
+
       <p style={{ color: "#14181f", fontWeight: 700, fontSize: 16, marginBottom: 16 }}>What's coming</p>
       <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 36 }}>
         {features.map((f) => (
