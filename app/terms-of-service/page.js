@@ -5,15 +5,15 @@ export default function TermsOfService() {
       <p style={{ color: "#4b5568", lineHeight: 1.6 }}>Last updated: July 2026</p>
 
       <p style={{ color: "#14181f", lineHeight: 1.6 }}>
-        By using Midnight Loadboard, you agree to the following terms.
+        By using Nightlane, you agree to the following terms.
       </p>
 
       <h2 style={{ color: "#14181f", fontSize: 18, marginTop: 24 }}>The service</h2>
       <p style={{ color: "#14181f", lineHeight: 1.6 }}>
-        Midnight Loadboard lets shippers post freight loads, lets verified carriers claim them, and
+        Nightlane lets shippers post freight loads, lets verified carriers claim them, and
         lets carriers confirm that the driver assigned to a load is covered under valid insurance or
         operating authority. Carriers are responsible for verifying their own authority and insurance
-        status; Midnight Loadboard does not provide insurance or brokerage services.
+        status; Nightlane does not provide insurance or brokerage services.
       </p>
 
       <h2 style={{ color: "#14181f", fontSize: 18, marginTop: 24 }}>SMS notifications</h2>

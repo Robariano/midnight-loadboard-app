@@ -49,7 +49,7 @@ export async function POST(req, { params }) {
   try {
     await sendDocumentEmail(
       recipientEmail,
-      carrier?.company_name || "A Midnight Loadboard carrier",
+      carrier?.company_name || "A Nightlane carrier",
       doc.document_type,
       doc.file_url,
       note

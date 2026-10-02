@@ -36,7 +36,7 @@ export default function ConfirmCoverage() {
   }
 
   // Not logged in at all — this is the "no account needed" public tool
-  // described in Midnight Loadboard's marketing. Assign-a-driver only: a
+  // described in Nightlane's marketing. Assign-a-driver only: a
   // driver almost never goes looking to self-check their own coverage
   // unprompted (nobody audits their own insurance until something forces
   // the question), so the version worth surfacing here is the one where
@@ -56,7 +56,7 @@ export default function ConfirmCoverage() {
       <PublicAssign />
 
       <p style={{ color: "#8a92a0", fontSize: 12, marginTop: 20 }}>
-        Already a verified carrier on Midnight Loadboard?{" "}
+        Already a verified carrier on Nightlane?{" "}
         <a href="/login?next=/confirm-coverage" style={{ color: "#1d4ed8" }}>Log in</a>{" "}
         for a saved version of this tied to your account.
       </p>
@@ -164,7 +164,7 @@ function PublicCheck() {
 
 // The public "assign a driver" version — same emailed-link flow as the
 // logged-in VerifiedCarrierTool below, but for a carrier, fleet owner, or
-// dispatcher acting on their behalf (no Midnight Loadboard account
+// dispatcher acting on their behalf (no Nightlane account
 // required). Identifies the company by DOT/name the same way PublicCheck
 // does, creating an unclaimed record if it's not on file yet, via
 // /api/public-assign-coverage.
@@ -351,7 +351,7 @@ function VerifiedCarrierTool() {
     <div>
       <h1 style={{ color: "#14181f", marginBottom: 4 }}>Confirm Driver Coverage</h1>
       <p style={{ color: "#4b5568", fontSize: 13, marginBottom: 20 }}>
-        Got a load from somewhere other than Midnight Loadboard (DAT, Truckstop, a phone call, whatever)?
+        Got a load from somewhere other than Nightlane (DAT, Truckstop, a phone call, whatever)?
         Use this to send a quick coverage confirmation to whoever's driving — same safety check, no load
         listing required.
       </p>

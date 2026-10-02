@@ -51,7 +51,7 @@ export default function Home() {
       </h1>
       <p style={{ color: "#4b5568", fontSize: 16, lineHeight: 1.6, marginBottom: 28, maxWidth: 560 }}>
         A truck can carry valid commercial insurance while the driver behind the wheel isn't actually
-        covered under it. Midnight Loadboard is a free, private coverage check — for drivers to confirm
+        covered under it. Nightlane is a free, private coverage check — for drivers to confirm
         for themselves, or for carriers to confirm with a driver — before the truck ever leaves. Works no
         matter where the load came from.
       </p>
@@ -135,7 +135,7 @@ export default function Home() {
         </p>
         <a href="/confirm-coverage" style={primaryBtn}>Confirm Coverage →</a>
         <p style={{ color: "#6b7280", fontSize: 12, marginTop: 20 }}>
-          Managing a load through Midnight Loadboard?{" "}
+          Managing a load through Nightlane?{" "}
           <a href="/loads" style={{ color: "#1d4ed8" }}>Go to My Loads →</a>
         </p>
       </div>

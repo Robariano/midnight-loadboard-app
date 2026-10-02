@@ -5,7 +5,7 @@ export default function PrivacyPolicy() {
       <p style={{ color: "#4b5568", lineHeight: 1.6 }}>Last updated: July 2026</p>
 
       <p style={{ color: "#14181f", lineHeight: 1.6 }}>
-        Midnight Loadboard ("we," "us") operates a load board connecting freight carriers with
+        Nightlane ("we," "us") operates a load board connecting freight carriers with
         available loads and verifying coverage on assigned loads. This page explains what
         information we collect and how we use it.
       </p>
@@ -28,7 +28,7 @@ export default function PrivacyPolicy() {
 
       <h2 style={{ color: "#14181f", fontSize: 18, marginTop: 24 }}>SMS messaging terms</h2>
       <p style={{ color: "#14181f", lineHeight: 1.6 }}>
-        A driver's mobile number is entered into Midnight Loadboard by the carrier dispatching that
+        A driver's mobile number is entered into Nightlane by the carrier dispatching that
         driver, as part of assigning them to a specific load. By entering the number, the carrier
         confirms the driver has agreed to receive this text as part of their existing working
         relationship with that carrier.

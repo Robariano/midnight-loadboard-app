@@ -5,7 +5,7 @@ import { geocodeLoadCities } from "../../../../lib/geocode";
 
 // Lets a carrier log a load they already have - found on DAT, Truckstop, a
 // phone call, anywhere - so they can use status tracking on it the same way
-// as a load posted through Midnight Loadboard itself. Skips the public
+// as a load posted through Nightlane itself. Skips the public
 // posting/claim flow entirely: it's created already "confirmed" and owned
 // by this carrier, since there's nothing to claim - they already have it.
 // A manage_token is generated too, so the carrier can optionally hand a

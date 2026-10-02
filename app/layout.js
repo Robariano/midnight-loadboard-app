@@ -1,5 +1,5 @@
 export const metadata = {
-  title: "Midnight Loadboard - Carrier Verification & Load Management",
+  title: "Nightlane - Carrier Verification & Load Management",
 };
 export default function RootLayout({ children }) {
   return (
@@ -24,7 +24,7 @@ export default function RootLayout({ children }) {
           }}
         >
           <a href="/" style={{ color: "#14181f", fontWeight: 700, fontSize: 18, textDecoration: "none" }}>
-            Midnight Loadboard
+            Nightlane
           </a>
           <nav style={{ marginLeft: "auto", display: "flex", gap: 16 }}>
             <a href="/loads" style={{ color: "#1d4ed8", fontSize: 13, fontWeight: 700, textDecoration: "none" }}>
