@@ -20,6 +20,7 @@ export default function NightwatchLeadForm() {
   const [contactName, setContactName] = useState("");
   const [contactEmail, setContactEmail] = useState("");
   const [contactPhone, setContactPhone] = useState("");
+  const [carrierVolume, setCarrierVolume] = useState("");
   const [notes, setNotes] = useState("");
   const [status, setStatus] = useState(null);
   const [error, setError] = useState(null);
@@ -42,6 +43,7 @@ export default function NightwatchLeadForm() {
         contact_name: contactName,
         contact_email: contactEmail,
         contact_phone: contactPhone,
+        carrier_volume: carrierVolume,
         notes,
         source,
       }),
@@ -103,8 +105,20 @@ export default function NightwatchLeadForm() {
       <label style={{ display: "block", fontSize: 12, color: "#4b5568", marginBottom: 6 }}>
         How many carriers do you vet in a typical month? (optional)
       </label>
+      <select value={carrierVolume} onChange={(e) => setCarrierVolume(e.target.value)} style={inputStyle}>
+        <option value="">Select a range...</option>
+        <option value="Under 25/month">Under 25/month</option>
+        <option value="25-100/month">25-100/month</option>
+        <option value="100-500/month">100-500/month</option>
+        <option value="500+/month">500+/month</option>
+        <option value="Not sure / varies">Not sure / varies</option>
+      </select>
+
+      <label style={{ display: "block", fontSize: 12, color: "#4b5568", marginBottom: 6 }}>
+        Anything else about your current process? (optional)
+      </label>
       <textarea value={notes} onChange={(e) => setNotes(e.target.value)} rows={3}
-        placeholder="e.g. About 40/month, mostly manual FMCSA lookups right now"
+        placeholder="e.g. Mostly manual FMCSA lookups right now, biggest pain is re-checking insurance monthly"
         style={{ ...inputStyle, resize: "vertical" }} />
 
       <button type="submit" disabled={status === "submitting"} style={{

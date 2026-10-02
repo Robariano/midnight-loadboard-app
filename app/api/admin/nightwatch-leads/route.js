@@ -10,7 +10,7 @@ export async function GET(req) {
   const supabase = getServiceClient();
   const { data, error } = await supabase
     .from("nightwatch_leads")
-    .select("id, company_name, contact_name, contact_email, contact_phone, notes, source, status, created_at")
+    .select("id, company_name, contact_name, contact_email, contact_phone, carrier_volume, notes, source, status, created_at")
     .order("created_at", { ascending: false });
 
   if (error) return Response.json({ error: error.message }, { status: 500 });

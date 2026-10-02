@@ -22,6 +22,14 @@ export async function POST(req) {
   const contactEmail = String(body.contact_email || "").trim();
   const contactPhone = String(body.contact_phone || "").trim();
   const notes = String(body.notes || "").trim();
+  const carrierVolumeRaw = String(body.carrier_volume || "").trim();
+  // Only store it if it matches one of the form's own options - anything
+  // else (a tampered request, an old client) is dropped rather than stored
+  // as junk in what's meant to be a clean, sortable field.
+  const ALLOWED_VOLUMES = new Set([
+    "Under 25/month", "25-100/month", "100-500/month", "500+/month", "Not sure / varies",
+  ]);
+  const carrierVolume = ALLOWED_VOLUMES.has(carrierVolumeRaw) ? carrierVolumeRaw : null;
   const source = String(body.source || "").trim();
 
   if (!companyName) {
@@ -37,6 +45,7 @@ export async function POST(req) {
     contact_name: contactName || null,
     contact_email: contactEmail || null,
     contact_phone: contactPhone || null,
+    carrier_volume: carrierVolume,
     notes: notes || null,
     source: source || null,
   });

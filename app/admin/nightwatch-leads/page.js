@@ -55,7 +55,18 @@ export default function AdminNightwatchLeads() {
           padding: 16, marginBottom: 12,
         }}>
           <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 8 }}>
-            <p style={{ fontWeight: 700, color: "#14181f", margin: 0 }}>{l.company_name}</p>
+            <p style={{ fontWeight: 700, color: "#14181f", margin: 0 }}>
+              {l.company_name}
+              {l.carrier_volume && (
+                <span style={{
+                  marginLeft: 8, fontSize: 11, fontWeight: 700, color: "#1d4ed8",
+                  background: "#eff4ff", border: "1px solid #c7d7fe", borderRadius: 999,
+                  padding: "2px 8px", verticalAlign: "middle",
+                }}>
+                  {l.carrier_volume}
+                </span>
+              )}
+            </p>
             <span style={{ fontSize: 12, color: statusColor[l.status] || "#4b5568", fontWeight: 700 }}>
               {l.status}
             </span>
