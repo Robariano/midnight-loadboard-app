@@ -57,6 +57,9 @@ export default function RootLayout({ children }) {
             <a href="/nightwatch" style={{ color: "#1d4ed8", fontSize: 13, fontWeight: 700, textDecoration: "none" }}>
               Nightwatch (For Brokers)
             </a>
+            <a href="/blog/chameleon-carriers-tql-chrobinson-lawsuit" style={{ color: "#1d4ed8", fontSize: 13, fontWeight: 700, textDecoration: "none" }}>
+              Blog
+            </a>
             <a href="/account" style={{ color: "#14181f", fontSize: 13, fontWeight: 700, textDecoration: "none" }}>
               Log In
             </a>
