@@ -91,16 +91,16 @@ export default function DispatcherLeadForm() {
       <div style={{ display: "flex", gap: 8, marginBottom: 14 }}>
         <button type="button" onClick={() => setHasOwnAuthority(true)} style={{
           flex: 1, padding: "8px", borderRadius: 6, cursor: "pointer",
-          border: hasOwnAuthority ? "2px solid #92400e" : "1px solid #e2e5ea",
-          background: hasOwnAuthority ? "#fdf1e4" : "#ffffff",
+          border: hasOwnAuthority ? "2px solid #7a2e1f" : "1px solid #e2e5ea",
+          background: hasOwnAuthority ? "#f1e6cc" : "#ffffff",
           color: "#14181f", fontWeight: 700, fontSize: 13,
         }}>
           I have my own authority
         </button>
         <button type="button" onClick={() => setHasOwnAuthority(false)} style={{
           flex: 1, padding: "8px", borderRadius: 6, cursor: "pointer",
-          border: !hasOwnAuthority ? "2px solid #92400e" : "1px solid #e2e5ea",
-          background: !hasOwnAuthority ? "#fdf1e4" : "#ffffff",
+          border: !hasOwnAuthority ? "2px solid #7a2e1f" : "1px solid #e2e5ea",
+          background: !hasOwnAuthority ? "#f1e6cc" : "#ffffff",
           color: "#14181f", fontWeight: 700, fontSize: 13,
         }}>
           I run under someone else's
@@ -112,7 +112,7 @@ export default function DispatcherLeadForm() {
           background: "#fef3e2", border: "1px solid #f5d999", borderRadius: 8,
           padding: "10px 14px", marginBottom: 14,
         }}>
-          <p style={{ fontSize: 12, color: "#92400e", margin: 0, lineHeight: 1.5 }}>
+          <p style={{ fontSize: 12, color: "#7a2e1f", margin: 0, lineHeight: 1.5 }}>
             Freight can only legally be booked in the name of whoever holds the operating
             authority — so this can't turn into a direct dispatch agreement with you individually.
             What it can do: we reach out to the carrier whose authority you run under about
@@ -184,7 +184,7 @@ export default function DispatcherLeadForm() {
         style={{ ...inputStyle, resize: "vertical" }} />
 
       <button type="submit" disabled={status === "submitting"} style={{
-        width: "100%", padding: "14px", background: "#92400e", color: "#fff",
+        width: "100%", padding: "14px", background: "#7a2e1f", color: "#fff",
         border: "none", borderRadius: 8, fontWeight: 700, fontSize: 15,
         cursor: status === "submitting" ? "not-allowed" : "pointer",
       }}>

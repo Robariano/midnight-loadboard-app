@@ -1,7 +1,30 @@
+import { headers } from "next/headers";
+
+// steadywakedispatch.com is Rob's separate dispatch business. It is served
+// from this same app (see middleware.js), but it must never show the
+// Nightlane header or chrome, so the two businesses stay fully separate.
+const STEADY_WAKE_HOSTS = new Set(["steadywakedispatch.com", "www.steadywakedispatch.com"]);
+
+function isSteadyWakeHost() {
+  try {
+    const host = (headers().get("host") || "").split(":")[0].toLowerCase();
+    return STEADY_WAKE_HOSTS.has(host);
+  } catch {
+    return false;
+  }
+}
+
 export const metadata = {
   title: "Nightlane - Carrier Verification & Load Management",
 };
 export default function RootLayout({ children }) {
+  if (isSteadyWakeHost()) {
+    return (
+      <html lang="en">
+        <body style={{ margin: 0, background: "#e6d8b9", color: "#2a1d12" }}>{children}</body>
+      </html>
+    );
+  }
   return (
     <html lang="en">
       <body

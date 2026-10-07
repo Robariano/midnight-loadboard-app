@@ -1,79 +1,119 @@
-import { DispatchSubNav, cardStyle, primaryBtn, secondaryBtn, statBox, BRAND, dispatchHref } from "./_shared";
+import { SteadyWakePage, PhoneRibbon, Ornament, PHOTO, dispatchHref } from "./_shared";
 
 export const metadata = {
-  title: "Steady Wake Dispatch | Freight Dispatching in Durango, CO",
+  title: "Steady Wake Dispatch | Freight Runs in the Family | Durango, CO",
   description:
-    "Reliable dispatching built on real experience — Navy veteran, 12 years driving dry van, now dispatching for owner-operators out of Durango, Colorado.",
+    "Three generations in freight, since 1933. Navy veteran Robert Ariano dispatches dry van and flatbed loads for owner-operators out of Durango, Colorado. 7% per load.",
 };
 
 export default function DispatchHome() {
   return (
-    <div>
-      <DispatchSubNav active="Home" />
-
-      <h1 style={{ color: "#14181f", fontSize: 32, lineHeight: 1.2, marginBottom: 12 }}>
-        Reliable dispatching, built on real experience.
+    <SteadyWakePage active="Home">
+      <h1 className="swd-brand">
+        Steady Wake Dispatch
+        <small>Truck dispatching for owner-operators · Dry van &amp; flatbed</small>
       </h1>
-      <p style={{ color: "#4b5568", fontSize: 16, lineHeight: 1.6, marginBottom: 24, maxWidth: 560 }}>
-        Navy veteran. Nearly 30 years around trucking, including 12 years driving dry van. I bring that same discipline to
-        dispatching for owner-operators — dry van and flatbed.
-      </p>
-      <div style={{ display: "flex", gap: 12, marginBottom: 32, flexWrap: "wrap" }}>
-        <a href={dispatchHref("/contact")} style={primaryBtn}>Get Started →</a>
-        <a href={dispatchHref("/services")} style={secondaryBtn}>See What's Included</a>
-      </div>
 
-      {/* Stats, echoing the odometer figures from Rob's own draft site */}
-      <div style={{ display: "flex", gap: 14, flexWrap: "wrap", marginBottom: 40 }}>
-        <div style={statBox}>
-          <p style={{ fontSize: 34, fontWeight: 700, margin: 0, color: "#fbbf24" }}>12</p>
-          <p style={{ fontSize: 13, color: "#c7ccd6", margin: "4px 0 0" }}>
-            Years driving dry van experience
-          </p>
+      <figure style={{ margin: 0 }}>
+        <div className="swd-photo">
+          <img src={PHOTO.src} alt={PHOTO.alt} width={PHOTO.width} height={PHOTO.height} />
         </div>
-        <div style={statBox}>
-          <p style={{ fontSize: 34, fontWeight: 700, margin: 0, color: "#fbbf24" }}>7%</p>
-          <p style={{ fontSize: 13, color: "#c7ccd6", margin: "4px 0 0" }}>
-            Starting rate per load, while building the track record
-          </p>
+        <figcaption className="swd-cap">{PHOTO.caption}</figcaption>
+      </figure>
+
+      <div className="swd-thesis">
+        <h2>
+          <span className="a">Freight runs</span>
+          <span className="b">in the family</span>
+        </h2>
+        <Ornament />
+        <p>
+          My name is Robert Ariano. I climbed on my grandfather&apos;s kegs as a kid, started delivering at 14, blocked
+          and braced flatbed loads in the Navy, and drove for the family business until I was 44. Now I dispatch for
+          owner-operators, and I run your truck the way my family ran ours.
+        </p>
+      </div>
+
+      <PhoneRibbon />
+
+      <section aria-labelledby="h-do">
+        <p className="swd-eyebrow">For owner-operators</p>
+        <h3 id="h-do">What I handle for your truck</h3>
+        <div className="swd-services">
+          {[
+            ["Finding and booking loads", "I work DAT, Truckstop and broker boards so you're not hunting freight from the cab."],
+            ["Every rate negotiated", "I don't take the first offer. I counter to get your truck real money."],
+            ["Brokers checked on FMCSA", "Active authority, matching name and MC, and bond on file before I book."],
+            ["You approve every load", "I send you the details first. Nothing gets booked without your yes."],
+            ["Planned around your hours", "Loads that fit your legal hours and your home time. I've been in the seat."],
+            ["Dry van and flatbed", "New MCs welcome. I'll help you get set up with brokers from day one."],
+          ].map(([t, d]) => (
+            <div className="swd-svc" key={t}>
+              <div>
+                <b>{t}</b>
+                <span>{d}</span>
+              </div>
+            </div>
+          ))}
         </div>
-      </div>
+      </section>
 
-      <div style={{ ...cardStyle, marginBottom: 32 }}>
-        <p style={{ color: "#14181f", fontWeight: 700, fontSize: 15, marginBottom: 10 }}>
-          Every broker checked before you commit
-        </p>
-        <p style={{ color: "#4b5568", fontSize: 14, lineHeight: 1.7, margin: 0 }}>
-          I personally check every broker against FMCSA's federal database before you're ever booked
-          on their load — so you always know exactly how you're being protected, not just taking my
-          word for it. No load is worth driving on unconfirmed coverage.
-        </p>
-      </div>
+      <section aria-labelledby="h-terms">
+        <p className="swd-eyebrow">Plain terms</p>
+        <h3 id="h-terms">One fee, paid after you&apos;re paid</h3>
+        <div className="swd-terms">
+          <div className="big">7%</div>
+          <ul>
+            <li>7% of each load I book for you.</li>
+            <li>No upfront fees and no setup charges.</li>
+            <li>You pay after the broker pays you, within 3 business days.</li>
+            <li>A short written agreement so we both know the deal.</li>
+          </ul>
+        </div>
+      </section>
 
-      <p style={{ color: "#14181f", fontWeight: 700, fontSize: 16, marginBottom: 16 }}>Why owner-operators choose Steady Wake</p>
-      <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 40 }}>
-        {[
-          "Real trucking experience, not just a certificate — 12 years driving, hands-on in trucking ever since.",
-          "Broker vetting built into every load — checked personally against FMCSA's own database.",
-          "Honest 7% starting rate — no bait-and-switch pricing later.",
-          "Navy discipline: reliable, direct, and accountable.",
-        ].map((line) => (
-          <div key={line} style={{ display: "flex", gap: 10, alignItems: "flex-start" }}>
-            <span style={{ color: "#92400e", fontWeight: 700, marginTop: 1 }}>✓</span>
-            <p style={{ color: "#4b5568", fontSize: 14, margin: 0, lineHeight: 1.5 }}>{line}</p>
-          </div>
-        ))}
-      </div>
+      <section aria-labelledby="h-start">
+        <p className="swd-eyebrow">Getting started</p>
+        <h3 id="h-start">How we get your truck rolling</h3>
+        <ol className="swd-steps">
+          <li>
+            <div>
+              <b>Call or text me</b>
+              <span>Tell me what you pull, where you like to run, and how often you want to be home.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <b>I check your authority</b>
+              <span>A quick look at your MC on SAFER, then we sign a simple dispatch agreement.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <b>Send your paperwork</b>
+              <span>W-9, certificate of insurance and MC authority letter, so brokers can set you up.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <b>I start booking</b>
+              <span>I find the loads, negotiate the rates and send them to you to approve.</span>
+            </div>
+          </li>
+        </ol>
+      </section>
 
-      <div style={{ textAlign: "center", padding: "12px 0 8px" }}>
-        <p style={{ color: "#14181f", fontSize: 16, fontWeight: 700, marginBottom: 16 }}>
-          Ready to get your first load booked?
+      <section className="swd-cta" aria-labelledby="h-cta">
+        <p className="swd-eyebrow">Talk to Robert</p>
+        <h3 id="h-cta" style={{ marginBottom: 4 }}>Let&apos;s get your truck loaded</h3>
+        <a className="swd-btn" href={dispatchHref("/contact")}>
+          Get started
+        </a>
+        <p className="swd-note" style={{ textAlign: "left" }}>
+          Steady Wake Dispatch works for carriers. I&apos;m a dispatcher, not a freight broker, so you sign every rate
+          confirmation and get paid directly by the broker.
         </p>
-        <a href={dispatchHref("/contact")} style={primaryBtn}>Get Started →</a>
-        <p style={{ color: "#6b7280", fontSize: 12, marginTop: 20 }}>
-          Or call directly: <a href={BRAND.phoneHref} style={{ color: "#92400e", fontWeight: 700 }}>{BRAND.phone}</a>
-        </p>
-      </div>
-    </div>
+      </section>
+    </SteadyWakePage>
   );
 }

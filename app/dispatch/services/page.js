@@ -1,85 +1,75 @@
-import { DispatchSubNav, cardStyle, primaryBtn, dispatchHref } from "../_shared";
+import { SteadyWakePage, PhoneRibbon, dispatchHref } from "../_shared";
 
 export const metadata = {
   title: "Dispatch Services | Steady Wake Dispatch",
   description:
-    "Load booking, broker verification, rate negotiation, route planning, and paperwork — everything Steady Wake Dispatch handles between pickup and delivery.",
+    "Load booking, rate negotiation, FMCSA broker checks, route planning and paperwork for dry van and flatbed owner-operators. 7% per load, paid after the broker pays you.",
 };
 
 const services = [
-  {
-    title: "Load booking",
-    body: "Finding solid freight that fits your equipment, your lanes, and your schedule.",
-  },
-  {
-    title: "Broker verification",
-    body:
-      "Every broker checked against FMCSA registration before you commit to a load — no exceptions. The same free tool Nightlane runs publicly is what gets used on your behalf: ",
-    link: { href: "/check-broker", label: "Check FMCSA Registration" },
-  },
-  {
-    title: "Rate negotiation",
-    body: "Pushing for fair, competitive rates on every load, every time.",
-  },
-  {
-    title: "Route planning",
-    body: "Reducing deadhead miles and keeping your truck moving and earning.",
-  },
-  {
-    title: "Paperwork management",
-    body: "Rate confirmations, broker packets, and load documents handled for you.",
-  },
-  {
-    title: "Direct communication",
-    body: "Fast, honest responses. No runaround, no ghosting.",
-  },
-  {
-    title: "Coverage checks",
-    body:
-      "Before you drive a load, you can confirm you're actually listed on the carrier's active policy for that trip — free and private, through ",
-    link: { href: "/confirm-coverage", label: "Confirm Coverage" },
-  },
+  ["Load booking", "Finding solid freight that fits your equipment, your lanes and your schedule."],
+  ["Every rate negotiated", "I counter every offer and push for a rate that actually pays your truck."],
+  ["Broker checks", "Every broker checked on FMCSA before you commit: active authority, matching name and MC, and bond on file."],
+  ["Route planning", "Cutting deadhead miles and keeping your truck moving and earning."],
+  ["Planned around your hours", "Loads that fit your legal hours and your home time. I won't push you to run past your clock."],
+  ["Paperwork", "Rate confirmations, broker setup packets and load documents handled for you."],
+  ["Direct communication", "Fast, honest answers from me. No runaround, no ghosting."],
+  ["Load securement know-how", "Flatbed blocking and bracing learned in the Navy, so I know what your load needs."],
 ];
 
 export default function DispatchServices() {
   return (
-    <div>
-      <DispatchSubNav active="Services" />
-
-      <h1 style={{ color: "#14181f", fontSize: 28, marginBottom: 4 }}>Services</h1>
-      <p style={{ color: "#4b5568", fontSize: 15, lineHeight: 1.6, marginBottom: 28, maxWidth: 560 }}>
-        Everything handled between pickup and delivery, so you can focus on driving. Dry van and
-        flatbed, including load securement.
-      </p>
-
-      <div style={{ display: "flex", flexDirection: "column", gap: 14, marginBottom: 40 }}>
-        {services.map((s) => (
-          <div key={s.title} style={cardStyle}>
-            <p style={{ color: "#14181f", fontWeight: 700, fontSize: 15, marginBottom: 6 }}>{s.title}</p>
-            <p style={{ color: "#4b5568", fontSize: 13, lineHeight: 1.7, margin: 0 }}>
-              {s.body}
-              {s.link && (
-                <a href={s.link.href} style={{ color: "#92400e", fontWeight: 700 }}>
-                  {s.link.label}
-                </a>
-              )}
-              {s.link && "."}
-            </p>
-          </div>
-        ))}
-      </div>
-
-      <div style={{ ...cardStyle, marginBottom: 40, background: "#fdf1e4", border: "1px solid #f0d3a8" }}>
-        <p style={{ fontSize: 13, color: "#92400e", margin: 0, lineHeight: 1.6 }}>
-          Freight can only legally be booked in the name of whoever holds the operating authority. If
-          you run under someone else's authority rather than your own, dispatch has to be arranged
-          with that carrier — still worth reaching out, since that's a conversation worth having.
+    <SteadyWakePage active="Services">
+      <section style={{ paddingTop: 32 }}>
+        <p className="swd-eyebrow">Services</p>
+        <h1 className="swd-h">Everything between pickup and delivery</h1>
+        <p className="swd-lede">
+          You drive. I handle the freight hunting, the brokers and the paperwork. Dry van and flatbed.
         </p>
-      </div>
+      </section>
 
-      <div style={{ textAlign: "center", padding: "12px 0 8px" }}>
-        <a href={dispatchHref("/contact")} style={primaryBtn}>Get Started →</a>
-      </div>
-    </div>
+      <section style={{ paddingTop: 20 }} aria-label="What's included">
+        <div className="swd-services">
+          {services.map(([t, d]) => (
+            <div className="swd-svc" key={t}>
+              <div>
+                <b>{t}</b>
+                <span>{d}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section aria-labelledby="h-terms">
+        <p className="swd-eyebrow">Plain terms</p>
+        <h3 id="h-terms">One fee, paid after you&apos;re paid</h3>
+        <div className="swd-terms">
+          <div className="big">7%</div>
+          <ul>
+            <li>7% of each load I book for you.</li>
+            <li>No upfront fees and no setup charges.</li>
+            <li>You pay after the broker pays you, within 3 business days.</li>
+            <li>A short written agreement so we both know the deal.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section aria-labelledby="h-authority">
+        <p className="swd-note" id="h-authority">
+          Freight can only be booked in the name of whoever holds the operating authority. If you run under someone
+          else&apos;s authority, dispatch has to be arranged with that carrier. It&apos;s still worth reaching out, and
+          we can talk it through.
+        </p>
+      </section>
+
+      <section className="swd-cta" style={{ paddingTop: 28 }}>
+        <a className="swd-btn" href={dispatchHref("/contact")}>
+          Get started
+        </a>
+      </section>
+
+      <PhoneRibbon />
+    </SteadyWakePage>
   );
 }

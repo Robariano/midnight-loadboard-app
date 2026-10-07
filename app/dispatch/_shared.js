@@ -1,17 +1,16 @@
-// Shared style tokens + sub-nav for Steady Wake Dispatch — Rob's real
-// dispatch business (steadywakedispatch@gmail.com, (970) 903-9226,
-// Durango, CO — the name on the actual client services agreement).
-// This mini-site lives inside Nightlane's app (app/dispatch/*)
-// so it reuses the working lead-capture backend and admin panel, but
-// carries Steady Wake's own identity — amber accent instead of
-// Nightlane's blue — rather than being folded into the
-// platform's own brand.
+// Shared look and layout for Steady Wake Dispatch, Rob's dispatch business
+// (steadywakedispatch@gmail.com, (970) 903-9226, Durango, CO).
 //
-// It's also served, via middleware.js at the repo root, as the real
-// steadywakedispatch.com domain's own clean URLs (steadywakedispatch.com/,
-// /services, /about, /contact) instead of only living under
-// midnightloadboard.com/dispatch/*. dispatchHref() below builds the
-// right link for whichever domain the page is currently being viewed on.
+// The site is built around the family story: Rob's grandfather Martin Ariano
+// started Southern Colorado Distributing in 1933, and the design borrows the
+// look of a 1930s poster (aged paper, dark ink, oxblood red, brass).
+//
+// It lives inside this app (app/dispatch/*) so it can reuse the lead form
+// backend and admin panel, and middleware.js serves it on
+// steadywakedispatch.com with clean URLs (/, /services, /about, /contact).
+// On that domain app/layout.js drops the Nightlane header, so the two
+// businesses stay completely separate. dispatchHref() builds the right link
+// for whichever domain the page is being viewed on.
 import { headers } from "next/headers";
 import SourceTracker from "./_SourceTracker";
 
@@ -36,120 +35,165 @@ export const BRAND = {
   phone: "(970) 903-9226",
   phoneHref: "tel:+19709039226",
   email: "steadywakedispatch@gmail.com",
-  location: "Durango, CO",
+  location: "Durango, Colorado",
 };
 
-export const cardStyle = {
-  background: "#f7f8fa",
-  border: "1px solid #e2e5ea",
-  borderRadius: 12,
-  padding: 20,
+export const PHOTO = {
+  src: "/steady-wake/warehouse-1933.jpg",
+  width: 1400,
+  height: 929,
+  alt: "Old brick beer warehouse with wooden kegs stacked on the loading dock and a sign reading Southern Colo. Distb., Martin Ariano, Mgr.",
+  caption: "Where it started: my grandfather Martin Ariano's warehouse in Southern Colorado.",
 };
 
-export const primaryBtn = {
-  display: "inline-block",
-  padding: "14px 24px",
-  background: "#92400e",
-  color: "#fff",
-  borderRadius: 8,
-  fontWeight: 700,
-  fontSize: 14,
-  textDecoration: "none",
-};
+const CSS = `
+.swd{--paper:#e6d8b9;--paper-2:#dccaa4;--ink:#2a1d12;--ink-soft:#5f4a33;--oxblood:#7a2e1f;--oxblood-dark:#5a2116;
+  --brass:#96703a;--rule:#8c7350;--cream:#f1e6cc;
+  --f-display:"Bodoni Moda","Bodoni 72",Didot,Georgia,serif;
+  --f-body:"Libre Caslon Text",Baskerville,"Book Antiqua",Georgia,serif;
+  --f-ledger:"Courier Prime","Courier New",Courier,monospace;
+  min-height:100vh;color:var(--ink);font:17px/1.65 var(--f-body);padding:0 16px 48px;
+  background:var(--paper);
+  background-image:radial-gradient(ellipse at center,transparent 55%,rgba(110,80,40,.22) 100%),
+    repeating-linear-gradient(0deg,rgba(90,60,30,.025) 0 2px,transparent 2px 5px);}
+.swd *{box-sizing:border-box}
+.swd a{color:var(--oxblood)}
+.swd :focus-visible{outline:2px solid var(--oxblood);outline-offset:3px}
+.swd-page{max-width:880px;margin:0 auto;border-left:1px solid var(--rule);border-right:1px solid var(--rule);
+  padding:24px clamp(16px,5vw,56px) 36px;background:rgba(241,230,204,.35)}
+.swd-mast{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:6px 18px;
+  font:700 .78rem/1.3 var(--f-ledger);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);
+  border-bottom:3px double var(--ink);padding-bottom:10px}
+.swd-mast b{color:var(--oxblood)}
+.swd-mast a{text-decoration:none}
+.swd-nav{display:flex;flex-wrap:wrap;justify-content:center;gap:4px 22px;padding:12px 0;border-bottom:1px solid var(--rule)}
+.swd-nav a{font:700 .8rem var(--f-ledger);letter-spacing:.14em;text-transform:uppercase;text-decoration:none;color:var(--ink);padding:4px 0;border-bottom:2px solid transparent}
+.swd-nav a[aria-current="page"]{color:var(--oxblood);border-bottom-color:var(--oxblood)}
+.swd-brand{font:800 clamp(2.1rem,6.4vw,3.6rem)/1 var(--f-display);text-align:center;margin:28px 0 0;text-wrap:balance}
+.swd-brand small{display:block;font:500 italic clamp(1rem,2.6vw,1.25rem)/1.4 var(--f-display);color:var(--ink-soft);margin-top:10px}
+.swd-photo{border:6px solid var(--ink);outline:1px solid var(--ink);outline-offset:4px;background:var(--ink);margin:28px 6px 0}
+.swd-photo img{display:block;width:100%;height:auto}
+.swd-cap{font:italic .95rem/1.4 var(--f-body);color:var(--ink-soft);text-align:center;margin:12px 0 0}
+.swd-thesis{text-align:center;display:grid;gap:12px;justify-items:center;margin-top:24px}
+.swd-thesis h2{margin:0;font:800 clamp(2rem,6vw,3.3rem)/1.04 var(--f-display);text-wrap:balance}
+.swd-thesis h2 .a{color:var(--brass);display:block}
+.swd-thesis h2 .b{color:var(--oxblood);display:block}
+.swd-thesis p{margin:0;max-width:60ch;font-size:1.06rem}
+.swd-orn{display:flex;align-items:center;gap:12px;justify-content:center}
+.swd-orn::before,.swd-orn::after{content:"";height:1px;width:min(160px,28vw);background:var(--rule)}
+.swd-orn span{width:10px;height:10px;background:var(--oxblood);transform:rotate(45deg)}
+.swd-ribbon{position:relative;background:var(--oxblood);color:var(--cream);margin:26px 22px 0;padding:14px 18px;
+  display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:6px 16px;text-align:center}
+.swd-ribbon::before,.swd-ribbon::after{content:"";position:absolute;top:0;bottom:0;width:22px;background:var(--oxblood-dark)}
+.swd-ribbon::before{left:-22px;clip-path:polygon(0 0,100% 0,100% 100%,0 100%,45% 50%)}
+.swd-ribbon::after{right:-22px;clip-path:polygon(0 0,100% 0,55% 50%,100% 100%,0 100%)}
+.swd-ribbon .lbl{font:700 .78rem var(--f-ledger);letter-spacing:.16em;text-transform:uppercase;opacity:.85}
+.swd-ribbon a{color:var(--cream);text-decoration:none;font:800 clamp(1.4rem,4.4vw,1.9rem)/1 var(--f-display)}
+.swd section{padding-top:44px}
+.swd-eyebrow{font:700 .78rem var(--f-ledger);letter-spacing:.16em;text-transform:uppercase;color:var(--oxblood);margin:0 0 6px}
+.swd h1.swd-h,.swd h3{font:800 clamp(1.6rem,4.2vw,2.2rem)/1.1 var(--f-display);margin:0 0 18px;text-wrap:balance}
+.swd-lede{max-width:60ch;margin:0 0 8px}
+.swd-ledger{border-top:2px solid var(--ink);border-bottom:2px solid var(--ink)}
+.swd-entry{display:grid;grid-template-columns:118px 1fr;gap:18px;padding:16px 0;border-bottom:1px dashed var(--rule)}
+.swd-entry:last-child{border-bottom:0}
+.swd-entry .when{font:700 .95rem/1.4 var(--f-ledger);color:var(--oxblood);letter-spacing:.04em;padding-top:3px}
+.swd-entry h4{margin:0 0 4px;font:700 1.08rem/1.3 var(--f-body)}
+.swd-entry p{margin:0;color:var(--ink-soft)}
+.swd-entry.now .when{color:var(--cream);background:var(--oxblood);align-self:start;justify-self:start;padding:3px 8px}
+.swd-entry.now h4{color:var(--oxblood)}
+.swd-services{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 34px}
+.swd-svc{padding:14px 0;border-top:1px solid var(--rule);display:grid;grid-template-columns:20px 1fr;gap:12px}
+.swd-svc::before{content:"";width:9px;height:9px;margin-top:9px;background:var(--brass);transform:rotate(45deg)}
+.swd-svc b{display:block;font:700 1.02rem/1.35 var(--f-body)}
+.swd-svc span{color:var(--ink-soft);font-size:.96rem}
+.swd-terms{border:2px solid var(--ink);outline:1px solid var(--ink);outline-offset:-7px;padding:26px clamp(18px,4vw,34px);
+  background:rgba(241,230,204,.55);display:grid;grid-template-columns:auto 1fr;gap:10px 28px;align-items:center}
+.swd-terms .big{font:800 clamp(3.4rem,10vw,5rem)/1 var(--f-display);color:var(--oxblood)}
+.swd-terms ul{margin:0;padding-left:1.1em}
+.swd-terms li{margin:3px 0}
+.swd-steps{counter-reset:s;display:grid;margin:0;padding:0;list-style:none}
+.swd-steps li{counter-increment:s;display:grid;grid-template-columns:48px 1fr;gap:14px;padding:14px 0;border-top:1px solid var(--rule)}
+.swd-steps li::before{content:counter(s);font:800 1.7rem/1 var(--f-display);color:var(--brass)}
+.swd-steps b{display:block}
+.swd-steps span{color:var(--ink-soft)}
+.swd-facts{display:grid;grid-template-columns:auto 1fr;gap:8px 20px;margin:0 0 8px;padding:18px 0;border-top:2px solid var(--ink);border-bottom:2px solid var(--ink)}
+.swd-facts dt{font:700 .8rem/1.6 var(--f-ledger);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft)}
+.swd-facts dd{margin:0;font-weight:700}
+.swd-prose p{max-width:62ch}
+.swd-note{font-size:.92rem;color:var(--ink-soft);border-left:3px solid var(--brass);padding:4px 0 4px 14px;max-width:62ch}
+.swd-cta{text-align:center;display:grid;gap:12px;justify-items:center}
+.swd-btn{display:inline-block;background:var(--oxblood);color:var(--cream) !important;text-decoration:none;padding:13px 26px;
+  font:700 .85rem var(--f-ledger);letter-spacing:.14em;text-transform:uppercase}
+.swd-btn:hover{background:var(--oxblood-dark)}
+.swd-contactline{display:flex;flex-wrap:wrap;gap:8px 28px;padding:16px 0;margin-bottom:22px;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.swd-contactline span{display:block;font:700 .74rem var(--f-ledger);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft)}
+.swd-contactline a,.swd-contactline b{font-weight:700;text-decoration:none}
+.swd-footer{margin-top:40px;padding-top:14px;border-top:3px double var(--ink);text-align:center;
+  font:700 .74rem var(--f-ledger);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft)}
+@media (max-width:640px){
+  .swd{font-size:16px}
+  .swd-services{grid-template-columns:1fr}
+  .swd-entry{grid-template-columns:1fr;gap:4px}
+  .swd-terms{grid-template-columns:1fr}
+  .swd-facts{grid-template-columns:1fr;gap:2px}
+  .swd-facts dd{margin-bottom:8px}
+  .swd-ribbon{margin-inline:18px}
+}
+`;
 
-export const secondaryBtn = {
-  display: "inline-block",
-  padding: "14px 24px",
-  background: "transparent",
-  color: "#92400e",
-  border: "1px solid #92400e",
-  borderRadius: 8,
-  fontWeight: 700,
-  fontSize: 14,
-  textDecoration: "none",
-};
+const FONTS =
+  "https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,600;0,6..96,800;1,6..96,500&family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Courier+Prime:wght@400;700&display=swap";
 
-// Dark stat tile — a nod to the odometer-style figures on Rob's own
-// draft site (steady-wake-website.html) without importing its full
-// dark theme, which would clash with the rest of Nightlane's
-// light chrome that wraps every page here.
-export const statBox = {
-  background: "#14181f",
-  borderRadius: 12,
-  padding: "18px 22px",
-  color: "#fff",
-  flex: 1,
-  minWidth: 160,
-};
-
-const subNavLinks = [
+const navLinks = [
   { path: "", label: "Home" },
   { path: "/services", label: "Services" },
-  { path: "/about", label: "About" },
+  { path: "/about", label: "Our Story" },
   { path: "/contact", label: "Contact" },
 ];
 
-export function DispatchSubNav({ active }) {
+// Wraps every Steady Wake page: fonts, styles, masthead, nav and footer.
+export function SteadyWakePage({ active, children }) {
   return (
-    <div>
+    <div className="swd">
+      <link rel="stylesheet" href={FONTS} />
+      <style dangerouslySetInnerHTML={{ __html: CSS }} />
       <SourceTracker />
-      <div
-        style={{
-          display: "flex",
-          alignItems: "baseline",
-          justifyContent: "space-between",
-          flexWrap: "wrap",
-          gap: 10,
-          marginBottom: 14,
-        }}
-      >
-        <p
-          style={{
-            fontSize: 13,
-            fontWeight: 700,
-            color: "#92400e",
-            letterSpacing: "0.04em",
-            textTransform: "uppercase",
-            margin: 0,
-          }}
-        >
-          Steady Wake Dispatch
-        </p>
-        <p style={{ fontSize: 12, color: "#6b7280", margin: 0 }}>
-          {BRAND.location} ·{" "}
-          <a href={BRAND.phoneHref} style={{ color: "#92400e", fontWeight: 700, textDecoration: "none" }}>
-            {BRAND.phone}
-          </a>
-        </p>
+      <div className="swd-page">
+        <header className="swd-mast">
+          <span>
+            <b>{BRAND.name}</b> · {BRAND.location}
+          </span>
+          <a href={BRAND.phoneHref}>{BRAND.phone}</a>
+        </header>
+        <nav className="swd-nav" aria-label="Steady Wake Dispatch">
+          {navLinks.map((l) => (
+            <a key={l.path} href={dispatchHref(l.path)} aria-current={active === l.label ? "page" : undefined}>
+              {l.label}
+            </a>
+          ))}
+        </nav>
+        {children}
+        <footer className="swd-footer">
+          {BRAND.name} · {BRAND.location} · Navy veteran owned · {BRAND.email}
+        </footer>
       </div>
-      <div
-        style={{
-          display: "flex",
-          gap: 6,
-          flexWrap: "wrap",
-          marginBottom: 32,
-          borderBottom: "1px solid #e2e5ea",
-          paddingBottom: 14,
-        }}
-      >
-        {subNavLinks.map((l) => (
-          <a
-            key={l.path}
-            href={dispatchHref(l.path)}
-            style={{
-              fontSize: 13,
-              fontWeight: 700,
-              textDecoration: "none",
-              padding: "6px 12px",
-              borderRadius: 20,
-              color: active === l.label ? "#fff" : "#92400e",
-              background: active === l.label ? "#92400e" : "#fdf1e4",
-            }}
-          >
-            {l.label}
-          </a>
-        ))}
-      </div>
+    </div>
+  );
+}
+
+export function PhoneRibbon() {
+  return (
+    <div className="swd-ribbon">
+      <span className="lbl">Call or text</span>
+      <a href={BRAND.phoneHref}>{BRAND.phone}</a>
+    </div>
+  );
+}
+
+export function Ornament() {
+  return (
+    <div className="swd-orn" aria-hidden="true">
+      <span />
     </div>
   );
 }
