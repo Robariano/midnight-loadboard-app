@@ -49,10 +49,10 @@ export const PHOTO = {
 // "Now" photo shown beside the 1933 warehouse: the A. Coors building on
 // Main Avenue in Durango (photo by Rob, Oct 2026).
 export const NOW_PHOTO = {
-  src: "/steady-wake/coors-building-durango.jpg",
+  src: "/steady-wake/coors-building-durango.jpg?v=2",
   width: 1400,
-  height: 1050,
-  alt: "Red brick building on Main Avenue in Durango with A. Coors A.D. 1900 carved at the top, beside the Durango Melodrama and Henry Strater Theatre, under a blue sky with a yellow fall tree out front.",
+  height: 1049,
+  alt: "Red brick building on Main Avenue in Durango with A. Coors A.D. 1900 carved at the top, under a blue sky with a yellow fall tree out front.",
   caption: "The A. Coors building (1900) on Main Avenue in Durango, the town where I made deliveries from age 14.",
 };
 
