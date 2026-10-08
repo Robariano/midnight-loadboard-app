@@ -3,7 +3,7 @@ import { SteadyWakePage, PhoneRibbon, PHOTO, dispatchHref } from "../_shared";
 export const metadata = {
   title: "Our Story | Steady Wake Dispatch",
   description:
-    "Three generations moving freight, from Martin Ariano's warehouse in 1933 to Steady Wake Dispatch in Durango today. Navy veteran, active CDL, dry van and flatbed.",
+    "Three generations moving freight, from Martin Ariano's warehouse in 1933 to Steady Wake Dispatch in Durango today. Navy veteran, 30 years behind the wheel, dry van and flatbed.",
 };
 
 export default function DispatchAbout() {
@@ -61,9 +61,9 @@ export default function DispatchAbout() {
           <dt>Background</dt>
           <dd>U.S. Navy veteran</dd>
           <dt>Experience</dt>
-          <dd>Delivering freight since age 14, including 12 years driving dry van in beverage distribution</dd>
-          <dt>License</dt>
-          <dd>Active CDL</dd>
+          <dd>30 years behind the wheel, from age 14 to 44, including 12 years driving dry van in beverage distribution</dd>
+          <dt>Commitment</dt>
+          <dd>Dispatch is my focus. When you call, I answer.</dd>
           <dt>Training</dt>
           <dd>Certified dispatcher</dd>
           <dt>Freight</dt>
