@@ -3,7 +3,7 @@ import { SteadyWakePage, PhoneRibbon, PHOTO, dispatchHref } from "../_shared";
 export const metadata = {
   title: "Our Story | Steady Wake Dispatch",
   description:
-    "Three generations moving freight, from Martin Ariano's warehouse in 1933 to Steady Wake Dispatch in Durango today. Navy veteran, 30 years behind the wheel, dry van and flatbed.",
+    "Three generations moving freight, from the Ariano brothers' warehouse in 1933 to Steady Wake Dispatch in Durango today. Navy veteran, 30 years behind the wheel, dry van and flatbed.",
 };
 
 export default function DispatchAbout() {
@@ -30,7 +30,7 @@ export default function DispatchAbout() {
         <h3 id="h-lineage">From the loading dock to dispatch</h3>
         <div className="swd-ledger">
           {[
-            ["1933", "The family business opens", "My grandfather, Martin Ariano, starts Southern Colorado Distributing. Kegs on the dock, trucks out the door."],
+            ["1933", "The family business opens", "My grandfather Gerald Ariano and his brother Martin start Southern Colorado Distributing. Kegs on the dock, trucks out the door."],
             ["Age 6", "On the loading dock", "I'm the oldest kid, climbing on those kegs and learning how freight moves."],
             ["Age 14", "Delivering in Durango", "The family moves to Durango, and I start running deliveries."],
             ["U.S. Navy", "Blocking and bracing", "In the Navy I secured weapons on flatbed trucks. When the cargo can't shift, you learn to do it right every time."],

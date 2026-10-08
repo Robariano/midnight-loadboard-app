@@ -1,7 +1,7 @@
 // Shared look and layout for Steady Wake Dispatch, Rob's dispatch business
 // (steadywakedispatch@gmail.com, (970) 903-9226, Durango, CO).
 //
-// The site is built around the family story: Rob's grandfather Martin Ariano
+// The site is built around the family story: Rob's grandfather Gerald Ariano and great-uncle Martin Ariano
 // started Southern Colorado Distributing in 1933, and the design borrows the
 // look of a 1930s poster (aged paper, dark ink, oxblood red, brass).
 //
@@ -43,7 +43,7 @@ export const PHOTO = {
   width: 1400,
   height: 929,
   alt: "Old brick beer warehouse with wooden kegs stacked on the loading dock and a sign reading Southern Colo. Distb., Martin Ariano, Mgr.",
-  caption: "Where it started: my grandfather Martin Ariano's warehouse in Southern Colorado.",
+  caption: "Where it started: the warehouse my grandfather Gerald Ariano and his brother Martin ran in Southern Colorado.",
 };
 
 const CSS = `
