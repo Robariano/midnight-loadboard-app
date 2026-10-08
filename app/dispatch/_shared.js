@@ -49,9 +49,9 @@ export const PHOTO = {
 // "Now" photo shown beside the 1933 warehouse: the A. Coors building on
 // Main Avenue in Durango (photo by Rob, Oct 2026).
 export const NOW_PHOTO = {
-  src: "/steady-wake/coors-building-durango.jpg?v=2",
+  src: "/steady-wake/coors-building-durango.jpg?v=3",
   width: 1400,
-  height: 1049,
+  height: 929,
   alt: "Red brick building on Main Avenue in Durango with A. Coors A.D. 1900 carved at the top, under a blue sky with a yellow fall tree out front.",
   caption: "The A. Coors building (1900) on Main Avenue in Durango, the town where I made deliveries from age 14.",
 };
