@@ -1,4 +1,4 @@
-import { SteadyWakePage, PhoneRibbon, PHOTO, dispatchHref } from "../_shared";
+import { SteadyWakePage, PhoneRibbon, ThenNow, dispatchHref } from "../_shared";
 
 export const metadata = {
   title: "Our Story | Steady Wake Dispatch",
@@ -18,12 +18,7 @@ export default function DispatchAbout() {
         </p>
       </section>
 
-      <figure style={{ margin: 0 }}>
-        <div className="swd-photo">
-          <img src={PHOTO.src} alt={PHOTO.alt} width={PHOTO.width} height={PHOTO.height} />
-        </div>
-        <figcaption className="swd-cap">{PHOTO.caption}</figcaption>
-      </figure>
+      <ThenNow />
 
       <section aria-labelledby="h-lineage">
         <p className="swd-eyebrow">The lineage</p>

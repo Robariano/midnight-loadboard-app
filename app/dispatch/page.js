@@ -1,4 +1,4 @@
-import { SteadyWakePage, PhoneRibbon, Ornament, PHOTO, dispatchHref } from "./_shared";
+import { SteadyWakePage, PhoneRibbon, Ornament, ThenNow, dispatchHref } from "./_shared";
 
 export const metadata = {
   title: "Steady Wake Dispatch | Freight Runs in the Family | Durango, CO",
@@ -14,12 +14,7 @@ export default function DispatchHome() {
         <small>Truck dispatching for owner-operators · Dry van &amp; flatbed</small>
       </h1>
 
-      <figure style={{ margin: 0 }}>
-        <div className="swd-photo">
-          <img src={PHOTO.src} alt={PHOTO.alt} width={PHOTO.width} height={PHOTO.height} />
-        </div>
-        <figcaption className="swd-cap">{PHOTO.caption}</figcaption>
-      </figure>
+      <ThenNow />
 
       <div className="swd-thesis">
         <h2>
