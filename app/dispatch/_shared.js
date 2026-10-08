@@ -39,21 +39,11 @@ export const BRAND = {
 };
 
 export const PHOTO = {
-  src: "/steady-wake/warehouse-1933-inset.jpg",
+  src: "/steady-wake/warehouse-1933-inset.jpg?v=2",
   width: 1400,
   height: 929,
   alt: "Old brick beer warehouse with wooden kegs stacked on the loading dock and a sign reading Southern Colo. Distb., Martin Ariano, Mgr. A framed inset in the top corner shows the A. Coors A.D. 1900 sign from the Coors building on Main Avenue in Durango.",
   caption: "Where it started: the warehouse my grandfather Gerald Ariano and his brother Martin ran in Southern Colorado.",
-};
-
-// "Now" photo shown beside the 1933 warehouse: the A. Coors building on
-// Main Avenue in Durango (photo by Rob, Oct 2026).
-export const NOW_PHOTO = {
-  src: "/steady-wake/coors-building-durango.jpg?v=3",
-  width: 1400,
-  height: 929,
-  alt: "Red brick building on Main Avenue in Durango with A. Coors A.D. 1900 carved at the top, under a blue sky with a yellow fall tree out front.",
-  caption: "The A. Coors building (1900) on Main Avenue in Durango, the town where I made deliveries from age 14.",
 };
 
 const CSS = `
@@ -84,11 +74,6 @@ const CSS = `
 .swd-photo{border:6px solid var(--ink);outline:1px solid var(--ink);outline-offset:4px;background:var(--ink);margin:28px 6px 0}
 .swd-photo img{display:block;width:100%;height:auto}
 .swd-cap{font:italic .95rem/1.4 var(--f-body);color:var(--ink-soft);text-align:center;margin:12px 0 0}
-.swd-pair{display:grid;gap:30px;margin-top:28px;align-items:start}
-.swd-pair figure{margin:0}
-.swd-pair .swd-photo{margin:0 6px}
-.swd-tag{display:block;text-align:center;font:700 .78rem/1 var(--f-ledger);letter-spacing:.18em;text-transform:uppercase;color:var(--oxblood);margin:0 0 12px}
-@media (min-width:760px){.swd-pair{grid-template-columns:1fr 1fr;gap:26px}}
 .swd-thesis{text-align:center;display:grid;gap:12px;justify-items:center;margin-top:24px}
 .swd-thesis h2{margin:0;font:800 clamp(2rem,6vw,3.3rem)/1.04 var(--f-display);text-wrap:balance}
 .swd-thesis h2 .a{color:var(--brass);display:block}
@@ -196,25 +181,16 @@ export function SteadyWakePage({ active, children }) {
   );
 }
 
-// The 1933 warehouse ("Then") beside today's A. Coors building in Durango ("Now").
+// The 1933 warehouse photo, with a framed inset of the A. Coors 1900 sign
+// from Main Avenue in Durango.
 export function ThenNow() {
   return (
-    <div className="swd-pair">
-      <figure>
-        <span className="swd-tag">Then · 1933</span>
-        <div className="swd-photo">
-          <img src={PHOTO.src} alt={PHOTO.alt} width={PHOTO.width} height={PHOTO.height} />
-        </div>
-        <figcaption className="swd-cap">{PHOTO.caption}</figcaption>
-      </figure>
-      <figure>
-        <span className="swd-tag">Now · Durango</span>
-        <div className="swd-photo">
-          <img src={NOW_PHOTO.src} alt={NOW_PHOTO.alt} width={NOW_PHOTO.width} height={NOW_PHOTO.height} loading="lazy" />
-        </div>
-        <figcaption className="swd-cap">{NOW_PHOTO.caption}</figcaption>
-      </figure>
-    </div>
+    <figure style={{ margin: 0 }}>
+      <div className="swd-photo">
+        <img src={PHOTO.src} alt={PHOTO.alt} width={PHOTO.width} height={PHOTO.height} />
+      </div>
+      <figcaption className="swd-cap">{PHOTO.caption}</figcaption>
+    </figure>
   );
 }
 
