@@ -113,11 +113,9 @@ export default function DispatcherLeadForm() {
           padding: "10px 14px", marginBottom: 14,
         }}>
           <p style={{ fontSize: 12, color: "#7a2e1f", margin: 0, lineHeight: 1.5 }}>
-            Freight can only legally be booked in the name of whoever holds the operating
-            authority — so this can't turn into a direct dispatch agreement with you individually.
-            What it can do: we reach out to the carrier whose authority you run under about
-            dispatching for their whole fleet, which would include you. Still worth submitting —
-            just setting honest expectations up front.
+            Since you run under another carrier&apos;s authority, loads have to be booked through
+            them. Send your info anyway. I can reach out to that carrier about dispatching for
+            their trucks, including yours.
           </p>
         </div>
       )}
