@@ -146,6 +146,13 @@ export default function MyDocuments() {
         }}>
           {DOCUMENT_TYPES.map((t) => <option key={t} value={t}>{t}</option>)}
         </select>
+        {documentType === "Medical Card" && (
+          <p style={{ fontSize: 12, color: "#8a92a0", marginTop: -6, marginBottom: 12 }}>
+            Good to keep a copy here. Since Oct. 12, 2026, a paper card no longer counts as proof
+            at inspections (except in Alaska). What counts is the medical certification on your
+            CDL record with the state, so after a new physical, check that it shows up there.
+          </p>
+        )}
 
         <label style={{ display: "block", fontSize: 13, color: "#4b5568", marginBottom: 6 }}>
           File
