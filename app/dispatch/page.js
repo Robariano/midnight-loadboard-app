@@ -36,7 +36,7 @@ export default function DispatchHome() {
         <h3 id="h-do">What I handle for your truck</h3>
         <div className="swd-services">
           {[
-            ["Finding and booking loads", "I work DAT, Truckstop and broker boards so you're not hunting freight from the cab."],
+            ["Finding and booking loads", "I search the load boards and call brokers directly so you're not hunting freight from the cab."],
             ["Every rate negotiated", "I don't take the first offer. I counter to get your truck real money."],
             ["Brokers checked on FMCSA", "Active authority, matching name and MC, and bond on file before I book."],
             ["You approve every load", "I send you the details first. Nothing gets booked without your yes."],
