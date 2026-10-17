@@ -3,7 +3,7 @@ import { SteadyWakePage, PhoneRibbon, dispatchHref } from "../_shared";
 export const metadata = {
   title: "Dispatch Services | Steady Wake Dispatch",
   description:
-    "Load booking, rate negotiation, FMCSA broker checks, route planning and paperwork for dry van, flatbed and box truck owner-operators. 7% per load, paid after the broker pays you.",
+    "Load booking, rate negotiation, FMCSA broker checks, route planning and paperwork for dry van, flatbed, hotshot, box truck and cargo van owner-operators. 7% per load, paid after the broker pays you.",
 };
 
 const services = [
@@ -24,7 +24,7 @@ export default function DispatchServices() {
         <p className="swd-eyebrow">Services</p>
         <h1 className="swd-h">Everything between pickup and delivery</h1>
         <p className="swd-lede">
-          You drive. I handle the freight hunting, the brokers and the paperwork. Dry van, flatbed and box truck.
+          You drive. I handle the freight hunting, the brokers and the paperwork. Dry van, flatbed, hotshot, box truck and cargo van.
         </p>
       </section>
 

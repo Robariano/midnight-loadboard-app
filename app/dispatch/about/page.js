@@ -3,7 +3,7 @@ import { SteadyWakePage, PhoneRibbon, ThenNow, dispatchHref } from "../_shared";
 export const metadata = {
   title: "Our Story | Steady Wake Dispatch",
   description:
-    "Three generations moving freight, from the Ariano brothers' warehouse in 1933 to Steady Wake Dispatch in Durango today. Navy veteran, 30 years behind the wheel, dry van, flatbed and box truck.",
+    "Three generations moving freight, from the Ariano brothers' warehouse in 1933 to Steady Wake Dispatch in Durango today. Navy veteran, 30 years behind the wheel. Dry van, flatbed, hotshot, box truck and cargo van.",
 };
 
 export default function DispatchAbout() {
@@ -62,7 +62,7 @@ export default function DispatchAbout() {
           <dt>Training</dt>
           <dd>Certified dispatcher</dd>
           <dt>Freight</dt>
-          <dd>Dry van, flatbed and box truck</dd>
+          <dd>Dry van, flatbed, hotshot, box truck and cargo van</dd>
         </dl>
       </section>
 
