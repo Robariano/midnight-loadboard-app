@@ -3,7 +3,7 @@ import { SteadyWakePage, PhoneRibbon, Ornament, ThenNow, dispatchHref } from "./
 export const metadata = {
   title: "Steady Wake Dispatch | Freight Runs in the Family | Durango, CO",
   description:
-    "Three generations in freight, since 1933. Navy veteran Robert Ariano dispatches dry van and flatbed loads for owner-operators out of Durango, Colorado. 7% per load.",
+    "Three generations in freight, since 1933. Navy veteran Robert Ariano dispatches dry van, flatbed and box truck loads for owner-operators out of Durango, Colorado. 7% per load.",
 };
 
 export default function DispatchHome() {
@@ -11,7 +11,7 @@ export default function DispatchHome() {
     <SteadyWakePage active="Home">
       <h1 className="swd-brand">
         Steady Wake Dispatch
-        <small>Truck dispatching for owner-operators · Dry van &amp; flatbed</small>
+        <small>Truck dispatching for owner-operators · Dry van, flatbed &amp; box truck</small>
       </h1>
 
       <ThenNow />
@@ -41,7 +41,7 @@ export default function DispatchHome() {
             ["Brokers checked on FMCSA", "Active authority, matching name and MC, and bond on file before I book."],
             ["You approve every load", "I send you the details first. Nothing gets booked without your yes."],
             ["Planned around your hours", "Loads that fit your legal hours and your home time. I've been in the seat."],
-            ["Dry van and flatbed", "New MCs welcome. I'll help you get set up with brokers from day one."],
+            ["Dry van, flatbed and box truck", "New MCs welcome. I'll help you get set up with brokers from day one."],
           ].map(([t, d]) => (
             <div className="swd-svc" key={t}>
               <div>
