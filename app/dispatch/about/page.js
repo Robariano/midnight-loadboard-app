@@ -30,7 +30,7 @@ export default function DispatchAbout() {
             ["Age 6", "On the loading dock", "I'm the oldest kid, climbing on those kegs and learning how freight moves."],
             ["Age 14", "Delivering in Durango", "The family moves to Durango, and I start running deliveries."],
             ["Age 18", "College football", "I leave Durango to play college football."],
-            ["Age 23", "U.S. Navy", "Five years on an aircraft carrier in the weapons department, then three years of shore duty blocking and bracing weapons on flatbed trucks. My last year, I inspected trucks. When the cargo can't shift, you learn to do it right every time."],
+            ["Age 23", "U.S. Navy", "Five years on an aircraft carrier in the weapons department. Then three years of shore duty at a Naval Weapons Station: two years blocking and bracing loads on civilian flatbed trucks, and a final year inspecting the trucks that hauled weapons to the carriers. When the cargo can't shift, you learn to do it right every time."],
             ["Ages 33 to 44", "Back to the family business", "Home from the Navy, I drive a beer route for A&L Coors in Durango. Tight schedules, early mornings, no room for slacking."],
             ["Last 4 years", "On the warehouse floor", "Four days a week inside on shipping and receiving, building loads and getting trucks out on time. Fridays I run kegs to the downtown bars, right past the old A. Coors sign. Nobody on the crew moved more kegs, or more weight, than I did."],
           ].map(([when, title, body]) => (
