@@ -43,7 +43,7 @@ export const PHOTO = {
   width: 1400,
   height: 929,
   alt: "Old brick beer warehouse in Walsenburg, Colorado, with wooden kegs stacked on the loading dock and a sign reading Southern Colo. Distb., Martin Ariano, Mgr. A framed inset in the top corner shows the A. Coors A.D. 1900 sign from the Coors building on Main Avenue in Durango.",
-  caption: "Where it started: Southern Colorado Distributing in Walsenburg, run by my great-uncle Martin Ariano. Inset: the A. Coors building on Main Avenue in Durango, where my dad later ran the business.",
+  caption: "Where it started: Southern Colorado Distributing in Walsenburg, run by my great-uncle Martin Ariano. Inset: the 1900 A. Coors sign on Main Avenue in Durango, the town where my dad later ran the business out on Bodo Drive.",
 };
 
 const CSS = `
