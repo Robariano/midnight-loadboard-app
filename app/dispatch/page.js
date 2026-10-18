@@ -3,7 +3,7 @@ import { SteadyWakePage, PhoneRibbon, Ornament, ThenNow, dispatchHref } from "./
 export const metadata = {
   title: "Steady Wake Dispatch | Freight Runs in the Family | Durango, CO",
   description:
-    "Three generations in freight, since 1933. Navy veteran Robert Ariano dispatches dry van, flatbed, hotshot, box truck and cargo van loads for owner-operators out of Durango, Colorado. 7% per load.",
+    "Three generations in freight. Navy veteran Robert Ariano dispatches dry van, flatbed, hotshot, box truck and cargo van loads for owner-operators out of Durango, Colorado. 7% per load.",
 };
 
 export default function DispatchHome() {
