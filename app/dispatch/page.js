@@ -24,7 +24,7 @@ export default function DispatchHome() {
         <Ornament />
         <p>
           My name is Robert Ariano. I climbed on my grandfather&apos;s kegs as a kid, started delivering at 14, blocked
-          and braced flatbed loads in the Navy, and drove for the family business until I was 44. Now I dispatch for
+          and braced flatbed loads in the Navy, and worked the routes and the warehouse for the family business until I was 44. Now I dispatch for
           owner-operators, and I run your truck the way my family ran ours.
         </p>
       </div>
