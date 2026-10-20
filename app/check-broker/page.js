@@ -200,10 +200,23 @@ function CheckBrokerInner() {
           )}
 
           <p style={{ margin: "6px 0", fontSize: 14 }}>
-            <strong>FMCSA operating status:</strong>{" "}
-            <span style={{ color: snapshot.allowToOperate ? "#166534" : "#4b5568" }}>
-              {snapshot.allowToOperate ? "Active" : "Not flagged as active for-hire authority"}
-            </span>
+            <strong>Trucking (carrier) authority:</strong>{" "}
+            {(() => {
+              const brokerOnly =
+                snapshot.authorities?.length > 0 &&
+                snapshot.authorities.every((a) => /broker/i.test(a.type || ""));
+              if (snapshot.allowToOperate) {
+                return <span style={{ color: "#166534" }}>Active</span>;
+              }
+              if (brokerOnly) {
+                return (
+                  <span style={{ color: "#166534" }}>
+                    None, which is normal for a broker (brokers arrange loads and don&apos;t haul them)
+                  </span>
+                );
+              }
+              return <span style={{ color: "#4b5568" }}>Not active, so this company isn&apos;t authorized to haul for hire</span>;
+            })()}
           </p>
           <p style={{ margin: "6px 0", fontSize: 14 }}>
             <strong>Out of service:</strong>{" "}
