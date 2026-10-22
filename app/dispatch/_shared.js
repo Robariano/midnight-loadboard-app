@@ -1,5 +1,5 @@
 // Shared look and layout for Steady Wake Dispatch, Rob's dispatch business
-// (steadywakedispatch@gmail.com, (970) 903-9226, Durango, CO).
+// (robert@steadywakedispatch.com, (970) 903-9226, Durango, CO).
 //
 // The site is built around the family story: Rob's grandfather Gerald Ariano and great-uncle Martin Ariano
 // started Southern Colorado Distributing in 1933, and the design borrows the
@@ -34,7 +34,7 @@ export const BRAND = {
   name: "Steady Wake Dispatch",
   phone: "(970) 903-9226",
   phoneHref: "tel:+19709039226",
-  email: "steadywakedispatch@gmail.com",
+  email: "robert@steadywakedispatch.com",
   location: "Durango, Colorado",
 };
 
