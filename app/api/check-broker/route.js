@@ -1,4 +1,4 @@
-import { lookupCarrierByDot, lookupCarrierByMc } from "../../../lib/fmcsa";
+import { lookupCarrierByDot, lookupCarrierByMc, searchCarriersByName } from "../../../lib/fmcsa";
 import { checkRateLimit } from "../../../lib/rate-limit";
 
 // Public broker/carrier lookup - anyone can check whether a DOT or MC
@@ -18,9 +18,28 @@ export async function POST(req) {
   const body = await req.json();
   const dotNumber = String(body.dot_number || "").trim();
   const mcNumber = String(body.mc_number || "").trim();
+  const name = String(body.name || "").trim();
+
+  if (!dotNumber && !mcNumber && name) {
+    if (name.length < 3) {
+      return Response.json({ error: "Enter at least 3 letters of the company name." }, { status: 400 });
+    }
+    try {
+      const matches = await searchCarriersByName(name);
+      if (matches.length === 0) {
+        return Response.json(
+          { error: `No FMCSA companies found matching "${name}". Try fewer words (for example, just the first word of the name).` },
+          { status: 404 }
+        );
+      }
+      return Response.json({ matches });
+    } catch (err) {
+      return Response.json({ error: "Couldn't reach FMCSA right now. Try again in a moment." }, { status: 502 });
+    }
+  }
 
   if (!dotNumber && !mcNumber) {
-    return Response.json({ error: "Enter a DOT or MC number to check." }, { status: 400 });
+    return Response.json({ error: "Enter a DOT number, MC number, or company name to check." }, { status: 400 });
   }
 
   try {

@@ -82,6 +82,7 @@ function CheckBrokerInner() {
     const [numberValue, setNumberValue] = useState("");
     const [status, setStatus] = useState(null);
     const [snapshot, setSnapshot] = useState(null);
+    const [matches, setMatches] = useState(null);
     const [ratingsData, setRatingsData] = useState(null);
     const [error, setError] = useState(null);
 
@@ -95,15 +96,19 @@ function CheckBrokerInner() {
         setStatus("checking");
         setError(null);
         setSnapshot(null);
+        setMatches(null);
         setRatingsData(null);
-        const body = type === "dot" ? { dot_number: value } : { mc_number: value };
+        const body = type === "dot" ? { dot_number: value } : type === "mc" ? { mc_number: value } : { name: value };
         const res = await fetch("/api/check-broker", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(body),
         });
         const data = await res.json().catch(() => ({}));
-        if (res.ok) {
+        if (res.ok && data.matches) {
+                setMatches(data.matches);
+                setStatus("done");
+        } else if (res.ok) {
                 setSnapshot(data.snapshot);
                 setStatus("done");
                 if (data.snapshot?.dotNumber) loadRatings(String(data.snapshot.dotNumber));
@@ -148,7 +153,7 @@ function CheckBrokerInner() {
       </p>
 
       <form onSubmit={handleCheck}>
-        <div style={{ display: "flex", gap: 8, marginBottom: 12 }}>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 12 }}>
           <button type="button" onClick={() => setNumberType("dot")} style={{
             flex: 1, padding: "8px", borderRadius: 6, cursor: "pointer",
             border: numberType === "dot" ? "2px solid #1d4ed8" : "1px solid #e2e5ea",
@@ -165,27 +170,63 @@ function CheckBrokerInner() {
           }}>
             I have their MC number
           </button>
+          <button type="button" onClick={() => setNumberType("name")} style={{
+            flex: 1, padding: "8px", borderRadius: 6, cursor: "pointer",
+            border: numberType === "name" ? "2px solid #1d4ed8" : "1px solid #e2e5ea",
+            background: numberType === "name" ? "#eef2ff" : "#f7f8fa",
+            color: "#14181f", fontWeight: 700, fontSize: 13,
+          }}>
+            I only have their name
+          </button>
         </div>
 
         <label style={{ display: "block", fontSize: 13, color: "#4b5568", marginBottom: 4 }}>
-          {numberType === "dot" ? "DOT Number" : "MC Number"}
+          {numberType === "dot" ? "DOT Number" : numberType === "mc" ? "MC Number" : "Company Name"}
         </label>
         <input
           style={inputStyle}
           type="text"
           value={numberValue}
           onChange={(e) => setNumberValue(e.target.value)}
-          placeholder={numberType === "dot" ? "e.g. 123456" : "e.g. 654321"}
+          placeholder={numberType === "dot" ? "e.g. 123456" : numberType === "mc" ? "e.g. 654321" : "e.g. Giltner Logistics"}
         />
         <button type="submit" disabled={status === "checking"} style={{
           width: "100%", padding: "14px", background: "#1d4ed8", color: "#fff",
           border: "none", borderRadius: 8, fontWeight: 700, fontSize: 15, cursor: "pointer",
         }}>
-          {status === "checking" ? "Checking..." : "Check This Number"}
+          {status === "checking" ? "Checking..." : numberType === "name" ? "Search This Name" : "Check This Number"}
         </button>
       </form>
 
       {error && <p style={{ color: "#991b1b", marginTop: 16 }}>{error}</p>}
+
+      {matches && (
+        <div style={{ marginTop: 20 }}>
+          <p style={{ fontSize: 14, color: "#14181f", fontWeight: 700, margin: "0 0 8px" }}>
+            {matches.length} match{matches.length === 1 ? "" : "es"} on file with FMCSA. Tap the right company to check it:
+          </p>
+          {matches.map((m) => (
+            <button
+              key={m.dotNumber}
+              type="button"
+              onClick={() => { setNumberType("dot"); setNumberValue(m.dotNumber); runCheck("dot", m.dotNumber); }}
+              style={{
+                display: "block", width: "100%", textAlign: "left", marginBottom: 8, padding: "10px 12px",
+                background: "#f7f8fa", border: "1px solid #e2e5ea", borderRadius: 8, cursor: "pointer", color: "#14181f",
+              }}
+            >
+              <span style={{ fontWeight: 700, fontSize: 14 }}>{m.legalName || "Name not on file"}</span>
+              {m.dbaName && <span style={{ fontSize: 12, color: "#4b5568" }}> (DBA {m.dbaName})</span>}
+              <span style={{ display: "block", fontSize: 12, color: "#4b5568", marginTop: 2 }}>
+                DOT {m.dotNumber}{m.city || m.state ? ` \u00b7 ${[m.city, m.state].filter(Boolean).join(", ")}` : ""}
+              </span>
+            </button>
+          ))}
+          <p style={{ fontSize: 12, color: "#8a92a0", marginTop: 4 }}>
+            Match the city and state to the load post or the company's signature before trusting a result.
+          </p>
+        </div>
+      )}
 
       {snapshot && (
         <div style={{
