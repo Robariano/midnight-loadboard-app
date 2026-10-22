@@ -41,7 +41,7 @@ export default function DispatchHome() {
             ["Brokers checked on FMCSA", "Active authority, matching name and MC, and bond on file before I book."],
             ["You approve every load", "I send you the details first. Nothing gets booked without your yes."],
             ["Planned around your hours", "Loads that fit your legal hours and your home time. I've been in the seat."],
-            ["Dry van, flatbed, hotshot, box truck and cargo van", "New MCs welcome. I'll help you get set up with brokers from day one."],
+            ["Dry van, flatbed, hotshot, box truck and cargo van", "New authority? I know which brokers work with new carriers, handle the setup paperwork, and open up the bigger brokers once you pass 90 days."],
           ].map(([t, d]) => (
             <div className="swd-svc" key={t}>
               <div>
