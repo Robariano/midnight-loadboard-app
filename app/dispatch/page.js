@@ -24,7 +24,7 @@ export default function DispatchHome() {
         <Ornament />
         <p>
           My name is Robert Ariano. I climbed on my grandfather&apos;s kegs as a kid, started delivering at 14, spent two
-          years in the Navy blocking and bracing loads on flatbed trucks and a year inspecting the trucks that hauled them, and worked the routes and the warehouse for the family business until I was 44. Now I dispatch for
+          years in the Navy blocking and bracing loads on flatbed trucks, and worked the routes and the warehouse for the family business until I was 44. Now I dispatch for
           owner-operators, and I run your truck the way my family ran ours.
         </p>
       </div>
@@ -36,7 +36,7 @@ export default function DispatchHome() {
         <h3 id="h-flat">I know what holds a load down</h3>
         <p>
           In the Navy I spent two years blocking and bracing loads on civilian flatbed trucks at a Naval Weapons
-          Station, then a year inspecting the trucks that hauled them. When the cargo can&apos;t shift, you learn to do it
+          Station. When the cargo can&apos;t shift, you learn to do it
           right every time. I bring that to every flatbed load I book for you.
         </p>
         <div className="swd-services">
