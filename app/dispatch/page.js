@@ -3,7 +3,7 @@ import { SteadyWakePage, PhoneRibbon, Ornament, ThenNow, dispatchHref } from "./
 export const metadata = {
   title: "Steady Wake Dispatch | Freight Runs in the Family | Durango, CO",
   description:
-    "Three generations in freight. Navy veteran Robert Ariano dispatches dry van, flatbed, hotshot, box truck and cargo van loads for owner-operators out of Durango, Colorado. 7% per load.",
+    "Three generations in freight. Navy veteran Robert Ariano dispatches flatbed, step deck and hotshot loads, plus dry van, box truck and cargo van, for owner-operators out of Durango, Colorado. 7% per load.",
 };
 
 export default function DispatchHome() {
@@ -11,7 +11,7 @@ export default function DispatchHome() {
     <SteadyWakePage active="Home">
       <h1 className="swd-brand">
         Steady Wake Dispatch
-        <small>Truck dispatching for owner-operators · Dry van, flatbed, hotshot, box truck &amp; cargo van</small>
+        <small>Flatbed dispatching for owner-operators · Also dry van, hotshot, box truck &amp; cargo van</small>
       </h1>
 
       <ThenNow />
@@ -23,13 +23,37 @@ export default function DispatchHome() {
         </h2>
         <Ornament />
         <p>
-          My name is Robert Ariano. I climbed on my grandfather&apos;s kegs as a kid, started delivering at 14, blocked
-          and braced flatbed loads in the Navy, and worked the routes and the warehouse for the family business until I was 44. Now I dispatch for
+          My name is Robert Ariano. I climbed on my grandfather&apos;s kegs as a kid, started delivering at 14, spent two
+          years in the Navy blocking and bracing loads on flatbed trucks and a year inspecting the trucks that hauled them, and worked the routes and the warehouse for the family business until I was 44. Now I dispatch for
           owner-operators, and I run your truck the way my family ran ours.
         </p>
       </div>
 
       <PhoneRibbon />
+
+      <section aria-labelledby="h-flat">
+        <p className="swd-eyebrow">Flatbed is my specialty</p>
+        <h3 id="h-flat">I know what holds a load down</h3>
+        <p>
+          In the Navy I spent two years blocking and bracing loads on civilian flatbed trucks at a Naval Weapons
+          Station, then a year inspecting the trucks that hauled them. When the cargo can&apos;t shift, you learn to do it
+          right every time. I bring that to every flatbed load I book for you.
+        </p>
+        <div className="swd-services">
+          {[
+            ["Securement checked before I book", "I look at what's being hauled and make sure your chains, straps and binders are enough for it."],
+            ["Tarps, oversize and extra stops called out", "You hear about tarps, permits and extra stops before you say yes, not at the shipper."],
+            ["Steel, lumber, pipe, machinery", "I know the freight and what it takes, so I can push the broker for the rate it deserves."],
+          ].map(([t, d]) => (
+            <div className="swd-svc" key={t}>
+              <div>
+                <b>{t}</b>
+                <span>{d}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
 
       <section aria-labelledby="h-do">
         <p className="swd-eyebrow">For owner-operators</p>
@@ -41,7 +65,7 @@ export default function DispatchHome() {
             ["Brokers checked on FMCSA", "Active authority, matching name and MC, and bond on file before I book."],
             ["You approve every load", "I send you the details first. Nothing gets booked without your yes."],
             ["Planned around your hours", "Loads that fit your legal hours and your home time. I've been in the seat."],
-            ["Dry van, flatbed, hotshot, box truck and cargo van", "New authority? I know which brokers work with new carriers, handle the setup paperwork, and open up the bigger brokers once you pass 90 days."],
+            ["Flatbed, step deck, hotshot, dry van, box truck and cargo van", "New authority? I know which brokers work with new carriers, handle the setup paperwork, and open up the bigger brokers once you pass 90 days."],
           ].map(([t, d]) => (
             <div className="swd-svc" key={t}>
               <div>
