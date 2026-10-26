@@ -282,7 +282,11 @@ function CheckBrokerInner() {
                 ))}
               </ul>
             ) : (
-              <span style={{ fontSize: 13, color: "#4b5568" }}>None on file with FMCSA</span>
+              <span style={{ fontSize: 13, color: "#4b5568" }}>
+                {snapshot.allowToOperate
+                  ? "Details not returned by FMCSA's data feed. See the SAFER link below for the full list."
+                  : "None on file with FMCSA"}
+              </span>
             )}
           </div>
 
