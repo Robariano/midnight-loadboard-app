@@ -246,7 +246,8 @@ function CheckBrokerInner() {
               const brokerOnly =
                 snapshot.authorities?.length > 0 &&
                 snapshot.authorities.every((a) => /broker/i.test(a.type || ""));
-              if (snapshot.allowToOperate) {
+              const hasCarrierAuthority = snapshot.authorities?.some((a) => !/broker/i.test(a.type || ""));
+              if (snapshot.allowToOperate || hasCarrierAuthority) {
                 return <span style={{ color: "#166534" }}>Active</span>;
               }
               if (brokerOnly) {
@@ -256,7 +257,11 @@ function CheckBrokerInner() {
                   </span>
                 );
               }
-              return <span style={{ color: "#4b5568" }}>Not active, so this company isn&apos;t authorized to haul for hire</span>;
+              return (
+                <span style={{ color: "#4b5568" }}>
+                  Not showing as active in FMCSA&apos;s data feed. Confirm on SAFER below before deciding.
+                </span>
+              );
             })()}
           </p>
           <p style={{ margin: "6px 0", fontSize: 14 }}>
@@ -280,6 +285,18 @@ function CheckBrokerInner() {
               <span style={{ fontSize: 13, color: "#4b5568" }}>None on file with FMCSA</span>
             )}
           </div>
+
+          {snapshot.dotNumber && (
+            <p style={{ margin: "10px 0 0", fontSize: 13 }}>
+              <a
+                href={`https://safer.fmcsa.dot.gov/query.asp?searchtype=ANY&query_type=queryCarrierSnapshot&query_param=USDOT&query_string=${encodeURIComponent(snapshot.dotNumber)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Double-check on FMCSA SAFER (official record) →
+              </a>
+            </p>
+          )}
 
           {snapshot.address && (
             <p style={{ margin: "10px 0 0", fontSize: 13, color: "#4b5568" }}>{snapshot.address}</p>
