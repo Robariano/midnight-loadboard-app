@@ -86,7 +86,7 @@ export default function DispatcherLeadForm() {
       padding: "16px 20px",
     }}>
       <label style={{ display: "block", fontSize: 12, color: "#4b5568", marginBottom: 6 }}>
-        Do you hold your own MC/DOT authority, or run under someone else's?
+        Do you hold your own MC/DOT authority, or are you leased on to a carrier?
       </label>
       <div style={{ display: "flex", gap: 8, marginBottom: 14 }}>
         <button type="button" onClick={() => setHasOwnAuthority(true)} style={{
@@ -103,7 +103,7 @@ export default function DispatcherLeadForm() {
           background: !hasOwnAuthority ? "#f1e6cc" : "#ffffff",
           color: "#14181f", fontWeight: 700, fontSize: 13,
         }}>
-          I run under someone else's
+          I&apos;m leased on to a carrier
         </button>
       </div>
 
@@ -178,7 +178,7 @@ export default function DispatcherLeadForm() {
         What are you looking for? (equipment type, lanes, anything relevant)
       </label>
       <textarea value={notes} onChange={(e) => setNotes(e.target.value)} rows={3}
-        placeholder="e.g. Box truck, mostly Southwest lanes, need help getting consistent freight"
+        placeholder="e.g. Semi dry van or 40-ft hotshot, Colorado and Texas lanes"
         style={{ ...inputStyle, resize: "vertical" }} />
 
       <button type="submit" disabled={status === "submitting"} style={{
