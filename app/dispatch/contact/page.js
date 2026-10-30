@@ -36,6 +36,11 @@ export default function DispatchContact() {
         </div>
       </div>
 
+      <p className="swd-lede" style={{ marginTop: 0 }}>
+        Fastest way: text <b>LOADS</b> + your truck type + city to{" "}
+        <a href="sms:+19709039226">{BRAND.phone}</a>.
+      </p>
+
       <DispatcherLeadForm />
     </SteadyWakePage>
   );
