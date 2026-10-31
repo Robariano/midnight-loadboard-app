@@ -51,7 +51,7 @@ export async function POST(req, { params }) {
         .eq("id", attestation.load_id)
         .single();
       if (load?.shipper_email) {
-        const manageUrl = `https://midnightloadboard.com/loads/manage/${load.manage_token}`;
+        const manageUrl = `https://www.nightlaneloads.com/loads/manage/${load.manage_token}`;
         sendLoadOnHoldEmail(load.shipper_email, load.pickup_city, load.delivery_city, manageUrl).catch((err) =>
           console.error("[email] Failed to send load-on-hold notice:", err.message)
         );

@@ -51,7 +51,7 @@ export async function POST(req) {
         .update({ password_reset_token: token, password_reset_expires_at: expiresAt })
         .eq("id", carrier.id);
 
-      const baseUrl = process.env.APP_BASE_URL || "https://midnightloadboard.com";
+      const baseUrl = process.env.APP_BASE_URL || "https://www.nightlaneloads.com";
       const resetUrl = `${baseUrl}/reset-password/${token}`;
 
       try {

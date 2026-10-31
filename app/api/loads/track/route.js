@@ -59,7 +59,7 @@ export async function POST(req) {
 
   if (error) return Response.json({ error: error.message }, { status: 500 });
 
-  const baseUrl = process.env.APP_BASE_URL || "https://midnightloadboard.com";
+  const baseUrl = process.env.APP_BASE_URL || "https://www.nightlaneloads.com";
   return Response.json(
     { load: data, manageUrl: `${baseUrl}/loads/manage/${manageToken}` },
     { status: 201 }

@@ -59,7 +59,7 @@ export async function POST(req, { params }) {
   if (isSelf) {
     return Response.json({ selfAttestationNeeded: true, token });
   } else {
-    const baseUrl = process.env.APP_BASE_URL || "https://midnightloadboard.com";
+    const baseUrl = process.env.APP_BASE_URL || "https://www.nightlaneloads.com";
     const confirmUrl = `${baseUrl}/confirm/${token}`;
 
     const contact = body.driver_contact.trim();
