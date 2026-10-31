@@ -66,8 +66,9 @@ export default function Roadside() {
         <p style={{ fontSize: 13, color: "#14532d", margin: 0, lineHeight: 1.5 }}>
           If it won&apos;t start but the dash lights are dim, or you only hear a click, it may be the
           battery. A portable jump starter (about $60 to $100) can get you going, but a battery
-          that&apos;s too far gone won&apos;t take a jump and has to be replaced. Carry the basic tools to
-          swap your battery, and know that many auto parts stores test batteries for free.
+          that&apos;s too far gone won&apos;t take a jump and has to be replaced. On many newer vehicles the
+          battery is hard to reach, so if you don&apos;t have the right tools, a tow to a professional is
+          often the smarter call.
         </p>
       </div>
 
