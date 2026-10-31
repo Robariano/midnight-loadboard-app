@@ -56,6 +56,20 @@ export default function Roadside() {
         </p>
       </div>
 
+      <div style={{
+        background: "#eef6f0", border: "1px solid #c6e3cf", borderRadius: 10,
+        padding: "12px 16px", marginBottom: 24,
+      }}>
+        <p style={{ fontSize: 13, fontWeight: 700, color: "#14532d", margin: "0 0 4px" }}>
+          Before you call a tow
+        </p>
+        <p style={{ fontSize: 13, color: "#14532d", margin: 0, lineHeight: 1.5 }}>
+          If it won&apos;t start but the dash lights are dim, or you only hear a click, it may just be
+          a dead battery. A portable jump starter (about $60 to $100) can save you a tow bill. Keep
+          one charged in the cab, and know your truck&apos;s basic tools before you need them.
+        </p>
+      </div>
+
       <form onSubmit={search} style={{ display: "flex", gap: 10, marginBottom: 20, flexWrap: "wrap" }}>
         <input value={city} onChange={(e) => setCity(e.target.value)}
           placeholder="City" style={{ ...inputStyle, width: 160 }} />
@@ -115,6 +129,33 @@ export default function Roadside() {
           </div>
         </div>
       ))}
+
+      <div style={{
+        borderLeft: "4px solid #f5a623", background: "#f7f8fa", borderRadius: "0 10px 10px 0",
+        padding: "16px 20px", marginTop: 32,
+      }}>
+        <p style={{ fontSize: 12, fontWeight: 700, color: "#92400e", margin: "0 0 4px", letterSpacing: 1 }}>
+          WHY THIS PAGE EXISTS
+        </p>
+        <p style={{ fontSize: 14, color: "#14181f", margin: "0 0 10px", lineHeight: 1.6 }}>
+          When I moved back to Durango from Aztec, I spent a night in my Jeep waiting for my apartment
+          to be ready. The next morning it wouldn&apos;t start. I had no tools and didn&apos;t know it was just
+          a dead battery, so I called a tow truck. My insurance didn&apos;t include towing, so the whole
+          bill came out of my pocket.
+        </p>
+        <p style={{ fontSize: 14, color: "#14181f", margin: "0 0 10px", lineHeight: 1.6 }}>
+          Years before that, my 2005 Ford Explorer taught me the other side of repairs. I tried to fix
+          the timing chain myself. Later the transmission went out after an extended-warranty
+          inspection at a shop in town, and a mechanic I trusted believed it had been put back
+          together wrong. We put in a new transmission. It took every dollar I had saved, but he did
+          the job right.
+        </p>
+        <p style={{ fontSize: 14, color: "#14181f", margin: 0, lineHeight: 1.6 }}>
+          What I learned: know what your insurance covers before you need it, carry a jump starter,
+          keep some cash set aside for repairs, and find a mechanic you trust before you break down.
+          That&apos;s why this page lists real shops that answer the phone. – Robert, founder
+        </p>
+      </div>
     </div>
   );
 }
