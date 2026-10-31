@@ -64,9 +64,10 @@ export default function Roadside() {
           Before you call a tow
         </p>
         <p style={{ fontSize: 13, color: "#14532d", margin: 0, lineHeight: 1.5 }}>
-          If it won&apos;t start but the dash lights are dim, or you only hear a click, it may just be
-          a dead battery. A portable jump starter (about $60 to $100) can save you a tow bill. Keep
-          one charged in the cab, and know your truck&apos;s basic tools before you need them.
+          If it won&apos;t start but the dash lights are dim, or you only hear a click, it may be the
+          battery. A portable jump starter (about $60 to $100) can get you going, but a battery
+          that&apos;s too far gone won&apos;t take a jump and has to be replaced. Carry the basic tools to
+          swap your battery, and know that many auto parts stores test batteries for free.
         </p>
       </div>
 
@@ -139,9 +140,9 @@ export default function Roadside() {
         </p>
         <p style={{ fontSize: 14, color: "#14181f", margin: "0 0 10px", lineHeight: 1.6 }}>
           When I moved back to Durango from Aztec, I spent a night in my Jeep waiting for my apartment
-          to be ready. The next morning it wouldn&apos;t start. I had no tools and didn&apos;t know it was just
-          a dead battery, so I called a tow truck. My insurance didn&apos;t include towing, so the whole
-          bill came out of my pocket.
+          to be ready. The next morning it wouldn&apos;t start. A jump didn&apos;t work, and I didn&apos;t know the
+          battery was done and needed replacing. I had no tools to take it out, so I called a tow truck.
+          My insurance didn&apos;t include towing, so the whole bill came out of my pocket.
         </p>
         <p style={{ fontSize: 14, color: "#14181f", margin: "0 0 10px", lineHeight: 1.6 }}>
           Years before that, my 2005 Ford Explorer taught me the other side of repairs. I tried to fix
@@ -151,7 +152,7 @@ export default function Roadside() {
           the job right.
         </p>
         <p style={{ fontSize: 14, color: "#14181f", margin: 0, lineHeight: 1.6 }}>
-          What I learned: know what your insurance covers before you need it, carry a jump starter,
+          What I learned: know what your insurance covers before you need it, carry basic tools,
           keep some cash set aside for repairs, and find a mechanic you trust before you break down.
           That&apos;s why this page lists real shops that answer the phone. – Robert, founder
         </p>
