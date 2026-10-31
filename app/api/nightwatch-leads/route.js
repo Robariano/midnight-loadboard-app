@@ -1,6 +1,7 @@
 import { getServiceClient } from "../../../lib/supabase";
 import { checkRateLimit } from "../../../lib/rate-limit";
 import { sendNightwatchLeadAlertSMS } from "../../../lib/twilio";
+import { sendNightwatchLeadAlertEmail } from "../../../lib/email";
 
 // Public early-access form for Nightwatch (the broker-facing continuous
 // carrier verification feature — see app/nightwatch/page.js). Nightwatch
@@ -57,6 +58,12 @@ export async function POST(req) {
     await sendNightwatchLeadAlertSMS({ companyName, contactPhone, contactEmail });
   } catch (smsError) {
     console.error("Failed to send Nightwatch lead alert SMS:", smsError);
+  }
+
+  try {
+    await sendNightwatchLeadAlertEmail({ companyName, contactPhone, contactEmail });
+  } catch (emailError) {
+    console.error("Failed to send Nightwatch lead alert email:", emailError);
   }
 
   return Response.json({ ok: true }, { status: 201 });
