@@ -1,6 +1,7 @@
 import { getServiceClient } from "../../../lib/supabase";
 import { checkRateLimit } from "../../../lib/rate-limit";
 import { sendDispatchLeadAlertSMS } from "../../../lib/twilio";
+import { sendDispatchLeadAlertEmail } from "../../../lib/email";
 
 // Genuinely public lead form - no login needed. Captures two real cases
 // (see app/dispatch/_DispatcherForm.js and the migration for why they're
@@ -77,6 +78,17 @@ export async function POST(req) {
     });
   } catch (smsError) {
     console.error("Failed to send dispatch lead alert SMS:", smsError);
+  }
+
+  // Email backup, independent of Twilio, so the lead still arrives if
+  // texting is down.
+  try {
+    await sendDispatchLeadAlertEmail({
+      companyName, hasOwnAuthority, mcNumber, dotNumber, leasedUnderCompany,
+      contactName, contactPhone, contactEmail, notes, source,
+    });
+  } catch (emailError) {
+    console.error("Failed to send dispatch lead alert email:", emailError);
   }
 
   return Response.json({ ok: true }, { status: 201 });
