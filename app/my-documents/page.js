@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 
-const DOCUMENT_TYPES = ["Bill of Lading", "Rate Confirmation", "Lumper Receipt", "Invoice", "Proof of Delivery", "Inspection Report", "Insurance Certificate", "Medical Card", "Other"];
+const DOCUMENT_TYPES = ["Bill of Lading", "Rate Confirmation", "Lumper Receipt", "Invoice", "Proof of Delivery", "Inspection Report", "Insurance Certificate", "W-9", "MC Authority Letter", "Notice of Assignment (Factoring)", "Medical Card", "Other"];
 
 export default function MyDocuments() {
     const [documents, setDocuments] = useState(null);
