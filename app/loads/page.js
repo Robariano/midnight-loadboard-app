@@ -424,10 +424,26 @@ export default function Loads() {
 
       {loading && <p style={{ color: "#4b5568" }}>Loading loads...</p>}
       {!loading && loads.length === 0 && (
-        <p style={{ color: "#4b5568" }}>
-          No loads match your filters. Try widening your search or{" "}
-          <a href="/post-load" style={{ color: "#1d4ed8" }}>post a load</a>.
-        </p>
+        <div style={{
+          background: "#f7f8fa", border: "1px solid #e2e5ea", borderRadius: 12,
+          padding: "18px 20px",
+        }}>
+          <p style={{ color: "#14181f", fontWeight: 700, margin: "0 0 6px" }}>
+            The Nightlane load board is just opening, so there may not be loads in your area yet.
+          </p>
+          <p style={{ color: "#4b5568", margin: "0 0 12px", fontSize: 14 }}>
+            Try widening your search, or check back soon.
+          </p>
+          <p style={{ color: "#4b5568", margin: "0 0 12px", fontSize: 14 }}>
+            <strong style={{ color: "#14181f" }}>Need loads now?</strong> Steady Wake Dispatch can find
+            them for you. 7%, paid after you&apos;re paid, and you approve every load.{" "}
+            <a href="/dispatch" style={{ color: "#1d4ed8", fontWeight: 700 }}>Get a dispatcher &rarr;</a>
+          </p>
+          <p style={{ color: "#4b5568", margin: 0, fontSize: 14 }}>
+            <strong style={{ color: "#14181f" }}>Brokers &amp; shippers:</strong>{" "}
+            <a href="/post-load" style={{ color: "#1d4ed8", fontWeight: 700 }}>post a load free</a>.
+          </p>
+        </div>
       )}
       {loads.map((load) => {
         const b = badgeColor[load.status] || badgeColor.open;
