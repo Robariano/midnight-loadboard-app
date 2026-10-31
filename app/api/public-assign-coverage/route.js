@@ -100,7 +100,7 @@ export async function POST(req) {
   });
   if (attestErr) return Response.json({ error: attestErr.message }, { status: 500 });
 
-  const baseUrl = process.env.APP_BASE_URL || "https://midnightloadboard.com";
+  const baseUrl = process.env.APP_BASE_URL || "https://www.nightlaneloads.com";
   const confirmUrl = `${baseUrl}/confirm/${token}`;
 
   try {

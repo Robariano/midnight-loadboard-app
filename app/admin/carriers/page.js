@@ -94,7 +94,7 @@ export default function AdminCarriers() {
 {" "}<span style={{ color: "#6b7280" }}>(only needed if they signed up before this was added - send it to them once, privately)</span>
   </p>
           <p style={{ fontSize: 12, color: "#4b5568", margin: "0 0 4px" }}>
-            Reverify link: <code style={{ color: "#1d4ed8" }}>https://midnightloadboard.com/reverify/{c.id}</code>
+            Reverify link: <code style={{ color: "#1d4ed8" }}>https://www.nightlaneloads.com/reverify/{c.id}</code>
             {" "}<span style={{ color: "#6b7280" }}>(send this if they need to resubmit documents - they'll still need their secret)</span>
               </p>
 

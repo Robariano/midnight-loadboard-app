@@ -33,7 +33,7 @@ export async function POST(req, { params }) {
   // Best-effort - a failed or slow email never blocks the status update
   // itself, which has already been saved at this point.
   if (looksLikeEmail(data.shipper_email)) {
-    const baseUrl = process.env.APP_BASE_URL || "https://midnightloadboard.com";
+    const baseUrl = process.env.APP_BASE_URL || "https://www.nightlaneloads.com";
     const manageUrl = `${baseUrl}/loads/manage/${data.manage_token}`;
     try {
       await sendLoadStatusUpdateEmail(data.shipper_email, data.pickup_city, data.delivery_city, "delivered", manageUrl);

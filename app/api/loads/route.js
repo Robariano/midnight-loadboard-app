@@ -67,7 +67,7 @@ export async function POST(req) {
     }
 
     if (looksLikeEmail(body.shipper_email)) {
-                const baseUrl = process.env.APP_BASE_URL || "https://midnightloadboard.com";
+                const baseUrl = process.env.APP_BASE_URL || "https://www.nightlaneloads.com";
                 const manageUrl = `${baseUrl}/loads/manage/${manageToken}`;
                 try {
                                 await sendLoadPostedEmail(body.shipper_email.trim(), body.pickup_city, body.delivery_city, manageUrl);
