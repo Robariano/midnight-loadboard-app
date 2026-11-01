@@ -51,7 +51,7 @@ export default function RootLayout({ children }) {
           </a>
           <nav style={{ marginLeft: "auto", display: "flex", gap: 16 }}>
             <a href="/loads" style={{ color: "#1d4ed8", fontSize: 13, fontWeight: 700, textDecoration: "none" }}>
-              My Loads
+              Find Loads
             </a>
             <a href="/carriers" style={{ color: "#1d4ed8", fontSize: 13, fontWeight: 700, textDecoration: "none" }}>
               Carriers
