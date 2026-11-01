@@ -32,7 +32,7 @@ export default function DispatchAbout() {
             ["Age 18", "College football", "I leave Durango to play college football."],
             ["Age 23", "U.S. Navy", "Five years on an aircraft carrier in the weapons department. Then three years of shore duty at a Naval Weapons Station: two years blocking and bracing loads on civilian flatbed trucks, and a final year inspecting the trucks that hauled weapons to the carriers. When the cargo can't shift, you learn to do it right every time."],
             ["Ages 33 to 44", "Back to the family business", "Home from the Navy, I drive a beer route for A&L Coors in Durango. Tight schedules, early mornings, no room for slacking."],
-            ["Last 4 years", "On the warehouse floor", "Four days a week inside on shipping and receiving, building loads and getting trucks out on time. Fridays I run kegs to the downtown bars, right past the old A. Coors sign. Nobody on the crew moved more kegs, or more weight, than I did."],
+            ["Last 4 years", "On the warehouse floor", "Four days a week inside on shipping and receiving, building loads and getting trucks out on time. A lot of that time was in the keg room, where the warehouse manager ran temperature checks to keep the beer cold. Fridays I run kegs to the downtown bars, right past the old A. Coors sign. Nobody on the crew moved more kegs, or more weight, than I did."],
           ].map(([when, title, body]) => (
             <div className="swd-entry" key={when}>
               <div className="when">{when}</div>
@@ -64,6 +64,8 @@ export default function DispatchAbout() {
           <dd>Dispatch is my focus. When you call, I answer.</dd>
           <dt>Training</dt>
           <dd>Certified dispatcher</dd>
+          <dt>Cold freight</dt>
+          <dd>Years in the Coors keg room, where temperatures were checked to keep the product cold. I know what it takes to keep a reefer load cold.</dd>
           <dt>Freight</dt>
           <dd>Dry van, reefer, flatbed, hotshot, box truck and cargo van</dd>
         </dl>
