@@ -21,7 +21,7 @@ const filterInputStyle = {
   fontSize: 13,
 };
 
-const EQUIPMENT_TYPES = ["Dry Van", "Flatbed", "Reefer", "Tanker", "Step Deck", "Other"];
+const EQUIPMENT_TYPES = ["Dry Van", "Flatbed", "Reefer", "Hotshot", "Box Truck", "Tanker", "Step Deck", "Other"];
 
 const US_STATES = [
   "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "DC", "FL", "GA", "HI", "ID", "IL", "IN",
@@ -223,7 +223,7 @@ export default function Loads() {
   return (
     <div>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
-        <h1 style={{ color: "#14181f", margin: 0 }}>My Loads</h1>
+        <h1 style={{ color: "#14181f", margin: 0 }}>Find Loads</h1>
         {me !== undefined && (
           <p style={{ color: "#4b5568", fontSize: 13, margin: 0 }}>
             {me ? (

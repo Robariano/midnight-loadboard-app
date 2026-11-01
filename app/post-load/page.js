@@ -120,6 +120,8 @@ export default function PostLoad() {
           <option>Flatbed</option>
           <option>Reefer</option>
           <option>Tanker</option>
+          <option>Hotshot</option>
+          <option>Box Truck</option>
           <option>Step Deck</option>
           <option>Other</option>
               </select>

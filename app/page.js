@@ -179,7 +179,7 @@ export default function Home() {
         <a href="/confirm-coverage" style={primaryBtn}>Confirm Coverage →</a>
         <p style={{ color: "#6b7280", fontSize: 12, marginTop: 20 }}>
           Managing a load through Nightlane?{" "}
-          <a href="/loads" style={{ color: "#1d4ed8" }}>Go to My Loads →</a>
+          <a href="/loads" style={{ color: "#1d4ed8" }}>Go to Find Loads →</a>
         </p>
       </div>
     </div>
