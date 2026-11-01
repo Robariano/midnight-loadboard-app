@@ -24,7 +24,7 @@ export default function DispatchServices() {
         <p className="swd-eyebrow">Services</p>
         <h1 className="swd-h">Everything between pickup and delivery</h1>
         <p className="swd-lede">
-          You drive. I handle the freight hunting, the brokers and the paperwork. Dry van, flatbed, hotshot, box truck and cargo van.
+          You drive. I handle the freight hunting, the brokers and the paperwork. Dry van, reefer, flatbed, hotshot, box truck and cargo van, across the Four Corners and Texas.
         </p>
       </section>
 
