@@ -199,6 +199,7 @@ export function PhoneRibbon() {
     <div className="swd-ribbon">
       <span className="lbl">Call or text</span>
       <a href={BRAND.phoneHref}>{BRAND.phone}</a>
+      <span className="lbl">Text LOADS + your truck type + city</span>
     </div>
   );
 }

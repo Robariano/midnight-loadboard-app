@@ -11,7 +11,7 @@ export default function DispatchHome() {
     <SteadyWakePage active="Home">
       <h1 className="swd-brand">
         Steady Wake Dispatch
-        <small>Flatbed dispatching for owner-operators · Also dry van, hotshot, box truck &amp; cargo van</small>
+        <small>Flatbed dispatching for owner-operators · Also dry van, reefer, hotshot, box truck &amp; cargo van · Four Corners &amp; Texas lanes</small>
       </h1>
 
       <ThenNow />
@@ -65,7 +65,7 @@ export default function DispatchHome() {
             ["Brokers checked on FMCSA", "Active authority, matching name and MC, and bond on file before I book."],
             ["You approve every load", "I send you the details first. Nothing gets booked without your yes."],
             ["Planned around your hours", "Loads that fit your legal hours and your home time. I've been in the seat."],
-            ["Flatbed, step deck, hotshot, dry van, box truck and cargo van", "New authority? I know which brokers work with new carriers, handle the setup paperwork, and open up the bigger brokers once you pass 90 days."],
+            ["Flatbed, step deck, dry van, reefer, hotshot, box truck and cargo van", "New authority? I know which brokers work with new carriers, handle the setup paperwork, and open up the bigger brokers once you pass 90 days."],
           ].map(([t, d]) => (
             <div className="swd-svc" key={t}>
               <div>
@@ -84,6 +84,7 @@ export default function DispatchHome() {
           <div className="big">7%</div>
           <ul>
             <li>7% of each load I book for you.</li>
+            <li>No fee on detention or lumper pay.</li>
             <li>No upfront fees and no setup charges.</li>
             <li>You pay after the broker pays you, within 3 business days.</li>
             <li>A short written agreement so we both know the deal.</li>

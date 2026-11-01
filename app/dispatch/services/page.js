@@ -48,6 +48,7 @@ export default function DispatchServices() {
           <div className="big">7%</div>
           <ul>
             <li>7% of each load I book for you.</li>
+            <li>No fee on detention or lumper pay.</li>
             <li>No upfront fees and no setup charges.</li>
             <li>You pay after the broker pays you, within 3 business days.</li>
             <li>A short written agreement so we both know the deal.</li>
