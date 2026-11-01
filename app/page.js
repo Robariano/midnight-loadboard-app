@@ -45,10 +45,53 @@ const stepNumber = {
 export default function Home() {
   return (
     <div>
-      {/* Hero */}
-      <h1 style={{ color: "#14181f", fontSize: 32, lineHeight: 1.25, marginBottom: 12 }}>
-        Know you're covered before you drive.
+      {/* Driver tools: what the ads promise */}
+      <h1 style={{ color: "#14181f", fontSize: 32, lineHeight: 1.25, marginBottom: 8 }}>
+        Nightlane Loads
       </h1>
+      <p style={{ color: "#4b5568", fontSize: 16, lineHeight: 1.6, marginBottom: 20, maxWidth: 560 }}>
+        A free load board and free tools for owner-operators. No subscription, no account needed to get started.
+      </p>
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))",
+          gap: 12,
+          marginBottom: 48,
+        }}
+      >
+        {[
+          ["/loads", "Find Loads", "Browse loads posted on Nightlane."],
+          ["/check-broker", "Check a Broker", "Look up a broker's FMCSA registration before you haul."],
+          ["/roadside", "Roadside & Repair", "Find towing and repair help near you."],
+          ["/my-documents", "My Documents", "Keep your W-9, insurance and authority letter in one place."],
+          ["/confirm-coverage", "Confirm Coverage", "Make sure you're covered before the truck leaves."],
+          ["/dispatch", "Need a Dispatcher?", "Steady Wake Dispatch finds loads for you. 7%, paid after you're paid."],
+        ].map(([href, title, body]) => (
+          <a
+            key={href}
+            href={href}
+            style={{
+              ...cardStyle,
+              padding: 16,
+              textDecoration: "none",
+              display: "block",
+              borderColor: href === "/dispatch" ? "#f5a623" : "#e2e5ea",
+              background: href === "/dispatch" ? "#fef7ea" : "#f7f8fa",
+            }}
+          >
+            <span style={{ display: "block", color: "#1d4ed8", fontWeight: 700, fontSize: 15, marginBottom: 6 }}>
+              {title} →
+            </span>
+            <span style={{ display: "block", color: "#4b5568", fontSize: 13, lineHeight: 1.5 }}>{body}</span>
+          </a>
+        ))}
+      </div>
+
+      {/* Coverage check */}
+      <h2 style={{ color: "#14181f", fontSize: 26, lineHeight: 1.25, marginBottom: 12 }}>
+        Know you're covered before you drive.
+      </h2>
       <p style={{ color: "#4b5568", fontSize: 16, lineHeight: 1.6, marginBottom: 28, maxWidth: 560 }}>
         A truck can carry valid commercial insurance while the driver behind the wheel isn't actually
         covered under it. Nightlane is a free, private coverage check — for drivers to confirm
