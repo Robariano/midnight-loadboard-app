@@ -19,14 +19,10 @@ export default function Account() {
   if (carrier === undefined) return <p style={{ color: "#4b5568" }}>Loading...</p>;
 
   if (!carrier) {
-        return (
-                <div>
-                  <h1 style={{ color: "#14181f" }}>Not Logged In</h1>
-        <p style={{ color: "#4b5568" }}>
-          <a href="/login" style={{ color: "#1d4ed8" }}>Log in</a> to view your account.
-    </p>
-    </div>
-    );
+        // Not logged in: send them straight to the login page (which also links
+        // new drivers to Get Verified), then back here after they log in.
+        if (typeof window !== "undefined") window.location.replace("/login?next=/account");
+        return <p style={{ color: "#4b5568" }}>Taking you to log in...</p>;
 }
 
 
