@@ -23,6 +23,10 @@ export async function POST(req) {
                                 );
         }
 
+    if (!String(body.broker_company || "").trim() || !String(body.broker_phone || "").trim()) {
+                return Response.json({ error: "Enter your company name and a phone number drivers can call." }, { status: 400 });
+    }
+
     const supabase = getServiceClient();
 
     // A shipper posts anonymously (no account), so the manage_token is the
@@ -50,6 +54,9 @@ export async function POST(req) {
                             notes: body.notes || null,
                             shipper_name: body.shipper_name,
                             shipper_email: body.shipper_email,
+                            broker_company: String(body.broker_company || "").trim() || null,
+                            broker_phone: String(body.broker_phone || "").trim() || null,
+                            broker_mc: String(body.broker_mc || "").replace(/[^0-9]/g, "") || null,
                             status: "open",
                             manage_token: manageToken,
                             pickup_lat: pickupGeo?.lat ?? null,

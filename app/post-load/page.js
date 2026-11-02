@@ -39,6 +39,9 @@ export default function PostLoad() {
               notes: "",
               shipper_name: "",
               shipper_email: "",
+              broker_company: "",
+              broker_phone: "",
+              broker_mc: "",
               hard_to_cover: false,
               website: "",
       });
@@ -70,7 +73,7 @@ export default function PostLoad() {
           return (
                     <div>
                       <h1 style={{ color: "#166534" }}>✓ Load Posted</h1>
-            <p style={{ color: "#4b5568" }}>Your load is live. Verified carriers can now see and claim it.</p>
+            <p style={{ color: "#4b5568" }}>Your load is live. Drivers can now see it on Find Loads and call you directly.</p>
         <p style={{ color: "#4b5568", marginTop: 12 }}>
           We just emailed you a private link to check its status, update the rate/notes, or cancel it later -
                         keep that email, since posting doesn't require an account.
@@ -84,7 +87,8 @@ export default function PostLoad() {
           <div>
             <h1 style={{ color: "#14181f" }}>Post a Load</h1>
       <p style={{ color: "#4b5568", marginBottom: 24 }}>
-        Every carrier is pre-verified. Payment terms are clear upfront. No surprises.
+        Post your load free. Drivers see your company and phone and call you directly, and they can
+        check their own coverage before they roll.
             </p>
       <form onSubmit={handleSubmit}>
                     <label style={labelStyle}>Pickup City & State</label>
@@ -141,6 +145,18 @@ export default function PostLoad() {
                       <label style={labelStyle}>Additional Notes</label>
         <textarea style={{ ...inputStyle, minHeight: 70 }} value={form.notes}
           onChange={(e) => update("notes", e.target.value)} />
+
+                      <label style={labelStyle}>Company Name</label>
+        <input style={inputStyle} required value={form.broker_company} placeholder="Your brokerage or shipping company"
+          onChange={(e) => update("broker_company", e.target.value)} />
+
+                      <label style={labelStyle}>Phone Drivers Should Call</label>
+        <input style={inputStyle} type="tel" required value={form.broker_phone} placeholder="(555) 555-5555"
+          onChange={(e) => update("broker_phone", e.target.value)} />
+
+                      <label style={labelStyle}>MC Number (brokers)</label>
+        <input style={inputStyle} value={form.broker_mc} placeholder="Shippers posting their own freight can leave this blank"
+          onChange={(e) => update("broker_mc", e.target.value)} />
 
                       <label style={labelStyle}>Your Name</label>
         <input style={inputStyle} required value={form.shipper_name}
