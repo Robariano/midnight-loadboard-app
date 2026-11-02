@@ -485,6 +485,25 @@ export default function Loads() {
                 </>
               )}
             </p>
+            {load.broker_company && (
+              <p style={{ color: "#4b5568", fontSize: 13, margin: "0 0 10px" }}>
+                Posted by <b style={{ color: "#14181f" }}>{load.broker_company}</b>
+                {load.broker_phone && (
+                  <>
+                    {" "}·{" "}
+                    <a href={`tel:${load.broker_phone.replace(/[^0-9+]/g, "")}`} style={{ color: "#1d4ed8" }}>
+                      {load.broker_phone}
+                    </a>
+                  </>
+                )}
+                {load.broker_mc && (
+                  <>
+                    {" "}· MC {load.broker_mc} ·{" "}
+                    <a href="/check-broker" style={{ color: "#1d4ed8" }}>Check this broker →</a>
+                  </>
+                )}
+              </p>
+            )}
 
             {(load.status === "confirmed" || load.status === "picked_up") && (
               <div style={{ marginBottom: 8 }}>
