@@ -58,7 +58,7 @@ export default function PrivacyPolicy() {
       <h2 style={{ color: "#14181f", fontSize: 18, marginTop: 24 }}>Contact</h2>
       <p style={{ color: "#14181f", lineHeight: 1.6 }}>
         Questions about this policy can be sent to{" "}
-        <a href="mailto:support@midnightloadboard.com" style={{ color: "#1d4ed8" }}>support@midnightloadboard.com</a>.
+        <a href="mailto:support@nightlaneloads.com" style={{ color: "#1d4ed8" }}>support@nightlaneloads.com</a>.
       </p>
     </div>
   );
