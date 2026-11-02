@@ -116,6 +116,7 @@ export default function Reverify({ params }) {
                         <option>Class A</option>
           <option>Class B</option>
           <option>Class C</option>
+          <option>No CDL (non-CDL hotshot, box truck, van)</option>
               </select>
 
         <label style={labelStyle}>Link to CDL (Drive/Dropbox)</label>

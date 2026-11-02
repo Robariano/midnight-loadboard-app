@@ -128,13 +128,22 @@ export default function GetVerified() {
                         <option>Class A</option>
           <option>Class B</option>
           <option>Class C</option>
+          <option>No CDL (non-CDL hotshot, box truck, van)</option>
               </select>
 
-        <label style={labelStyle}>Link to CDL (Drive/Dropbox)</label>
+        <div style={{
+          background: "#eef2ff", border: "1px solid #c7d2fe", borderRadius: 8,
+          padding: "10px 14px", marginBottom: 14, fontSize: 13, color: "#374151", lineHeight: 1.5,
+        }}>
+          <b>Document links:</b> optional for now, but needed before we can verify you. Upload each file to
+          Google Drive or Dropbox, set it to &quot;Anyone with the link,&quot; and paste the link here.
+        </div>
+
+        <label style={labelStyle}>Link to CDL (optional)</label>
         <input style={inputStyle} value={form.cdl_link}
           onChange={(e) => update("cdl_link", e.target.value)} />
 
-                      <label style={labelStyle}>Link to Insurance Certificate</label>
+                      <label style={labelStyle}>Link to Insurance Certificate (optional)</label>
         <input style={inputStyle} value={form.insurance_link}
           onChange={(e) => update("insurance_link", e.target.value)} />
 
@@ -142,7 +151,7 @@ export default function GetVerified() {
         <input style={inputStyle} type="date" value={form.insurance_expiration_date}
           onChange={(e) => update("insurance_expiration_date", e.target.value)} />
 
-                      <label style={labelStyle}>Link to FMCSA / Operating Authority</label>
+                      <label style={labelStyle}>Link to FMCSA / Operating Authority (optional)</label>
         <input style={inputStyle} value={form.authority_link}
           onChange={(e) => update("authority_link", e.target.value)} />
 
