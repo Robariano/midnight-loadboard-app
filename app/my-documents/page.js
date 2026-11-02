@@ -11,9 +11,14 @@ export default function MyDocuments() {
     const [status, setStatus] = useState(null);
     const [error, setError] = useState(null);
 
+  const [notLoggedIn, setNotLoggedIn] = useState(false);
+
   function loadDocuments() {
         fetch("/api/driver-documents")
-          .then((r) => r.json())
+          .then((r) => {
+                if (r.status === 401) setNotLoggedIn(true);
+                return r.json();
+          })
           .then((d) => {
                 if (d.error) { setError(d.error); setDocuments([]); }
                 else { setDocuments(d.documents || []); setError(null); }
@@ -122,6 +127,40 @@ export default function MyDocuments() {
                 setError(data.error || "Upload failed.");
                 setStatus("error");
         }
+  }
+
+  if (notLoggedIn) {
+    return (
+      <div>
+        <h1 style={{ color: "#14181f" }}>My Documents</h1>
+        <p style={{ color: "#4b5568", marginBottom: 24 }}>
+          A private, timestamped record of your own paperwork: W-9, insurance, authority letter, rate
+          confirmations, delivery receipts. Only you can see these, and you can send a broker a private
+          link instead of emailing attachments.
+        </p>
+        <div style={{
+          background: "#eef2ff", border: "1px solid #c7d2fe", borderRadius: 10,
+          padding: "20px 22px", marginBottom: 24,
+        }}>
+          <p style={{ fontWeight: 700, fontSize: 17, color: "#14181f", margin: "0 0 6px" }}>
+            Log in to save your documents.
+          </p>
+          <p style={{ fontSize: 14, color: "#4b5568", margin: "0 0 16px" }}>
+            New here? Getting set up is free.
+          </p>
+          <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+            <a href="/login?next=/my-documents" style={{
+              background: "#1d4ed8", color: "#fff", borderRadius: 8, padding: "12px 20px",
+              fontWeight: 700, fontSize: 14, textDecoration: "none",
+            }}>Log in</a>
+            <a href="/get-verified" style={{
+              background: "transparent", color: "#1d4ed8", border: "1px solid #1d4ed8", borderRadius: 8,
+              padding: "12px 20px", fontWeight: 700, fontSize: 14, textDecoration: "none",
+            }}>Get started</a>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (
