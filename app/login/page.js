@@ -67,6 +67,17 @@ export default function Login() {
 {" "}-{" "}
         <a href="/get-verified" style={{ color: "#1d4ed8" }}>New carrier? Get verified</a>
   </p>
+      <div style={{
+        background: "#eef2ff", border: "1px solid #c7d2fe", borderRadius: 10,
+        padding: "14px 18px", marginTop: 20,
+      }}>
+        <p style={{ fontWeight: 700, color: "#14181f", margin: "0 0 4px" }}>New here?</p>
+        <p style={{ color: "#4b5568", fontSize: 14, margin: "0 0 10px" }}>Getting set up is free.</p>
+        <a href="/get-verified" style={{
+          display: "inline-block", background: "#1d4ed8", color: "#fff", borderRadius: 8,
+          padding: "10px 18px", fontWeight: 700, fontSize: 14, textDecoration: "none",
+        }}>Get started</a>
+      </div>
   </div>
     );
 }
