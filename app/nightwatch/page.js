@@ -62,8 +62,8 @@ export default function Nightwatch() {
           Why it matters
         </p>
         <p style={{ color: "#4b5568", fontSize: 14, lineHeight: 1.7, margin: 0 }}>
-          Freight fraud — double brokering, identity theft, fake documents — cost the industry
-          $800M+ in 2026. New authority under 6 months old is where "chameleon" carriers hide after
+          Cargo theft and fraud — double brokering, identity theft, fake documents — cost trucking up to
+          $6.6 billion a year, more than $18 million a day (ATRI). New authority under 6 months old is where "chameleon" carriers hide after
           a shutdown. And brokers now face real legal exposure for not vetting carriers carefully.
         </p>
       </div>

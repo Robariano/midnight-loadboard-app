@@ -1,5 +1,5 @@
 export const metadata = {
-  title: "The $800M Blind Spot: What the TQL / C.H. Robinson Lawsuit Means for Carrier Vetting | Nightlane",
+  title: "The Vetting Blind Spot: What the TQL / C.H. Robinson Lawsuit Means for Carrier Vetting | Nightlane",
   description:
     "A new RICO lawsuit against TQL and C.H. Robinson puts a number on a problem Nightwatch was built to solve — chameleon carriers that one-time vetting can't catch.",
 };
@@ -51,7 +51,7 @@ export default function ChameleonCarriersPost() {
           Broker Risk · Oct 2, 2026
         </p>
         <h1 style={{ fontSize: 26, lineHeight: 1.3, margin: "0 0 12px" }}>
-          The $800M Blind Spot: What the TQL / C.H. Robinson Lawsuit Says About How Brokers Vet
+          The Vetting Blind Spot: What the TQL / C.H. Robinson Lawsuit Says About How Brokers Vet
           Carriers
         </h1>
         <p style={{ fontSize: 15, lineHeight: 1.6, color: "#c7ccd6", maxWidth: 580, margin: 0 }}>
