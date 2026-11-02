@@ -86,8 +86,8 @@ export default async function RevokedCarriers() {
 
       <p style={{ color: "#6b7280", fontSize: 12, marginTop: 24 }}>
         Believe a listing here is a mistake? Contact{" "}
-        <a href="mailto:disputes@midnightloadboard.com" style={{ color: "#1d4ed8" }}>
-          disputes@midnightloadboard.com
+        <a href="mailto:disputes@nightlaneloads.com" style={{ color: "#1d4ed8" }}>
+          disputes@nightlaneloads.com
         </a>.
       </p>
     </div>
