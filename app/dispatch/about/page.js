@@ -20,14 +20,23 @@ export default function DispatchAbout() {
       </section>
 
 
+      <section className="swd-prose swd-mom" aria-labelledby="h-memory">
+        <p className="swd-eyebrow">The reason for all of it</p>
+        <h3 id="h-memory">My mom, Alfreda Susie Hudson</h3>
+        <p>
+          Steady Wake exists because my mom never stopped looking out for me. Her support kept a roof over my head
+          while I built this business. Every load I book carries a little of her with it.
+        </p>
+      </section>
+
       <section aria-labelledby="h-lineage">
         <p className="swd-eyebrow">The lineage</p>
         <h3 id="h-lineage">From the loading dock to dispatch</h3>
         <div className="swd-ledger">
           {[
             ["Age 6", "On the loading dock", "I'm the oldest kid, climbing on kegs and learning how freight moves."],
-            ["Age 14", "Delivering in Durango", "We move to Durango, and I start running deliveries."],
-            ["Age 18", "College football", "I leave Durango to play college football."],
+            ["Age 14", "Delivering", "I start running deliveries."],
+            ["Age 18", "College football", "I leave home to play college football."],
             ["Age 23", "U.S. Navy", "Five years on an aircraft carrier in the weapons department. Then three years of shore duty at a Naval Weapons Station: two years blocking and bracing loads on civilian flatbed trucks, and a final year inspecting the trucks that hauled weapons to the carriers. When the cargo can't shift, you learn to do it right every time."],
             ["Ages 33 to 44", "Route driver", "Home from the Navy, I drive a beverage delivery route. Tight schedules, early mornings, no room for slacking."],
             ["Last 4 years", "On the warehouse floor", "Four days a week inside on shipping and receiving, building loads and getting trucks out on time. A lot of that time was in the keg room, where the warehouse manager ran temperature checks to keep the beer cold. Fridays I run kegs to the downtown bars. Nobody on the crew moved more kegs, or more weight, than I did."],
@@ -83,14 +92,6 @@ export default function DispatchAbout() {
         </p>
       </section>
 
-      <section className="swd-prose" aria-labelledby="h-memory">
-        <p className="swd-eyebrow">In memory</p>
-        <h3 id="h-memory">My mom, Alfreda Susie (Hudson) Ariano</h3>
-        <p>
-          Steady Wake exists because my mom never stopped looking out for me. Her support kept a roof over my head
-          while I built this business. Every load I book carries a little of her with it.
-        </p>
-      </section>
 
       <PhoneRibbon />
     </SteadyWakePage>
