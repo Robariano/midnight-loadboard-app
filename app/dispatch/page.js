@@ -1,9 +1,9 @@
 import { SteadyWakePage, PhoneRibbon, Ornament, ThenNow, dispatchHref } from "./_shared";
 
 export const metadata = {
-  title: "Steady Wake Dispatch | Freight Runs in the Family | Durango, CO",
+  title: "Steady Wake Dispatch | Navy Veteran Dispatcher | Durango, CO",
   description:
-    "Three generations in freight. Navy veteran Robert Ariano dispatches flatbed, step deck and hotshot loads, plus dry van, box truck and cargo van, for owner-operators out of Durango, Colorado. 7% per load.",
+    "Navy veteran Robert Ariano dispatches flatbed, step deck and hotshot loads, plus dry van, box truck and cargo van, for owner-operators out of Durango, Colorado. 7% per load.",
 };
 
 export default function DispatchHome() {
@@ -18,14 +18,14 @@ export default function DispatchHome() {
 
       <div className="swd-thesis">
         <h2>
-          <span className="a">Freight runs</span>
-          <span className="b">in the family</span>
+          <span className="a">Built by a guy</span>
+          <span className="b">who&apos;s moved the freight</span>
         </h2>
         <Ornament />
         <p>
           My name is Robert Ariano. I climbed on my grandfather&apos;s kegs as a kid, started delivering at 14, spent two
-          years in the Navy blocking and bracing loads on flatbed trucks, and worked the routes and the warehouse for the family business until I was 44. Now I dispatch for
-          owner-operators, and I run your truck the way my family ran ours.
+          years in the Navy blocking and bracing loads on flatbed trucks, and worked the routes and the warehouse at A&amp;L Coors until I was 44. Now I dispatch for
+          owner-operators, and I run your truck the way I&apos;d want mine run.
         </p>
       </div>
 
