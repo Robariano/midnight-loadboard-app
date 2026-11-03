@@ -13,7 +13,7 @@ export default function DispatchAbout() {
         <p className="swd-eyebrow">Our story</p>
         <h1 className="swd-h">My road to dispatch</h1>
         <p className="swd-lede">
-          I worked the dock and ran deliveries growing up, played college football, served in the Navy, and then spent
+          I worked the dock and ran deliveries growing up, played college football, served in the Navy, earned a Master&apos;s in Project Management, and spent
           11 years on the routes and in the warehouse for a beverage distributor. Now everything I learned goes to work for
           owner-operators.
         </p>
@@ -68,6 +68,10 @@ export default function DispatchAbout() {
           shippers think, how warehouses run, and what large carriers need to keep freight moving. Whether you&apos;re
           one truck or a fleet, a local shipper or a large operation, I understand your side of the dock.
         </p>
+        <p>
+          My Master&apos;s in Project Management shows up in every load: planning, scheduling, managing risk, clear
+          communication, and watching the numbers so your truck makes money.
+        </p>
       </section>
 
       <section aria-labelledby="h-facts">
@@ -76,6 +80,8 @@ export default function DispatchAbout() {
         <dl className="swd-facts">
           <dt>Background</dt>
           <dd>U.S. Navy veteran</dd>
+          <dt>Education</dt>
+          <dd>Master&apos;s in Project Management, plus doctoral coursework</dd>
           <dt>Experience</dt>
           <dd>Delivering since age 14. 11 years with a beverage distributor: route driver, then shipping and receiving in the warehouse</dd>
           <dt>Commitment</dt>

@@ -170,7 +170,7 @@ export function SteadyWakePage({ active, children }) {
         </nav>
         {children}
         <footer className="swd-footer">
-          {BRAND.name} · {BRAND.location} · Navy veteran owned · {BRAND.email}
+          {BRAND.name} · {BRAND.location} · Navy veteran owned · Master&apos;s in Project Management · {BRAND.email}
           <br />
           Independently owned and operated by Shane Hudson. Not affiliated with any other company or family business.
           <span className="mom">Dedicated to my mom, Alfreda Susie Hudson. Her support kept me off the street while I built this.</span>

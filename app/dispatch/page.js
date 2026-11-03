@@ -33,7 +33,7 @@ export default function DispatchHome() {
         <Ornament />
         <p>
           My name is Shane Hudson. I grew up on a loading dock, started delivering at 14, spent two
-          years in the Navy blocking and bracing loads on flatbed trucks, and worked the routes and the warehouse for a beverage distributor until I was 44. Now I dispatch for
+          years in the Navy blocking and bracing loads on flatbed trucks, and worked the routes and the warehouse for a beverage distributor until I was 44. Along the way I earned a Master&apos;s in Project Management. Now I dispatch for
           owner-operators, and I run your truck the way I&apos;d want mine run.
         </p>
       </div>
@@ -61,6 +61,11 @@ export default function DispatchHome() {
           shipping and receiving, and keeping temperature-sensitive product moving on tight schedules. I know how
           shippers think, how warehouses run, and what large carriers need to keep freight moving. Whether you&apos;re
           one truck or a fleet, a local shipper or a large operation, I understand your side of the dock.
+        </p>
+        <p>
+          I also hold a Master&apos;s in Project Management, and dispatch is project management on wheels: planning
+          routes, scheduling pickups and deliveries around hours of service, managing risk, keeping everyone informed,
+          and making sure every load pays.
         </p>
       </section>
 
