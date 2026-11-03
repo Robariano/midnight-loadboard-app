@@ -155,7 +155,7 @@ export default function Roadside() {
         <p style={{ fontSize: 14, color: "#14181f", margin: 0, lineHeight: 1.6 }}>
           What I learned: know what your insurance covers before you need it, carry basic tools,
           keep some cash set aside for repairs, and find a mechanic you trust before you break down.
-          That&apos;s why this page lists real shops that answer the phone. – Robert, founder
+          That&apos;s why this page lists real shops that answer the phone. – Shane, founder
         </p>
       </div>
     </div>

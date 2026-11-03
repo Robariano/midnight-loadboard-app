@@ -3,7 +3,7 @@ import { SteadyWakePage, PhoneRibbon, Ornament, dispatchHref } from "./_shared";
 export const metadata = {
   title: "Steady Wake Dispatch | Semi & Hotshot Dispatch | Four Corners",
   description:
-    "Navy veteran Robert dispatches flatbed, step deck and hotshot loads, plus dry van, box truck and cargo van, for owner-operators in the Four Corners and Texas. 7% per load. Dedicated to my mom, Alfreda Susie Hudson.",
+    "Navy veteran Shane Hudson dispatches flatbed, step deck and hotshot loads, plus dry van, box truck and cargo van, for owner-operators in the Four Corners and Texas. 7% per load. Dedicated to my mom, Alfreda Susie Hudson.",
 };
 
 export default function DispatchHome() {
@@ -32,7 +32,7 @@ export default function DispatchHome() {
         </h2>
         <Ornament />
         <p>
-          My name is Robert. I grew up on a loading dock, started delivering at 14, spent two
+          My name is Shane Hudson. I grew up on a loading dock, started delivering at 14, spent two
           years in the Navy blocking and bracing loads on flatbed trucks, and worked the routes and the warehouse for a beverage distributor until I was 44. Now I dispatch for
           owner-operators, and I run your truck the way I&apos;d want mine run.
         </p>
@@ -146,7 +146,7 @@ export default function DispatchHome() {
       </section>
 
       <section className="swd-cta" aria-labelledby="h-cta">
-        <p className="swd-eyebrow">Talk to Robert</p>
+        <p className="swd-eyebrow">Talk to Shane</p>
         <h3 id="h-cta" style={{ marginBottom: 4 }}>Let&apos;s get your truck loaded</h3>
         <a className="swd-btn" href={dispatchHref("/contact")}>
           Get started
