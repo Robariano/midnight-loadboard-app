@@ -1,9 +1,9 @@
-import { SteadyWakePage, PhoneRibbon, ThenNow, dispatchHref } from "../_shared";
+import { SteadyWakePage, PhoneRibbon, dispatchHref } from "../_shared";
 
 export const metadata = {
   title: "Our Story | Steady Wake Dispatch",
   description:
-    "From the loading dock to dispatch. Navy veteran Robert Ariano, with 11 years on the routes and in the warehouse at A&L Coors. Dry van, reefer, flatbed, hotshot, box truck and cargo van.",
+    "From the loading dock to dispatch. Navy veteran Robert Ariano, with 11 years on the routes and in the warehouse for a beverage distributor. Dry van, reefer, flatbed, hotshot, box truck and cargo van.",
 };
 
 export default function DispatchAbout() {
@@ -14,25 +14,23 @@ export default function DispatchAbout() {
         <h1 className="swd-h">My road to dispatch</h1>
         <p className="swd-lede">
           I worked the dock and ran deliveries growing up, played college football, served in the Navy, and then spent
-          11 years on the routes and in the warehouse at A&amp;L Coors. Now everything I learned goes to work for
+          11 years on the routes and in the warehouse for a beverage distributor. Now everything I learned goes to work for
           owner-operators.
         </p>
       </section>
 
-      <ThenNow />
 
       <section aria-labelledby="h-lineage">
         <p className="swd-eyebrow">The lineage</p>
         <h3 id="h-lineage">From the loading dock to dispatch</h3>
         <div className="swd-ledger">
           {[
-            ["Early days", "Where it started", "My grandfather Gerald Ariano and his brother Martin run Southern Colorado Distributing out of the old Coors warehouse in Walsenburg. Kegs on the dock, trucks out the door."],
-            ["Age 6", "On the loading dock", "I'm the oldest kid, climbing on those kegs and learning how freight moves."],
+            ["Age 6", "On the loading dock", "I'm the oldest kid, climbing on kegs and learning how freight moves."],
             ["Age 14", "Delivering in Durango", "We move to Durango, and I start running deliveries."],
             ["Age 18", "College football", "I leave Durango to play college football."],
             ["Age 23", "U.S. Navy", "Five years on an aircraft carrier in the weapons department. Then three years of shore duty at a Naval Weapons Station: two years blocking and bracing loads on civilian flatbed trucks, and a final year inspecting the trucks that hauled weapons to the carriers. When the cargo can't shift, you learn to do it right every time."],
-            ["Ages 33 to 44", "Route driver at A&L Coors", "Home from the Navy, I drive a beer route for A&L Coors in Durango. Tight schedules, early mornings, no room for slacking."],
-            ["Last 4 years", "On the warehouse floor", "Four days a week inside on shipping and receiving, building loads and getting trucks out on time. A lot of that time was in the keg room, where the warehouse manager ran temperature checks to keep the beer cold. Fridays I run kegs to the downtown bars, right past the old A. Coors sign. Nobody on the crew moved more kegs, or more weight, than I did."],
+            ["Ages 33 to 44", "Route driver", "Home from the Navy, I drive a beverage delivery route. Tight schedules, early mornings, no room for slacking."],
+            ["Last 4 years", "On the warehouse floor", "Four days a week inside on shipping and receiving, building loads and getting trucks out on time. A lot of that time was in the keg room, where the warehouse manager ran temperature checks to keep the beer cold. Fridays I run kegs to the downtown bars. Nobody on the crew moved more kegs, or more weight, than I did."],
           ].map(([when, title, body]) => (
             <div className="swd-entry" key={when}>
               <div className="when">{when}</div>
@@ -59,13 +57,13 @@ export default function DispatchAbout() {
           <dt>Background</dt>
           <dd>U.S. Navy veteran</dd>
           <dt>Experience</dt>
-          <dd>Delivering since age 14. 11 years at A&amp;L Coors in Durango: route driver, then shipping and receiving in the warehouse</dd>
+          <dd>Delivering since age 14. 11 years with a beverage distributor: route driver, then shipping and receiving in the warehouse</dd>
           <dt>Commitment</dt>
           <dd>Dispatch is my focus. When you call, I answer.</dd>
           <dt>Training</dt>
           <dd>Certified dispatcher</dd>
           <dt>Cold freight</dt>
-          <dd>Years in the Coors keg room, where temperatures were checked to keep the product cold. I know what it takes to keep a reefer load cold.</dd>
+          <dd>Years in a beverage warehouse keg room, where temperatures were checked to keep the product cold. I know what it takes to keep a reefer load cold.</dd>
           <dt>Freight</dt>
           <dd>Dry van, reefer, flatbed, hotshot, box truck and cargo van</dd>
         </dl>

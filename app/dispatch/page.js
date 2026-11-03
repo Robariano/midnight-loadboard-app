@@ -1,4 +1,4 @@
-import { SteadyWakePage, PhoneRibbon, Ornament, ThenNow, dispatchHref } from "./_shared";
+import { SteadyWakePage, PhoneRibbon, Ornament, dispatchHref } from "./_shared";
 
 export const metadata = {
   title: "Steady Wake Dispatch | Navy Veteran Dispatcher | Durango, CO",
@@ -14,7 +14,6 @@ export default function DispatchHome() {
         <small>Flatbed dispatching for owner-operators · Also dry van, reefer, hotshot, box truck &amp; cargo van · Four Corners &amp; Texas lanes</small>
       </h1>
 
-      <ThenNow />
 
       <div className="swd-thesis">
         <h2>
@@ -23,8 +22,8 @@ export default function DispatchHome() {
         </h2>
         <Ornament />
         <p>
-          My name is Robert Ariano. I climbed on my grandfather&apos;s kegs as a kid, started delivering at 14, spent two
-          years in the Navy blocking and bracing loads on flatbed trucks, and worked the routes and the warehouse at A&amp;L Coors until I was 44. Now I dispatch for
+          My name is Robert Ariano. I grew up on a loading dock, started delivering at 14, spent two
+          years in the Navy blocking and bracing loads on flatbed trucks, and worked the routes and the warehouse for a beverage distributor until I was 44. Now I dispatch for
           owner-operators, and I run your truck the way I&apos;d want mine run.
         </p>
       </div>
