@@ -1,8 +1,8 @@
 // Shared look and layout for Steady Wake Dispatch, Rob's dispatch business
 // (robert@steadywakedispatch.com, (970) 903-9226, Durango, CO).
 //
-// The site is built around Rob's own story. Per Rob: never mention or credit his father, and don't
-// frame Steady Wake as a family business. The 1933 photo shows his grandfather Gerald and great-uncle
+// The site is built around Rob's own story. Per Rob: never mention or credit his father, never name
+// Coors or A&L Coors (say "a beverage distributor"), and don't frame Steady Wake as a family business. The 1933 photo shows his grandfather Gerald and great-uncle
 // Martin Ariano's Southern Colorado Distributing, and the design borrows the
 // look of a 1930s poster (aged paper, dark ink, oxblood red, brass).
 //
@@ -177,7 +177,7 @@ export function SteadyWakePage({ active, children }) {
         <footer className="swd-footer">
           {BRAND.name} · {BRAND.location} · Navy veteran owned · {BRAND.email}
           <br />
-          Independently owned and operated by Robert Ariano. Not affiliated with A&amp;L Coors or any family business.
+          Independently owned and operated by Robert Ariano. Not affiliated with any other company or family business.
         </footer>
       </div>
     </div>
