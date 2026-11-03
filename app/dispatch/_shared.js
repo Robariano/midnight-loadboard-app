@@ -1,7 +1,7 @@
 // Shared look and layout for Steady Wake Dispatch, Rob's dispatch business
 // (robert@steadywakedispatch.com, (970) 903-9226, Four Corners region).
 //
-// The site is built around Rob's own story. Per Rob: never mention or credit his father, never name
+// The site is built around the owner's own story. He now goes by Shane Hudson publicly. Per him: never mention or credit his father, never name
 // Coors or A&L Coors (say "a beverage distributor"), never use the Ariano surname publicly, and
 // don't frame Steady Wake as a family business. The design borrows the
 // look of Rob's Facebook ads (dark navy, blue glow, red banners). The business is centered on and
@@ -172,7 +172,7 @@ export function SteadyWakePage({ active, children }) {
         <footer className="swd-footer">
           {BRAND.name} · {BRAND.location} · Navy veteran owned · {BRAND.email}
           <br />
-          Independently owned and operated by Robert. Not affiliated with any other company or family business.
+          Independently owned and operated by Shane Hudson. Not affiliated with any other company or family business.
           <span className="mom">Dedicated to my mom, Alfreda Susie Hudson. Her support kept me off the street while I built this.</span>
         </footer>
       </div>
