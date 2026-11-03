@@ -3,7 +3,7 @@ import { SteadyWakePage, PhoneRibbon, Ornament, dispatchHref } from "./_shared";
 export const metadata = {
   title: "Steady Wake Dispatch | Navy Veteran Dispatcher | Durango, CO",
   description:
-    "Navy veteran Robert Ariano dispatches flatbed, step deck and hotshot loads, plus dry van, box truck and cargo van, for owner-operators out of Durango, Colorado. 7% per load.",
+    "Navy veteran Robert dispatches flatbed, step deck and hotshot loads, plus dry van, box truck and cargo van, for owner-operators out of Durango, Colorado. 7% per load.",
 };
 
 export default function DispatchHome() {
@@ -22,7 +22,7 @@ export default function DispatchHome() {
         </h2>
         <Ornament />
         <p>
-          My name is Robert Ariano. I grew up on a loading dock, started delivering at 14, spent two
+          My name is Robert. I grew up on a loading dock, started delivering at 14, spent two
           years in the Navy blocking and bracing loads on flatbed trucks, and worked the routes and the warehouse for a beverage distributor until I was 44. Now I dispatch for
           owner-operators, and I run your truck the way I&apos;d want mine run.
         </p>

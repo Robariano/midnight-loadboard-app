@@ -2,8 +2,8 @@
 // (robert@steadywakedispatch.com, (970) 903-9226, Durango, CO).
 //
 // The site is built around Rob's own story. Per Rob: never mention or credit his father, never name
-// Coors or A&L Coors (say "a beverage distributor"), and don't frame Steady Wake as a family business. The 1933 photo shows his grandfather Gerald and great-uncle
-// Martin Ariano's Southern Colorado Distributing, and the design borrows the
+// Coors or A&L Coors (say "a beverage distributor"), never use the Ariano surname publicly, and
+// don't frame Steady Wake as a family business. The design borrows the
 // look of a 1930s poster (aged paper, dark ink, oxblood red, brass).
 //
 // It lives inside this app (app/dispatch/*) so it can reuse the lead form
@@ -37,14 +37,6 @@ export const BRAND = {
   phoneHref: "tel:+19709039226",
   email: "robert@steadywakedispatch.com",
   location: "Durango, Colorado",
-};
-
-export const PHOTO = {
-  src: "/steady-wake/warehouse-1933-inset.jpg?v=2",
-  width: 1400,
-  height: 929,
-  alt: "Old brick beer warehouse in Walsenburg, Colorado, with wooden kegs stacked on the loading dock and a sign reading Southern Colo. Distb., Martin Ariano, Mgr. A framed inset in the top corner shows the A. Coors A.D. 1900 sign from the Coors building on Main Avenue in Durango.",
-  caption: "Where it started: Southern Colorado Distributing in Walsenburg, run by my great-uncle Martin Ariano. Inset: the \"A. Coors A.D. 1900\" sign on Main Avenue in Durango.",
 };
 
 const CSS = `
@@ -177,25 +169,13 @@ export function SteadyWakePage({ active, children }) {
         <footer className="swd-footer">
           {BRAND.name} · {BRAND.location} · Navy veteran owned · {BRAND.email}
           <br />
-          Independently owned and operated by Robert Ariano. Not affiliated with any other company or family business.
+          Independently owned and operated by Robert. Not affiliated with any other company or family business.
         </footer>
       </div>
     </div>
   );
 }
 
-// The 1933 warehouse photo, with a framed inset of the A. Coors 1900 sign
-// from Main Avenue in Durango.
-export function ThenNow() {
-  return (
-    <figure style={{ margin: 0 }}>
-      <div className="swd-photo">
-        <img src={PHOTO.src} alt={PHOTO.alt} width={PHOTO.width} height={PHOTO.height} />
-      </div>
-      <figcaption className="swd-cap">{PHOTO.caption}</figcaption>
-    </figure>
-  );
-}
 
 export function PhoneRibbon() {
   return (

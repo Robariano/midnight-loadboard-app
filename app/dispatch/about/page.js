@@ -3,7 +3,7 @@ import { SteadyWakePage, PhoneRibbon, dispatchHref } from "../_shared";
 export const metadata = {
   title: "Our Story | Steady Wake Dispatch",
   description:
-    "From the loading dock to dispatch. Navy veteran Robert Ariano, with 11 years on the routes and in the warehouse for a beverage distributor. Dry van, reefer, flatbed, hotshot, box truck and cargo van.",
+    "From the loading dock to dispatch. Navy veteran Robert, with 11 years on the routes and in the warehouse for a beverage distributor. Dry van, reefer, flatbed, hotshot, box truck and cargo van.",
 };
 
 export default function DispatchAbout() {
