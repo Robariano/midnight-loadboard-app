@@ -59,6 +59,17 @@ export default function DispatchAbout() {
         </div>
       </section>
 
+      <section aria-labelledby="h-bring2">
+        <p className="swd-eyebrow">For shippers and carriers</p>
+        <h3 id="h-bring2">What I bring to your business</h3>
+        <p>
+          I spent 11 years inside high-volume beverage distribution: running delivery routes, building loads, managing
+          shipping and receiving, and keeping temperature-sensitive product moving on tight schedules. I know how
+          shippers think, how warehouses run, and what large carriers need to keep freight moving. Whether you&apos;re
+          one truck or a fleet, a local shipper or a large operation, I understand your side of the dock.
+        </p>
+      </section>
+
       <section aria-labelledby="h-facts">
         <p className="swd-eyebrow">At a glance</p>
         <h3 id="h-facts">Who you&apos;re working with</h3>
