@@ -44,9 +44,9 @@ export default function DispatchHome() {
         <p className="swd-eyebrow">In her name</p>
         <h3 id="h-promise">Alfreda&apos;s Promise</h3>
         <p>
-          Every month, I give one struggling owner-operator their first load with no dispatch fee and no strings
-          attached, the way my mom gave me a chance when I had nothing. If you&apos;re a new authority having a rough
-          start, tell me when you call.
+          Your first load is on me. Every new client gets their first load with no dispatch fee and no strings
+          attached, the way my mom gave me a chance when I had nothing. After that it&apos;s just 7%, paid after
+          you&apos;re paid. I keep a limited number of spots each month so every truck gets my full attention.
         </p>
         <p className="swd-note">
           Why &quot;Steady Wake&quot;? It&apos;s named for the steady support that carried me through rough water.
