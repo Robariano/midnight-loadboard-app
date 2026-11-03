@@ -1,8 +1,9 @@
 // Shared look and layout for Steady Wake Dispatch, Rob's dispatch business
 // (robert@steadywakedispatch.com, (970) 903-9226, Durango, CO).
 //
-// The site is built around the family story: Rob's grandfather Gerald Ariano and great-uncle Martin Ariano
-// started Southern Colorado Distributing in 1933, and the design borrows the
+// The site is built around Rob's own story. Per Rob: never mention or credit his father, and don't
+// frame Steady Wake as a family business. The 1933 photo shows his grandfather Gerald and great-uncle
+// Martin Ariano's Southern Colorado Distributing, and the design borrows the
 // look of a 1930s poster (aged paper, dark ink, oxblood red, brass).
 //
 // It lives inside this app (app/dispatch/*) so it can reuse the lead form
@@ -43,7 +44,7 @@ export const PHOTO = {
   width: 1400,
   height: 929,
   alt: "Old brick beer warehouse in Walsenburg, Colorado, with wooden kegs stacked on the loading dock and a sign reading Southern Colo. Distb., Martin Ariano, Mgr. A framed inset in the top corner shows the A. Coors A.D. 1900 sign from the Coors building on Main Avenue in Durango.",
-  caption: "Where it started: Southern Colorado Distributing in Walsenburg, run by my great-uncle Martin Ariano. Inset: the \"A. Coors A.D. 1900\" sign on Main Avenue in Durango, the town where my dad later ran the business out on Bodo Drive.",
+  caption: "Where it started: Southern Colorado Distributing in Walsenburg, run by my great-uncle Martin Ariano. Inset: the \"A. Coors A.D. 1900\" sign on Main Avenue in Durango.",
 };
 
 const CSS = `
@@ -175,6 +176,8 @@ export function SteadyWakePage({ active, children }) {
         {children}
         <footer className="swd-footer">
           {BRAND.name} · {BRAND.location} · Navy veteran owned · {BRAND.email}
+          <br />
+          Independently owned and operated by Robert Ariano. Not affiliated with A&amp;L Coors or any family business.
         </footer>
       </div>
     </div>
