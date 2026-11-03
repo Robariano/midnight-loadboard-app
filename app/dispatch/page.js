@@ -1,9 +1,9 @@
 import { SteadyWakePage, PhoneRibbon, Ornament, dispatchHref } from "./_shared";
 
 export const metadata = {
-  title: "Steady Wake Dispatch | Navy Veteran Dispatcher | Durango, CO",
+  title: "Steady Wake Dispatch | Semi & Hotshot Dispatch | Four Corners",
   description:
-    "Navy veteran Robert dispatches flatbed, step deck and hotshot loads, plus dry van, box truck and cargo van, for owner-operators out of Durango, Colorado. 7% per load.",
+    "Navy veteran Robert dispatches flatbed, step deck and hotshot loads, plus dry van, box truck and cargo van, for owner-operators in the Four Corners and Texas. 7% per load. Dedicated to my mom, Alfreda Susie Hudson.",
 };
 
 export default function DispatchHome() {
@@ -11,8 +11,18 @@ export default function DispatchHome() {
     <SteadyWakePage active="Home">
       <h1 className="swd-brand">
         Steady Wake Dispatch
-        <small>Flatbed dispatching for owner-operators · Also dry van, reefer, hotshot, box truck &amp; cargo van · Four Corners &amp; Texas lanes</small>
+        <small>Semi &amp; hotshot owner-operators · Four Corners &amp; Texas lanes</small>
       </h1>
+
+      <div className="swd-mom">
+        <p className="tag">Why this business exists</p>
+        <h2>Built because my mom never gave up on me</h2>
+        <p>
+          Steady Wake Dispatch exists because of my mom, Alfreda Susie Hudson. When I had nothing left, the support
+          she left me kept a roof over my head and gave me the chance to build this business. Every load I book is part
+          of the life she made possible.
+        </p>
+      </div>
 
 
       <div className="swd-thesis">
@@ -29,6 +39,19 @@ export default function DispatchHome() {
       </div>
 
       <PhoneRibbon />
+
+      <section aria-labelledby="h-promise">
+        <p className="swd-eyebrow">In her name</p>
+        <h3 id="h-promise">Alfreda&apos;s Promise</h3>
+        <p>
+          Every month, I give one struggling owner-operator their first load with no dispatch fee and no strings
+          attached, the way my mom gave me a chance when I had nothing. If you&apos;re a new authority having a rough
+          start, tell me when you call.
+        </p>
+        <p className="swd-note">
+          Why &quot;Steady Wake&quot;? It&apos;s named for the steady support that carried me through rough water.
+        </p>
+      </section>
 
       <section aria-labelledby="h-flat">
         <p className="swd-eyebrow">Flatbed is my specialty</p>
