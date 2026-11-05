@@ -121,6 +121,10 @@ export default function NightwatchLeadForm() {
         placeholder="e.g. Mostly manual FMCSA lookups right now, biggest pain is re-checking insurance monthly"
         style={{ ...inputStyle, resize: "vertical" }} />
 
+      <p style={{ fontSize: 12, color: "#6b7280", lineHeight: 1.5, margin: "0 0 10px" }}>
+        By sending, you agree Nightlane may call, text or email you about Nightwatch early access.
+        Message and data rates may apply. Reply STOP to opt out.
+      </p>
       <button type="submit" disabled={status === "submitting"} style={{
         width: "100%", padding: "14px", background: "#14181f", color: "#fff",
         border: "none", borderRadius: 8, fontWeight: 700, fontSize: 15,
