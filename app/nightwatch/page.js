@@ -23,6 +23,10 @@ const features = [
     body: "New registrants get compared against every carrier already flagged for fraud — a shared address, phone, owner, or insurer surfaces immediately.",
   },
   {
+    title: "Driver-level coverage, every load",
+    body: "Most vetting stops at the company. Nightwatch confirms the actual driver is covered under the carrier's policy before pickup, using our Confirm Coverage tool, already live on Nightlane.",
+  },
+  {
     title: "Audit trail",
     body: "Every profile check gets timestamped — a documented, repeatable process brokers can point to if a carrier selection is ever questioned.",
   },
@@ -54,6 +58,19 @@ export default function Nightwatch() {
           We're building a tool that checks every carrier's FMCSA authority, insurance, and safety
           data continuously — and cross-references against carriers already flagged for fraud. One
           status instead of a stack of PDFs.
+        </p>
+      </div>
+
+      <div style={{ ...cardStyle, marginBottom: 24, borderLeft: "4px solid #f5a623" }}>
+        <p style={{ color: "#14181f", fontWeight: 700, fontSize: 15, marginBottom: 10 }}>
+          Why I built this
+        </p>
+        <p style={{ color: "#4b5568", fontSize: 14, lineHeight: 1.7, margin: 0 }}>
+          A carrier once asked me to run a load under insurance coverage that didn&apos;t check out. The
+          story didn&apos;t add up, and I&apos;d have been the one exposed if something happened. Brokers face
+          the same risk from the other side. Nightwatch is built so nobody finds out after the fact.
+          <br />
+          <span style={{ color: "#14181f", fontWeight: 700 }}>– Shane Hudson, founder</span>
         </p>
       </div>
 
