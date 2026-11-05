@@ -34,6 +34,11 @@ export default function PrivacyPolicy() {
         relationship with that carrier.
       </p>
       <p style={{ color: "#14181f", lineHeight: 1.6 }}>
+        <strong>Consent.</strong> Nightlane sends this text only when a carrier confirms the driver
+        has given consent to receive it. Each message identifies Nightlane, explains why it was sent,
+        and includes opt-out instructions.
+      </p>
+      <p style={{ color: "#14181f", lineHeight: 1.6 }}>
         <strong>Mobile opt-in data is never shared with third parties or affiliates for marketing or
         promotional purposes.</strong> It is used solely to deliver the coverage confirmation message
         for the specific load it was submitted for.

@@ -92,6 +92,11 @@ export default function RootLayout({ children }) {
           </nav>
         </header>
         <main style={{ maxWidth: 720, margin: "0 auto", padding: "40px 24px" }}>{children}</main>
+        <footer style={{ maxWidth: 720, margin: "0 auto", padding: "0 24px 32px", fontSize: 12, color: "#6b7280" }}>
+          <a href="/privacy-policy" style={{ color: "#4b5568" }}>Privacy Policy &amp; SMS Consent</a>
+          {" · "}
+          <a href="/terms-of-service" style={{ color: "#4b5568" }}>Terms of Service</a>
+        </footer>
       </body>
     </html>
   );
