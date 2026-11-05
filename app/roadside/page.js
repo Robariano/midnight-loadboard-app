@@ -146,8 +146,8 @@ export default function Roadside() {
           My insurance didn&apos;t include towing, so the whole bill came out of my pocket.
         </p>
         <p style={{ fontSize: 14, color: "#14181f", margin: "0 0 10px", lineHeight: 1.6 }}>
-          Years before that, my 2005 Ford Explorer taught me the other side of repairs. I tried to fix
-          the timing chain myself. Later the transmission went out after an extended-warranty
+          Years before that, my 2005 Ford Explorer taught me the other side of repairs. The transmission
+          went out after an extended-warranty
           inspection at a shop in town, and a mechanic I trusted believed it had been put back
           together wrong. We put in a new transmission. It took every dollar I had saved, but he did
           the job right.
