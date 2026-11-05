@@ -72,6 +72,25 @@ export default function Roadside() {
         </p>
       </div>
 
+      <div style={{
+        background: "#eef2ff", border: "1px solid #c7d2fe", borderRadius: 10,
+        padding: "12px 16px", marginBottom: 24,
+      }}>
+        <p style={{ fontSize: 13, fontWeight: 700, color: "#1e3a8a", margin: "0 0 4px" }}>
+          If your semi has to be towed
+        </p>
+        <p style={{ fontSize: 13, color: "#1e3a8a", margin: 0, lineHeight: 1.5 }}>
+          When a big rig is towed with its drive wheels on the ground, the wrecker operator should
+          disconnect the driveshaft (or pull the axle shafts) first. Left connected, the wheels spin
+          the transmission with the engine off and no lubrication moving, and that can ruin it. After
+          a rollover, they&apos;ll do the same before winching it out, since oil may have drained and the
+          driveline may be damaged. It&apos;s fair to ask, &quot;Are you pulling the driveshaft?&quot; A good
+          operator won&apos;t mind. Flooded roads, washouts and bad weather like southwest Colorado has
+          seen this fall make these tows more common, so know your coverage and keep a tow number
+          handy before you need it.
+        </p>
+      </div>
+
       <form onSubmit={search} style={{ display: "flex", gap: 10, marginBottom: 20, flexWrap: "wrap" }}>
         <input value={city} onChange={(e) => setCity(e.target.value)}
           placeholder="City" style={{ ...inputStyle, width: 160 }} />
@@ -152,10 +171,20 @@ export default function Roadside() {
           together wrong. We put in a new transmission. It took every dollar I had saved, but he did
           the job right.
         </p>
+        <p style={{ fontSize: 14, color: "#14181f", margin: "0 0 10px", lineHeight: 1.6 }}>
+          A couple of months later, the same mechanic tried to fix an engine rattle and got it wrong,
+          so I did the job myself. I had every part on the bench except one: the thin spacer plate that
+          sits between the engine and the transmission. When I mated the engine back to the
+          transmission, that plate slipped off the dowel pins, and the job wasn&apos;t right. One small
+          missing part undid all that work.
+        </p>
         <p style={{ fontSize: 14, color: "#14181f", margin: 0, lineHeight: 1.6 }}>
           What I learned: know what your insurance covers before you need it, carry basic tools,
           keep some cash set aside for repairs, and find a mechanic you trust before you break down.
-          That&apos;s why this page lists real shops that answer the phone. – Shane, founder
+          On any job, have every part in hand before you start. Dispatch is the same: I check the
+          broker, the rate con, the pickup numbers and your hours before your truck rolls, because one
+          missed detail can cost you the whole load. That&apos;s why this page lists real shops that
+          answer the phone. – Shane, founder
         </p>
       </div>
     </div>
