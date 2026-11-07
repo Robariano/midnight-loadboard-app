@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { snapshotRows, overallOk } from "../_snapshotRows";
+import { snapshotRows, overallOk, saferUrl } from "../_snapshotRows";
 
 const card = { background: "#f7f8fa", border: "1px solid #e2e5ea", borderRadius: 12, padding: "16px 20px", marginBottom: 16 };
 const label = { display: "block", fontSize: 12, color: "#4b5568", marginBottom: 6 };
@@ -119,6 +119,13 @@ function Result({ result, onReset }) {
         <p style={{ fontSize: 13, fontWeight: 700, color: ok ? "#166534" : "#991b1b", margin: "8px 0 10px" }}>
           {ok ? "Carrier checks out with FMCSA" : "Something needs a closer look"}
         </p>
+        {!ok && (
+          <p style={{ fontSize: 12, color: "#4b5568", margin: "-4px 0 10px", lineHeight: 1.5 }}>
+            FMCSA&apos;s data feed can miss details for some carriers, especially new ones. Confirm anything marked ✗ on{" "}
+            <a href={saferUrl(s.dotNumber)} target="_blank" rel="noopener noreferrer" style={{ color: "#1d4ed8", fontWeight: 700 }}>FMCSA SAFER</a>{" "}
+            before you decide.
+          </p>
+        )}
         {snapshotRows(s).map((r) => (
           <p key={r.label} style={{ fontSize: 13, margin: "4px 0", color: "#14181f" }}>
             <span style={{ color: r.ok ? "#166534" : "#991b1b", fontWeight: 700 }}>{r.ok ? "✓" : "✗"}</span> {r.label}: {r.value}

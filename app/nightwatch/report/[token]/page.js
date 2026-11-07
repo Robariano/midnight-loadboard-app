@@ -1,5 +1,5 @@
 import { getServiceClient } from "../../../../lib/supabase";
-import { snapshotRows, overallOk, driverStatus } from "../../_snapshotRows";
+import { snapshotRows, overallOk, driverStatus, saferUrl } from "../../_snapshotRows";
 import PrintButton from "./_PrintButton";
 
 // Saved Nightwatch Lite report: the FMCSA snapshot exactly as it was at
@@ -73,7 +73,7 @@ export default async function NightwatchReport({ params }) {
       <h2 style={{ fontSize: 16, color: "#14181f", margin: "0 0 8px" }}>1. Carrier (FMCSA record at time of check)</h2>
       <div style={{ ...card, borderLeft: `4px solid ${ok ? "#166534" : "#991b1b"}` }}>
         <p style={{ fontSize: 14, fontWeight: 700, color: ok ? "#166534" : "#991b1b", margin: "0 0 8px" }}>
-          {ok ? "Carrier checked out with FMCSA" : "Carrier needed a closer look"}
+          {ok ? "Carrier checked out with FMCSA" : "Some items need confirming"}
         </p>
         <div style={row}><span style={{ color: "#4b5568" }}>DOT number</span><span>{s.dotNumber || check.dot_number}</span></div>
         {s.dbaName && <div style={row}><span style={{ color: "#4b5568" }}>DBA</span><span>{s.dbaName}</span></div>}
@@ -86,6 +86,7 @@ export default async function NightwatchReport({ params }) {
         {s.address && <div style={row}><span style={{ color: "#4b5568" }}>Address on file</span><span style={{ textAlign: "right" }}>{s.address}</span></div>}
         {s.telephone && <div style={{ ...row, borderBottom: "none" }}><span style={{ color: "#4b5568" }}>Phone on file</span><span>{s.telephone}</span></div>}
         <p style={{ fontSize: 11, color: "#6b7280", margin: "10px 0 0", lineHeight: 1.5 }}>
+          {!ok && <>FMCSA&apos;s data feed can miss details for some carriers. Confirm any ✗ item on <a href={saferUrl(s.dotNumber || check.dot_number)} style={{ color: "#1d4ed8" }}>FMCSA SAFER</a>. </>}
           Tip: call the carrier at the phone number FMCSA has on file, not one they gave you. A mismatch is a common sign of identity theft.
         </p>
       </div>
