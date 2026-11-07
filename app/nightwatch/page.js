@@ -61,6 +61,19 @@ export default function Nightwatch() {
         </p>
       </div>
 
+      <div style={{ ...cardStyle, marginBottom: 24, background: "#e8effc", borderColor: "#c9d8f5" }}>
+        <p style={{ color: "#14181f", fontWeight: 700, fontSize: 15, marginBottom: 6 }}>
+          New: Nightwatch Lite is live, and free
+        </p>
+        <p style={{ color: "#4b5568", fontSize: 14, lineHeight: 1.6, margin: "0 0 10px" }}>
+          Check a carrier&apos;s FMCSA authority and insurance, text the driver to confirm they&apos;re covered,
+          and keep a timestamped report of both. Continuous monitoring is still coming.
+        </p>
+        <a href="/nightwatch/check" style={{ color: "#1d4ed8", fontWeight: 700, fontSize: 14, textDecoration: "none" }}>
+          Run a check &rarr;
+        </a>
+      </div>
+
       <div style={{ ...cardStyle, marginBottom: 24, borderLeft: "4px solid #f5a623" }}>
         <p style={{ color: "#14181f", fontWeight: 700, fontSize: 15, marginBottom: 10 }}>
           Why I built this
