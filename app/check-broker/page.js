@@ -348,6 +348,23 @@ function CheckBrokerInner() {
           </p>
         </div>
       )}
+
+      <div style={{ marginTop: 24, background: "#fff4e5", border: "1px solid #f3d19e", borderRadius: 12, padding: "16px 20px" }}>
+        <p style={{ color: "#14181f", fontWeight: 700, fontSize: 14, margin: "0 0 6px" }}>
+          Ran into fraud or an unsafe operator?
+        </p>
+        <p style={{ color: "#4b5568", fontSize: 13, lineHeight: 1.6, margin: "0 0 10px" }}>
+          Drivers, carriers, and brokers can report unsafe carriers, broker fraud, or being pressured to
+          break safety rules (like driving without proper coverage) directly to FMCSA.
+        </p>
+        <a href="https://nccdb.fmcsa.dot.gov/" target="_blank" rel="noopener noreferrer"
+          style={{ color: "#1d4ed8", fontWeight: 700, fontSize: 13, textDecoration: "none" }}>
+          File a complaint with FMCSA &rarr;
+        </a>
+        <p style={{ color: "#8a92a0", fontSize: 11, margin: "8px 0 0" }}>
+          Opens FMCSA&apos;s National Consumer Complaint Database. Nightlane is not affiliated with FMCSA.
+        </p>
+      </div>
     </div>
   );
 }
