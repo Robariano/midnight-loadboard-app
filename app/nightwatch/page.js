@@ -67,7 +67,8 @@ export default function Nightwatch() {
         </p>
         <p style={{ color: "#4b5568", fontSize: 14, lineHeight: 1.6, margin: "0 0 10px" }}>
           Check a carrier&apos;s FMCSA authority and insurance, text the driver to confirm they&apos;re covered,
-          and keep a timestamped report of both. Continuous monitoring is still coming.
+          and keep a timestamped report of both. Tracking apps tell you where the truck is. Nightwatch
+          Lite tells you whether the driver should have the load in the first place.
         </p>
         <a href="/nightwatch/check" style={{ color: "#1d4ed8", fontWeight: 700, fontSize: 14, textDecoration: "none" }}>
           Run a check &rarr;
