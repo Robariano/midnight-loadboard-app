@@ -13,9 +13,13 @@ export default function NightwatchCheckPage() {
         For Brokers · Free
       </p>
       <h1 style={{ color: "#14181f", margin: "0 0 6px" }}>Nightwatch Lite</h1>
-      <p style={{ color: "#4b5568", fontSize: 14, lineHeight: 1.6, maxWidth: 600, marginBottom: 20 }}>
+      <p style={{ color: "#4b5568", fontSize: 14, lineHeight: 1.6, maxWidth: 600, marginBottom: 12 }}>
         Before you hand over a load: check the carrier with FMCSA, confirm the actual driver is covered
         under their policy, and keep a dated report of both checks for your records.
+      </p>
+      <p style={{ color: "#14181f", fontSize: 15, fontWeight: 700, lineHeight: 1.5, maxWidth: 600, margin: "0 0 20px", borderLeft: "3px solid #1d4ed8", paddingLeft: 12 }}>
+        Tracking apps tell you where the truck is. Nightwatch Lite tells you whether the driver should
+        have the load in the first place.
       </p>
       <NightwatchCheck />
       <p style={{ fontSize: 11, color: "#8a92a0", marginTop: 24, lineHeight: 1.6, maxWidth: 600 }}>
