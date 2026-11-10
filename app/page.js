@@ -63,6 +63,7 @@ export default function Home() {
         {[
           ["/loads", "Find Loads", "Browse loads posted on Nightlane."],
           ["/check-broker", "Check a Broker", "Look up a broker's FMCSA registration before you haul."],
+          ["/authority-watch", "Authority Watch", "Free daily check of your FMCSA authority. We alert you if it changes."],
           ["/roadside", "Roadside & Repair", "Find towing and repair help near you."],
           ["/my-documents", "My Documents", "Keep your W-9, insurance and authority letter in one place."],
           ["/confirm-coverage", "Confirm Coverage", "Make sure you're covered before the truck leaves."],
