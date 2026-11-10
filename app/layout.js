@@ -62,6 +62,9 @@ export default function RootLayout({ children }) {
             <a href="/check-broker" style={{ color: "#1d4ed8", fontSize: 13, fontWeight: 700, textDecoration: "none" }}>
               Check FMCSA Registration
             </a>
+            <a href="/authority-watch" style={{ color: "#1d4ed8", fontSize: 13, fontWeight: 700, textDecoration: "none" }}>
+              Authority Watch
+            </a>
             <a href="/roadside" style={{ color: "#1d4ed8", fontSize: 13, fontWeight: 700, textDecoration: "none" }}>
               Roadside &amp; Repair
             </a>

@@ -53,6 +53,18 @@ export default function PrivacyPolicy() {
         to stop receiving messages.
       </p>
 
+      <h2 style={{ color: "#14181f", fontSize: 18, marginTop: 24 }}>Authority Watch alerts</h2>
+      <p style={{ color: "#14181f", lineHeight: 1.6 }}>
+        Carriers who sign up for Authority Watch give us their USDOT or MC number and an email address
+        and, if they choose, a mobile number. We use these only to check that company&apos;s public FMCSA
+        record once a day and to alert the person who signed up when its operating status, out-of-service
+        status, operating authority or liability insurance on file changes. Text alerts are sent only to a
+        mobile number whose owner checked the consent box when signing up: one welcome message, then a
+        message only when a change is found. Every email includes a link to stop alerts, and you can reply
+        STOP to any text. This information is not used for marketing and is not sold or shared, except with
+        the providers we use to deliver messages (such as Twilio and Resend).
+      </p>
+
       <h2 style={{ color: "#14181f", fontSize: 18, marginTop: 24 }}>Opting out</h2>
       <p style={{ color: "#14181f", lineHeight: 1.6 }}>
         Reply STOP to any text message from us to stop receiving further messages. Because each
