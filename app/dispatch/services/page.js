@@ -13,6 +13,7 @@ const services = [
   ["Route planning", "Cutting deadhead miles and keeping your truck moving and earning."],
   ["Planned around your hours", "Loads that fit your legal hours and your home time. I won't push you to run past your clock."],
   ["Paperwork", "Rate confirmations, broker setup packets and load documents handled for you."],
+  ["Your authority watched daily", "Free for every client: Authority Watch checks your FMCSA status every morning and alerts you if a Motus glitch or insurance mix-up shuts your authority off."],
   ["Direct communication", "Fast, honest answers from me. No runaround, no ghosting."],
   ["Load securement know-how", "Flatbed blocking and bracing learned in the Navy, so I know what your load needs."],
 ];

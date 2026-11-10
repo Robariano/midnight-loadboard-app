@@ -102,6 +102,7 @@ export default function DispatchHome() {
             ["Every rate negotiated", "I don't take the first offer. I counter to get your truck real money."],
             ["Brokers checked on FMCSA", "Active authority, matching name and MC, and bond on file before I book."],
             ["You approve every load", "I send you the details first. Nothing gets booked without your yes."],
+            ["Your authority watched every day", "Every client gets Authority Watch free: a check of your FMCSA status every morning, with an alert if a Motus glitch or insurance mix-up shuts your authority off. No finding out at a pickup."],
             ["Planned around your hours", "Loads that fit your legal hours and your home time. I've been in the seat."],
             ["Flatbed, step deck, dry van, reefer, hotshot, box truck and cargo van", "New authority? I know which brokers work with new carriers, handle the setup paperwork, and open up the bigger brokers once you pass 90 days."],
           ].map(([t, d]) => (
