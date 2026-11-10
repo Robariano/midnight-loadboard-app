@@ -53,24 +53,19 @@ export default function DispatchAbout() {
             <div className="when">Today</div>
             <div>
               <h4>Steady Wake Dispatch</h4>
-              <p>The first piece of this story that&apos;s all mine. I keep owner-operators loaded with good-paying freight.</p>
+              <p>The first piece of this story that&apos;s all mine. I keep owner-operators loaded with good-paying freight. I also build free tools for carriers, like Authority Watch, which checks your FMCSA status every morning.</p>
             </div>
           </div>
         </div>
       </section>
 
       <section aria-labelledby="h-bring2">
-        <p className="swd-eyebrow">For shippers and carriers</p>
-        <h3 id="h-bring2">What I bring to your business</h3>
+        <p className="swd-eyebrow">What it means for your truck</p>
+        <h3 id="h-bring2">I know both sides of the dock</h3>
         <p>
-          I spent 11 years inside high-volume beverage distribution: running delivery routes, building loads, managing
-          shipping and receiving, and keeping temperature-sensitive product moving on tight schedules. I know how
-          shippers think, how warehouses run, and what large carriers need to keep freight moving. Whether you&apos;re
-          one truck or a fleet, a local shipper or a large operation, I understand your side of the dock.
-        </p>
-        <p>
-          My Master&apos;s in Project Management shows up in every load: planning, scheduling, managing risk, clear
-          communication, and watching the numbers so your truck makes money.
+          Years of building loads and getting trucks out on time taught me how shippers and warehouses think. My
+          Master&apos;s in Project Management shows up in every load: planning, scheduling around your hours, managing
+          risk, and watching the numbers so your truck makes money.
         </p>
       </section>
 
@@ -87,7 +82,7 @@ export default function DispatchAbout() {
           <dt>Commitment</dt>
           <dd>Dispatch is my focus. When you call, I answer.</dd>
           <dt>Training</dt>
-          <dd>Certified dispatcher</dd>
+          <dd>Completed a truck dispatcher training course (certification exam in progress)</dd>
           <dt>Cold freight</dt>
           <dd>Years in a beverage warehouse keg room, where temperatures were checked to keep the product cold. I know what it takes to keep a reefer load cold.</dd>
           <dt>Freight</dt>
