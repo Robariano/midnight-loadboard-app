@@ -175,10 +175,14 @@ export default function DispatcherLeadForm() {
       </p>
 
       <label style={{ display: "block", fontSize: 12, color: "#4b5568", marginBottom: 6 }}>
-        What are you looking for? (equipment type, lanes, anything relevant)
+        {hasOwnAuthority === false
+          ? "About that carrier (how many trucks they run, what freight, who handles their dispatch, best person to talk to)"
+          : "What are you looking for? (equipment type, lanes, anything relevant)"}
       </label>
       <textarea value={notes} onChange={(e) => setNotes(e.target.value)} rows={3}
-        placeholder="e.g. Semi dry van or 40-ft hotshot, Colorado and Texas lanes"
+        placeholder={hasOwnAuthority === false
+          ? "e.g. About 10 trucks, flatbed and hotshot, owner is Mike, they do their own dispatch but get busy"
+          : "e.g. Semi dry van or 40-ft hotshot, Colorado and Texas lanes"}
         style={{ ...inputStyle, resize: "vertical" }} />
 
       <p style={{ fontSize: 12, color: "#6b7280", lineHeight: 1.5, margin: "0 0 10px" }}>
