@@ -4,6 +4,7 @@ const BASE = "https://www.nightlaneloads.com";
 const PAGES = [
   "", "/check-broker", "/confirm-coverage", "/roadside", "/carriers", "/loads",
   "/get-verified", "/post-load", "/dispatch", "/nightwatch", "/revoked-carriers",
+  "/authority-watch", "/blog", "/blog/new-authority-brokers-wont-work-with-me",
   "/blog/chameleon-carriers-tql-chrobinson-lawsuit", "/terms-of-service", "/privacy-policy",
 ];
 

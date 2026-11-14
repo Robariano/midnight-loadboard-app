@@ -18,7 +18,7 @@ import SourceTracker from "./_SourceTracker";
 
 const STEADY_WAKE_HOSTS = new Set(["steadywakedispatch.com", "www.steadywakedispatch.com"]);
 
-// path is "" (home), "/services", "/about", "/contact" or "/privacy".
+// path is "" (home), "/services", "/about", "/contact", "/privacy" or "/four-corners".
 export function dispatchHref(path = "") {
   let host = "";
   try {
@@ -174,6 +174,8 @@ export function SteadyWakePage({ active, children }) {
           <br />
           Independently owned and operated by Rob Ariano, who also runs Nightlane. Not affiliated with any family business.
           <br />
+          <a href={dispatchHref("/four-corners")} style={{ color: "var(--ink-soft)" }}>Serving the Four Corners</a>
+          {" · "}
           <a href={dispatchHref("/privacy")} style={{ color: "var(--ink-soft)" }}>Privacy &amp; text messaging terms</a>
           <span className="mom">Dedicated to my mom, Alfreda Susie Hudson. Her support kept me off the street while I built this.</span>
         </footer>
