@@ -18,7 +18,7 @@ import SourceTracker from "./_SourceTracker";
 
 const STEADY_WAKE_HOSTS = new Set(["steadywakedispatch.com", "www.steadywakedispatch.com"]);
 
-// path is "" (home), "/services", "/about", or "/contact".
+// path is "" (home), "/services", "/about", "/contact" or "/privacy".
 export function dispatchHref(path = "") {
   let host = "";
   try {
@@ -173,6 +173,8 @@ export function SteadyWakePage({ active, children }) {
           {BRAND.name} · {BRAND.location} · Navy veteran owned · Master&apos;s in Project Management · {BRAND.email}
           <br />
           Independently owned and operated by Shane Hudson. Not affiliated with any other company or family business.
+          <br />
+          <a href={dispatchHref("/privacy")} style={{ color: "var(--ink-soft)" }}>Privacy &amp; text messaging terms</a>
           <span className="mom">Dedicated to my mom, Alfreda Susie Hudson. Her support kept me off the street while I built this.</span>
         </footer>
       </div>

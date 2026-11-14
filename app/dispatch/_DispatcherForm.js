@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SOURCE_STORAGE_KEY } from "./_SourceTracker";
 
 // The lead-capture form used on /dispatch/contact (and /need-a-dispatcher,
@@ -13,6 +13,11 @@ import { SOURCE_STORAGE_KEY } from "./_SourceTracker";
 // the admin panel and the lead alert email as-is.
 //
 // Company-name auto-fill reuses the public /api/check-broker FMCSA lookup.
+//
+// The SMS consent links to Steady Wake's own privacy/texting terms
+// (app/dispatch/privacy/page.js): /privacy on steadywakedispatch.com,
+// /dispatch/privacy everywhere else (same rule as dispatchHref()).
+const STEADY_WAKE_HOSTS = ["steadywakedispatch.com", "www.steadywakedispatch.com"];
 
 const C = {
   ink: "#14181f",
@@ -43,7 +48,7 @@ const hintStyle = { fontWeight: 400, color: C.muted };
 const fieldWrap = { marginBottom: 16 };
 const errStyle = { color: C.red, fontSize: 12, margin: "5px 0 0" };
 
-const EQUIPMENT = ["Flatbed", "Step deck", "Hotshot", "Dry van", "Box truck", "Cargo van"];
+const EQUIPMENT = ["Flatbed", "Step deck", "Hotshot", "Dry van", "Reefer", "Box truck", "Cargo van"];
 const TRUCK_COUNTS = ["1–2", "3–5", "6–15", "16+"];
 const CURRENT_DISPATCH = [
   "I do it myself",
@@ -146,6 +151,11 @@ export default function DispatcherLeadForm() {
   const [bestTime, setBestTime] = useState("Anytime");
   const [smsConsent, setSmsConsent] = useState(false);
   const [notes, setNotes] = useState("");
+
+  const [privacyHref, setPrivacyHref] = useState("/dispatch/privacy");
+  useEffect(() => {
+    if (STEADY_WAKE_HOSTS.includes(window.location.hostname.toLowerCase())) setPrivacyHref("/privacy");
+  }, []);
 
   const [errors, setErrors] = useState({});
   const [status, setStatus] = useState(null);
@@ -525,8 +535,8 @@ export default function DispatcherLeadForm() {
         <span>
           Yes, Steady Wake Dispatch may text me at the number above about dispatch services. Consent is not
           a condition of service. Message frequency varies. Msg &amp; data rates may apply. Reply STOP to opt
-          out, HELP for help. See the <a href="/privacy-policy" style={{ color: C.brand }}>Privacy Policy</a> and{" "}
-          <a href="/terms-of-service" style={{ color: C.brand }}>Terms</a>.
+          out, HELP for help. See the <a href={privacyHref} style={{ color: C.brand }}>Privacy Policy</a> and{" "}
+          <a href={`${privacyHref}#sms`} style={{ color: C.brand }}>Text Messaging Terms</a>.
         </span>
       </label>
       {errors.smsConsent && <p style={{ ...errStyle, margin: "0 0 14px" }}>{errors.smsConsent}</p>}
