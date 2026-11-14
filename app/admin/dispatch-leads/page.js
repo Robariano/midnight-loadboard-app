@@ -1,6 +1,51 @@
 "use client";
 import { useEffect, useState } from "react";
 
+// Per-lead "add a note" box. Notes are appended with a date by
+// /api/admin/dispatch-leads/[id]/notes, never overwritten.
+function NoteBox({ id, onSaved }) {
+  const [text, setText] = useState("");
+  const [saving, setSaving] = useState(false);
+  const [err, setErr] = useState(null);
+
+  async function save() {
+    if (!text.trim()) return;
+    setSaving(true);
+    setErr(null);
+    const res = await fetch(`/api/admin/dispatch-leads/${id}/notes`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ note: text }),
+    });
+    const d = await res.json().catch(() => ({}));
+    setSaving(false);
+    if (!res.ok) { setErr(d.error || "Couldn't save the note."); return; }
+    setText("");
+    onSaved();
+  }
+
+  return (
+    <div style={{ marginTop: 10 }}>
+      <div style={{ display: "flex", gap: 8 }}>
+        <input value={text} onChange={(e) => setText(e.target.value)}
+          onKeyDown={(e) => { if (e.key === "Enter") save(); }}
+          placeholder="Add a note (call outcome, next step…)"
+          aria-label="Add a note"
+          style={{
+            flex: 1, minWidth: 0, padding: "8px 10px", fontSize: 14, borderRadius: 6,
+            border: "1px solid #e2e5ea", background: "#ffffff", color: "#14181f",
+          }} />
+        <button onClick={save} disabled={saving || !text.trim()} style={{
+          background: "#14181f", color: "#ffffff", border: "none", borderRadius: 6,
+          padding: "6px 14px", fontSize: 12, fontWeight: 700,
+          cursor: saving || !text.trim() ? "default" : "pointer", opacity: text.trim() ? 1 : 0.5,
+        }}>{saving ? "Saving…" : "Add note"}</button>
+      </div>
+      {err && <p style={{ color: "#991b1b", fontSize: 12, margin: "4px 0 0" }}>{err}</p>}
+    </div>
+  );
+}
+
 const statusColor = {
   new: "#1d4ed8",
   contacted: "#92400e",
@@ -113,6 +158,7 @@ export default function AdminDispatchLeads() {
               }}>Reopen</button>
             )}
           </div>
+          <NoteBox id={l.id} onSaved={load} />
         </div>
       ))}
     </div>
