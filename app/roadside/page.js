@@ -184,7 +184,7 @@ export default function Roadside() {
           On any job, have every part in hand before you start. Dispatch is the same: I check the
           broker, the rate con, the pickup numbers and your hours before your truck rolls, because one
           missed detail can cost you the whole load. That&apos;s why this page lists real shops that
-          answer the phone. – Shane, founder
+          answer the phone. – Rob, founder
         </p>
       </div>
     </div>

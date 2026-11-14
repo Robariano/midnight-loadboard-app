@@ -84,7 +84,7 @@ export default function Nightwatch() {
           story didn&apos;t add up, and I&apos;d have been the one exposed if something happened. Brokers face
           the same risk from the other side. Nightwatch is built so nobody finds out after the fact.
           <br />
-          <span style={{ color: "#14181f", fontWeight: 700 }}>– Shane Hudson, founder</span>
+          <span style={{ color: "#14181f", fontWeight: 700 }}>– Rob Ariano, founder</span>
         </p>
       </div>
 
