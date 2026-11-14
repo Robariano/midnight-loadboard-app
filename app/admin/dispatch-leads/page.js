@@ -85,7 +85,7 @@ export default function AdminDispatchLeads() {
           </p>
           {l.notes && (
             <p style={{ fontSize: 13, color: "#14181f", margin: "8px 0", background: "#ffffff",
-              border: "1px solid #e2e5ea", borderRadius: 6, padding: "8px 10px" }}>
+              border: "1px solid #e2e5ea", borderRadius: 6, padding: "8px 10px", whiteSpace: "pre-line" }}>
               {l.notes}
             </p>
           )}
