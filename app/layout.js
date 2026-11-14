@@ -14,6 +14,9 @@ function isSteadyWakeHost() {
   }
 }
 
+const navLink = { color: "#1d4ed8", fontSize: 13, fontWeight: 700, textDecoration: "none" };
+const footLink = { color: "#4b5568" };
+
 export const metadata = {
   title: "Nightlane - Carrier Verification & Load Management",
 };
@@ -40,65 +43,53 @@ export default function RootLayout({ children }) {
           style={{
             background: "#ffffff",
             borderBottom: "1px solid #e2e5ea",
-            padding: "16px 32px",
+            padding: "14px 24px",
             display: "flex",
             alignItems: "center",
-            gap: 24,
+            flexWrap: "wrap",
+            gap: "10px 24px",
           }}
         >
           <a href="/" style={{ color: "#14181f", fontWeight: 700, fontSize: 18, textDecoration: "none" }}>
             Nightlane
           </a>
-          <nav style={{ marginLeft: "auto", display: "flex", gap: 16 }}>
-            <a href="/loads" style={{ color: "#1d4ed8", fontSize: 13, fontWeight: 700, textDecoration: "none" }}>
-              Find Loads
-            </a>
-            <a href="/carriers" style={{ color: "#1d4ed8", fontSize: 13, fontWeight: 700, textDecoration: "none" }}>
-              Carriers
-            </a>
-            <a href="/confirm-coverage" style={{ color: "#1d4ed8", fontSize: 13, fontWeight: 700, textDecoration: "none" }}>
-              Confirm Coverage
-            </a>
-            <a href="/check-broker" style={{ color: "#1d4ed8", fontSize: 13, fontWeight: 700, textDecoration: "none" }}>
-              Check FMCSA Registration
-            </a>
-            <a href="/authority-watch" style={{ color: "#1d4ed8", fontSize: 13, fontWeight: 700, textDecoration: "none" }}>
-              Authority Watch
-            </a>
-            <a href="/roadside" style={{ color: "#1d4ed8", fontSize: 13, fontWeight: 700, textDecoration: "none" }}>
-              Roadside &amp; Repair
-            </a>
-            <a href="/my-documents" style={{ color: "#1d4ed8", fontSize: 13, fontWeight: 700, textDecoration: "none" }}>
-              My Documents
-            </a>
-            <a href="/dispatch" style={{ color: "#1d4ed8", fontSize: 13, fontWeight: 700, textDecoration: "none" }}>
+          {/* Short on purpose: the free tools owner-operators come for, then the
+              dispatch offer. Everything else lives in the footer. */}
+          <nav style={{ marginLeft: "auto", display: "flex", flexWrap: "wrap", alignItems: "center", gap: "8px 18px" }}>
+            <a href="/loads" style={navLink}>Find Loads</a>
+            <a href="/check-broker" style={navLink}>Check a Broker</a>
+            <a href="/authority-watch" style={navLink}>Authority Watch</a>
+            <a href="/account" style={{ ...navLink, color: "#14181f" }}>Log In</a>
+            <a href="/dispatch" style={{
+              color: "#ffffff", background: "#1d4ed8", fontSize: 13, fontWeight: 700,
+              textDecoration: "none", padding: "8px 14px", borderRadius: 8,
+            }}>
               Need a Dispatcher?
-            </a>
-            <a href="/post-load" style={{ color: "#1d4ed8", fontSize: 13, fontWeight: 700, textDecoration: "none" }}>
-              Post a Load
-            </a>
-            <a href="/get-verified" style={{ color: "#166534", fontSize: 13, fontWeight: 700, textDecoration: "none" }}>
-              Get Verified
-            </a>
-            <a href="/nightwatch" style={{ color: "#1d4ed8", fontSize: 13, fontWeight: 700, textDecoration: "none" }}>
-              Nightwatch (For Brokers)
-            </a>
-            <a href="/blog/chameleon-carriers-tql-chrobinson-lawsuit" style={{ color: "#1d4ed8", fontSize: 13, fontWeight: 700, textDecoration: "none" }}>
-              Blog
-            </a>
-            <a href="/account" style={{ color: "#14181f", fontSize: 13, fontWeight: 700, textDecoration: "none" }}>
-              Log In
-            </a>
-            <a href="/revoked-carriers" style={{ color: "#991b1b", fontSize: 13, fontWeight: 700, textDecoration: "none" }}>
-              Revoked Credentials
             </a>
           </nav>
         </header>
         <main style={{ maxWidth: 720, margin: "0 auto", padding: "40px 24px" }}>{children}</main>
-        <footer style={{ maxWidth: 720, margin: "0 auto", padding: "0 24px 32px", fontSize: 12, color: "#6b7280" }}>
-          <a href="/privacy-policy" style={{ color: "#4b5568" }}>Privacy Policy &amp; SMS Consent</a>
-          {" · "}
-          <a href="/terms-of-service" style={{ color: "#4b5568" }}>Terms of Service</a>
+        <footer style={{ maxWidth: 720, margin: "0 auto", padding: "24px 24px 32px", fontSize: 12, color: "#6b7280", borderTop: "1px solid #e2e5ea", lineHeight: 2 }}>
+          <div>
+            <b style={{ color: "#4b5568" }}>Free tools:</b>{" "}
+            <a href="/confirm-coverage" style={footLink}>Confirm Coverage</a>{" · "}
+            <a href="/my-documents" style={footLink}>My Documents</a>{" · "}
+            <a href="/roadside" style={footLink}>Roadside &amp; Repair</a>{" · "}
+            <a href="/revoked-carriers" style={footLink}>Revoked Credentials</a>{" · "}
+            <a href="/blog/chameleon-carriers-tql-chrobinson-lawsuit" style={footLink}>Blog</a>
+          </div>
+          <div>
+            <b style={{ color: "#4b5568" }}>Carriers &amp; brokers:</b>{" "}
+            <a href="/carriers" style={footLink}>Carriers</a>{" · "}
+            <a href="/get-verified" style={footLink}>Get Verified</a>{" · "}
+            <a href="/post-load" style={footLink}>Post a Load</a>{" · "}
+            <a href="/nightwatch" style={footLink}>Nightwatch (for brokers)</a>
+          </div>
+          <div>
+            <a href="/privacy-policy" style={footLink}>Privacy Policy &amp; SMS Consent</a>
+            {" · "}
+            <a href="/terms-of-service" style={footLink}>Terms of Service</a>
+          </div>
         </footer>
       </body>
     </html>
