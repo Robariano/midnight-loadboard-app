@@ -1,5 +1,5 @@
 // Shared look and layout for Steady Wake Dispatch, Rob's dispatch business
-// (shane@steadywakedispatch.com, (970) 903-9226, Four Corners region).
+// (steadywakedispatch@gmail.com, (970) 903-9226, Four Corners region).
 //
 // The site is built around the owner's own story. He goes by Rob Ariano publicly (changed from Shane Hudson on Nov 14, 2026, at his request). Per him: never mention or credit his father, never name
 // Coors or A&L Coors (say "a beverage distributor"), and
@@ -36,7 +36,7 @@ export const BRAND = {
   name: "Steady Wake Dispatch",
   phone: "(970) 903-9226",
   phoneHref: "tel:+19709039226",
-  email: "shane@steadywakedispatch.com",
+  email: "steadywakedispatch@gmail.com",
   location: "Four Corners Region",
 };
 
