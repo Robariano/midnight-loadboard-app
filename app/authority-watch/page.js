@@ -1,4 +1,5 @@
 import AuthorityWatchForm from "./_AuthorityWatchForm";
+import DispatchNudge from "../shared/DispatchNudge";
 
 export const metadata = {
   title: "Authority Watch: Free Daily FMCSA Status Alerts | Nightlane",
@@ -40,6 +41,12 @@ export default function AuthorityWatchPage() {
           <li>If you were cited for operating without authority because of a system error, you can challenge it through FMCSA&apos;s DataQs.</li>
         </ul>
       </div>
+
+      <DispatchNudge
+        title="New authority, and brokers keep saying you're too new?"
+        body="Steady Wake Dispatch knows which brokers set up new carriers, handles the setup packets and negotiates every rate."
+        maxWidth={600}
+      />
 
       <p style={{ fontSize: 11, color: "#8a92a0", marginTop: 24, lineHeight: 1.6, maxWidth: 600 }}>
         We read FMCSA&apos;s public data once a day; we never log in to your Motus account and never ask for your

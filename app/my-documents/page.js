@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import DispatchNudge from "../shared/DispatchNudge";
 
 const DOCUMENT_TYPES = ["Bill of Lading", "Rate Confirmation", "Lumper Receipt", "Invoice", "Proof of Delivery", "Inspection Report", "Insurance Certificate", "W-9", "MC Authority Letter", "Notice of Assignment (Factoring)", "Medical Card", "Other"];
 
@@ -386,6 +387,11 @@ export default function MyDocuments() {
           </div>
         );
       })}
+
+      <DispatchNudge
+        title="Your W-9, insurance and authority letter are already here"
+        body="That's everything a dispatcher needs to start booking. Steady Wake Dispatch finds the loads, negotiates the rates and handles broker setup."
+      />
     </div>
   );
 }
