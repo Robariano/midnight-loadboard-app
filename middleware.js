@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 
 // Lets steadywakedispatch.com (Rob's real, separately-registered domain
 // for the dispatch business) serve clean URLs — steadywakedispatch.com/,
-// /services, /about, /contact — for what is, under the hood, the
+// /services, /about, /contact, /privacy — for what is, under the hood, the
 // app/dispatch/* section of this same app. Everything else (including
 // cross-linked pages like /check-broker) is left untouched and just
 // serves normally regardless of which domain it's requested through.
@@ -17,6 +17,7 @@ const CLEAN_PATH_MAP = {
   "/services": "/dispatch/services",
   "/about": "/dispatch/about",
   "/contact": "/dispatch/contact",
+  "/privacy": "/dispatch/privacy",
 };
 
 export function middleware(request) {
@@ -32,5 +33,5 @@ export function middleware(request) {
 }
 
 export const config = {
-  matcher: ["/", "/services", "/about", "/contact"],
+  matcher: ["/", "/services", "/about", "/contact", "/privacy"],
 };
