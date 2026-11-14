@@ -25,6 +25,9 @@ export default function DispatcherLeadForm() {
   const [mcNumber, setMcNumber] = useState("");
   const [dotNumber, setDotNumber] = useState("");
   const [leasedUnderCompany, setLeasedUnderCompany] = useState("");
+  const [carrierNumber, setCarrierNumber] = useState("");
+  const [carrierContact, setCarrierContact] = useState("");
+  const [okToMention, setOkToMention] = useState(false);
   const [contactName, setContactName] = useState("");
   const [contactEmail, setContactEmail] = useState("");
   const [contactPhone, setContactPhone] = useState("");
@@ -54,7 +57,12 @@ export default function DispatcherLeadForm() {
         contact_name: contactName,
         contact_email: contactEmail,
         contact_phone: contactPhone,
-        notes,
+        notes: hasOwnAuthority ? notes : [
+          carrierNumber.trim() && `Carrier MC/DOT: ${carrierNumber.trim()}`,
+          carrierContact.trim() && `Best contact at carrier: ${carrierContact.trim()}`,
+          `OK to mention this driver to the carrier: ${okToMention ? "yes" : "no"}`,
+          notes.trim() && `About the carrier: ${notes.trim()}`,
+        ].filter(Boolean).join("\n"),
         source,
       }),
     });
@@ -113,9 +121,11 @@ export default function DispatcherLeadForm() {
           padding: "10px 14px", marginBottom: 14,
         }}>
           <p style={{ fontSize: 12, color: "#7a2e1f", margin: 0, lineHeight: 1.5 }}>
-            Since you run under another carrier&apos;s authority, loads have to be booked through
-            them. Send your info anyway. I can reach out to that carrier about dispatching for
-            their trucks, including yours.
+            <b>Introduce me to your carrier.</b> Since you run under their authority, loads are
+            booked through them. A lot of carriers with leased owner-operators get stretched thin on
+            dispatch. Tell me who you run under and I&apos;ll reach out to them about backup dispatch
+            help, for their trucks and yours. Anything you tell me about your pay or how you&apos;re
+            treated stays between us.
           </p>
         </div>
       )}
@@ -156,17 +166,31 @@ export default function DispatcherLeadForm() {
           </label>
           <input value={leasedUnderCompany} onChange={(e) => setLeasedUnderCompany(e.target.value)}
             placeholder="e.g. Big Rig Carriers LLC" style={inputStyle} />
+          <label style={{ display: "block", fontSize: 12, color: "#4b5568", marginBottom: 6 }}>
+            Their MC or DOT number (if you know it)
+          </label>
+          <input value={carrierNumber} onChange={(e) => setCarrierNumber(e.target.value)}
+            placeholder="e.g. MC 654321" style={inputStyle} />
+          <label style={{ display: "block", fontSize: 12, color: "#4b5568", marginBottom: 6 }}>
+            Best person to talk to there (name, role, phone or email if you have it)
+          </label>
+          <input value={carrierContact} onChange={(e) => setCarrierContact(e.target.value)}
+            placeholder="e.g. Mike, owner, (555) 555-5555" style={inputStyle} />
+          <label style={{ display: "flex", gap: 8, alignItems: "flex-start", fontSize: 12, color: "#4b5568", marginBottom: 14 }}>
+            <input type="checkbox" checked={okToMention} onChange={(e) => setOkToMention(e.target.checked)} style={{ marginTop: 2 }} />
+            <span>It&apos;s OK to tell them you sent me</span>
+          </label>
         </>
       )}
 
       <label style={{ display: "block", fontSize: 12, color: "#4b5568", marginBottom: 6 }}>
-        Email
+        {hasOwnAuthority ? "Email" : "Your email"}
       </label>
       <input value={contactEmail} onChange={(e) => setContactEmail(e.target.value)}
         placeholder="you@example.com" style={inputStyle} />
 
       <label style={{ display: "block", fontSize: 12, color: "#4b5568", marginBottom: 6 }}>
-        Phone
+        {hasOwnAuthority ? "Phone" : "Your phone"}
       </label>
       <input value={contactPhone} onChange={(e) => setContactPhone(e.target.value)}
         placeholder="(555) 555-5555" style={inputStyle} />
@@ -176,7 +200,7 @@ export default function DispatcherLeadForm() {
 
       <label style={{ display: "block", fontSize: 12, color: "#4b5568", marginBottom: 6 }}>
         {hasOwnAuthority === false
-          ? "About that carrier (how many trucks they run, what freight, who handles their dispatch, best person to talk to)"
+          ? "About that carrier (how many trucks they run, what freight they haul, who handles their dispatch)"
           : "What are you looking for? (equipment type, lanes, anything relevant)"}
       </label>
       <textarea value={notes} onChange={(e) => setNotes(e.target.value)} rows={3}
