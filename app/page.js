@@ -28,59 +28,46 @@ const secondaryBtn = {
   textDecoration: "none",
 };
 
-const stepNumber = {
-  display: "inline-flex",
-  alignItems: "center",
-  justifyContent: "center",
-  width: 28,
-  height: 28,
-  borderRadius: "50%",
-  background: "#1d4ed8",
-  color: "#fff",
-  fontWeight: 700,
-  fontSize: 13,
-  marginBottom: 12,
-};
+
+// Nightlane's job is to bring owner-operators in with free tools and turn
+// the ones who want help into Steady Wake Dispatch clients. So the page
+// leads with the tools, puts the dispatch offer right under them, and keeps
+// the coverage check to one short card (its own page explains the rest).
+const tools = [
+  ["/check-broker", "Check a Broker", "Look up a broker's FMCSA registration before you haul."],
+  ["/authority-watch", "Authority Watch", "Free daily check of your FMCSA authority, with an alert if it changes."],
+  ["/loads", "Find Loads", "Browse loads posted on Nightlane."],
+  ["/my-documents", "My Documents", "Keep your W-9, insurance and authority letter in one place."],
+  ["/confirm-coverage", "Confirm Coverage", "Make sure the driver is covered before the truck leaves."],
+  ["/roadside", "Roadside & Repair", "Find towing and repair help near you."],
+];
+
+const dispatchPoints = [
+  ["First load free.", "Then 7%, only after the broker pays you."],
+  ["Booked under your MC,", "with your OK on every load."],
+  ["Every broker checked on FMCSA", "before I book."],
+  ["New authority welcome.", "I know which brokers will set you up."],
+];
 
 export default function Home() {
   return (
     <div>
-      {/* Driver tools: what the ads promise */}
       <h1 style={{ color: "#14181f", fontSize: 32, lineHeight: 1.25, marginBottom: 8 }}>
-        Nightlane Loads
+        Free tools for owner-operators
       </h1>
       <p style={{ color: "#4b5568", fontSize: 16, lineHeight: 1.6, marginBottom: 20, maxWidth: 560 }}>
-        A free load board and free tools for owner-operators. No subscription, no account needed to get started.
+        Check brokers, watch your authority and keep your documents in one place. Free, no subscription, no account needed to start.
       </p>
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))",
+          gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
           gap: 12,
-          marginBottom: 48,
+          marginBottom: 40,
         }}
       >
-        {[
-          ["/loads", "Find Loads", "Browse loads posted on Nightlane."],
-          ["/check-broker", "Check a Broker", "Look up a broker's FMCSA registration before you haul."],
-          ["/authority-watch", "Authority Watch", "Free daily check of your FMCSA authority. We alert you if it changes."],
-          ["/roadside", "Roadside & Repair", "Find towing and repair help near you."],
-          ["/my-documents", "My Documents", "Keep your W-9, insurance and authority letter in one place."],
-          ["/confirm-coverage", "Confirm Coverage", "Make sure you're covered before the truck leaves."],
-          ["/dispatch", "Need a Dispatcher?", "Steady Wake Dispatch finds loads for you. 7%, paid after you're paid."],
-        ].map(([href, title, body]) => (
-          <a
-            key={href}
-            href={href}
-            style={{
-              ...cardStyle,
-              padding: 16,
-              textDecoration: "none",
-              display: "block",
-              borderColor: href === "/dispatch" ? "#f5a623" : "#e2e5ea",
-              background: href === "/dispatch" ? "#fef7ea" : "#f7f8fa",
-            }}
-          >
+        {tools.map(([href, title, body]) => (
+          <a key={href} href={href} style={{ ...cardStyle, padding: 16, textDecoration: "none", display: "block" }}>
             <span style={{ display: "block", color: "#1d4ed8", fontWeight: 700, fontSize: 15, marginBottom: 6 }}>
               {title} →
             </span>
@@ -89,99 +76,58 @@ export default function Home() {
         ))}
       </div>
 
-      {/* Coverage check */}
-      <h2 style={{ color: "#14181f", fontSize: 26, lineHeight: 1.25, marginBottom: 12 }}>
-        Know you're covered before you drive.
-      </h2>
-      <p style={{ color: "#4b5568", fontSize: 16, lineHeight: 1.6, marginBottom: 28, maxWidth: 560 }}>
-        A truck can carry valid commercial insurance while the driver behind the wheel isn't actually
-        covered under it. Nightlane is a free, private coverage check — for drivers to confirm
-        for themselves, or for carriers to confirm with a driver — before the truck ever leaves. Works no
-        matter where the load came from.
-      </p>
-      <div style={{ display: "flex", gap: 12, marginBottom: 48, flexWrap: "wrap" }}>
-        <a href="/confirm-coverage" style={primaryBtn}>Confirm Coverage →</a>
-        <a href="/get-verified" style={secondaryBtn}>Get Verified as a Carrier →</a>
+      {/* The offer this site exists for */}
+      <div style={{ ...cardStyle, background: "#fef7ea", borderColor: "#f5a623", padding: 24, marginBottom: 40 }}>
+        <p style={{ color: "#92400e", fontWeight: 700, fontSize: 12, letterSpacing: 1, textTransform: "uppercase", margin: "0 0 6px" }}>
+          Need a dispatcher?
+        </p>
+        <h2 style={{ color: "#14181f", fontSize: 24, lineHeight: 1.25, margin: "0 0 8px" }}>
+          Let Steady Wake Dispatch find your next load
+        </h2>
+        <p style={{ color: "#4b5568", fontSize: 15, lineHeight: 1.6, margin: "0 0 14px", maxWidth: 560 }}>
+          You drive. I find the freight, negotiate the rate and handle the broker paperwork.
+        </p>
+        <ul style={{ listStyle: "none", padding: 0, margin: "0 0 18px" }}>
+          {dispatchPoints.map(([head, rest]) => (
+            <li key={head} style={{ display: "flex", gap: 10, padding: "4px 0", fontSize: 14, color: "#14181f", lineHeight: 1.5 }}>
+              <span aria-hidden="true" style={{ color: "#166534", fontWeight: 700 }}>✓</span>
+              <span><b>{head}</b> {rest}</span>
+            </li>
+          ))}
+        </ul>
+        <div style={{ display: "flex", gap: 12, flexWrap: "wrap", alignItems: "center" }}>
+          <a href="/dispatch/contact" style={{ ...primaryBtn, background: "#92400e" }}>Get my first load free →</a>
+          <a href="/dispatch" style={{ color: "#92400e", fontWeight: 700, fontSize: 14 }}>How it works</a>
+          <span style={{ color: "#4b5568", fontSize: 14 }}>
+            or call or text <a href="tel:+19709039226" style={{ color: "#14181f", fontWeight: 700 }}>(970) 903-9226</a>
+          </span>
+        </div>
+        <p style={{ color: "#6b7280", fontSize: 12, margin: "16px 0 0", lineHeight: 1.5 }}>
+          Nightlane and Steady Wake Dispatch are run by the same person. The tools above are free whether or not you use dispatch.
+        </p>
       </div>
 
-      {/* Why this exists */}
-      <div style={{ ...cardStyle, marginBottom: 48 }}>
-        <p style={{ color: "#14181f", fontWeight: 700, fontSize: 15, marginBottom: 10 }}>
-          Why coverage attestation matters
+      {/* Coverage check, kept short */}
+      <div style={{ ...cardStyle, marginBottom: 40 }}>
+        <p style={{ color: "#14181f", fontWeight: 700, fontSize: 16, margin: "0 0 8px" }}>
+          Know the driver is covered before the truck leaves
         </p>
-        <p style={{ color: "#4b5568", fontSize: 14, lineHeight: 1.7, margin: 0 }}>
-          Being covered means you're a named or listed driver on the carrier's active policy for that
-          trip — not just that the truck has valid papers. That gap gets missed through double brokering,
-          last-minute driver swaps, or a small carrier moving fast with nobody dedicated to catching it.
-          Whoever's behind the wheel is the one exposed, and usually doesn't find out until something's
-          already gone wrong. This closes that gap before the truck ever leaves — for one driver on one
-          load, in about 30 seconds.
+        <p style={{ color: "#4b5568", fontSize: 14, lineHeight: 1.6, margin: "0 0 14px" }}>
+          A truck can carry valid insurance while the driver isn't listed on the policy. A free, private
+          30-second check closes that gap, for a load from any board or a phone call.
         </p>
-      </div>
-
-      {/* How it works */}
-      <p style={{ color: "#14181f", fontWeight: 700, fontSize: 18, marginBottom: 20 }}>How it works</p>
-      <div style={{ display: "flex", flexDirection: "column", gap: 16, marginBottom: 48 }}>
-        <div style={cardStyle}>
-          <div style={stepNumber}>1</div>
-          <p style={{ color: "#14181f", fontWeight: 700, fontSize: 14, marginBottom: 6 }}>
-            Check coverage for any load, from anywhere
-          </p>
-          <p style={{ color: "#4b5568", fontSize: 13, lineHeight: 1.6, margin: 0 }}>
-            Found the load on DAT, Truckstop, or a phone call? Doesn't matter. A driver can check their
-            own coverage directly, no carrier or account required — or a verified carrier can send a
-            driver a private confirmation link.
-          </p>
-        </div>
-        <div style={cardStyle}>
-          <div style={{ ...stepNumber, background: "#166534" }}>2</div>
-          <p style={{ color: "#14181f", fontWeight: 700, fontSize: 14, marginBottom: 6 }}>
-            One private link, one honest question
-          </p>
-          <p style={{ color: "#4b5568", fontSize: 13, lineHeight: 1.6, margin: 0 }}>
-            The driver gets a link by email — no app to download, no account to create — and answers one
-            question: are you actually listed on the active policy for this trip?
-          </p>
-        </div>
-        <div style={cardStyle}>
-          <div style={{ ...stepNumber, background: "#92400e" }}>3</div>
-          <p style={{ color: "#14181f", fontWeight: 700, fontSize: 14, marginBottom: 6 }}>
-            The answer stays private — the outcome doesn't
-          </p>
-          <p style={{ color: "#4b5568", fontSize: 13, lineHeight: 1.6, margin: 0 }}>
-            A carrier never sees how a driver responded. If something's wrong, the carrier just sees that
-            it's flagged, and it becomes part of that carrier's record — enough to act on, without putting
-            the driver on the spot.
-          </p>
+        <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+          <a href="/confirm-coverage" style={{ ...primaryBtn, padding: "10px 18px" }}>Confirm Coverage →</a>
+          <a href="/get-verified" style={{ ...secondaryBtn, padding: "10px 18px" }}>Get Verified as a Carrier →</a>
         </div>
       </div>
 
-      {/* Trust / no fees */}
-      <div style={{ ...cardStyle, marginBottom: 48, display: "flex", gap: 32, flexWrap: "wrap" }}>
-        <div>
-          <p style={{ color: "#166534", fontWeight: 700, fontSize: 14, marginBottom: 4 }}>Always free</p>
-          <p style={{ color: "#4b5568", fontSize: 13, margin: 0 }}>No fees, no subscription, no account needed to check your own coverage.</p>
-        </div>
-        <div>
-          <p style={{ color: "#166534", fontWeight: 700, fontSize: 14, marginBottom: 4 }}>Works with any load</p>
-          <p style={{ color: "#4b5568", fontSize: 13, margin: 0 }}>Not tied to this site's load board — use it alongside DAT, Truckstop, or a direct call.</p>
-        </div>
-        <div>
-          <p style={{ color: "#166534", fontWeight: 700, fontSize: 14, marginBottom: 4 }}>Driver answers stay private</p>
-          <p style={{ color: "#4b5568", fontSize: 13, margin: 0 }}>Carriers never see how a driver responded — only that a load is confirmed or flagged.</p>
-        </div>
-      </div>
-
-      {/* Final CTA */}
-      <div style={{ textAlign: "center", padding: "12px 0 8px" }}>
-        <p style={{ color: "#14181f", fontSize: 16, fontWeight: 700, marginBottom: 16 }}>
-          Not sure if you're covered on your next load?
+      {/* Final nudge */}
+      <div style={{ textAlign: "center", padding: "8px 0" }}>
+        <p style={{ color: "#14181f", fontSize: 16, fontWeight: 700, marginBottom: 14 }}>
+          Tired of sitting on load boards?
         </p>
-        <a href="/confirm-coverage" style={primaryBtn}>Confirm Coverage →</a>
-        <p style={{ color: "#6b7280", fontSize: 12, marginTop: 20 }}>
-          Managing a load through Nightlane?{" "}
-          <a href="/loads" style={{ color: "#1d4ed8" }}>Go to Find Loads →</a>
-        </p>
+        <a href="/dispatch/contact" style={{ ...primaryBtn, background: "#92400e" }}>Get my first load free →</a>
       </div>
     </div>
   );
