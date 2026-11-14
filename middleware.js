@@ -18,6 +18,7 @@ const CLEAN_PATH_MAP = {
   "/about": "/dispatch/about",
   "/contact": "/dispatch/contact",
   "/privacy": "/dispatch/privacy",
+  "/four-corners": "/dispatch/four-corners",
 };
 
 export function middleware(request) {
@@ -33,5 +34,5 @@ export function middleware(request) {
 }
 
 export const config = {
-  matcher: ["/", "/services", "/about", "/contact", "/privacy"],
+  matcher: ["/", "/services", "/about", "/contact", "/privacy", "/four-corners"],
 };

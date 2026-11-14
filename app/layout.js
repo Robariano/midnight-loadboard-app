@@ -76,7 +76,7 @@ export default function RootLayout({ children }) {
             <a href="/my-documents" style={footLink}>My Documents</a>{" · "}
             <a href="/roadside" style={footLink}>Roadside &amp; Repair</a>{" · "}
             <a href="/revoked-carriers" style={footLink}>Revoked Credentials</a>{" · "}
-            <a href="/blog/chameleon-carriers-tql-chrobinson-lawsuit" style={footLink}>Blog</a>
+            <a href="/blog" style={footLink}>Blog</a>
           </div>
           <div>
             <b style={{ color: "#4b5568" }}>Carriers &amp; brokers:</b>{" "}
