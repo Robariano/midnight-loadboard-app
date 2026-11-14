@@ -1,4 +1,5 @@
 "use client";
+import DispatchNudge from "../shared/DispatchNudge";
 import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 
@@ -247,8 +248,17 @@ function CheckBrokerInner() {
                 snapshot.authorities?.length > 0 &&
                 snapshot.authorities.every((a) => /broker/i.test(a.type || ""));
               const hasCarrierAuthority = snapshot.authorities?.some((a) => !/broker/i.test(a.type || ""));
-              if (snapshot.allowToOperate || hasCarrierAuthority) {
+              // Only for-hire authority counts as "Active". An active USDOT
+              // number alone (allowToOperate) is not operating authority.
+              if (hasCarrierAuthority) {
                 return <span style={{ color: "#166534" }}>Active</span>;
+              }
+              if (snapshot.authorityUnknown) {
+                return (
+                  <span style={{ color: "#4b5568" }}>
+                    Couldn&apos;t confirm right now. Check SAFER below before deciding.
+                  </span>
+                );
               }
               if (brokerOnly) {
                 return (
@@ -258,8 +268,10 @@ function CheckBrokerInner() {
                 );
               }
               return (
-                <span style={{ color: "#4b5568" }}>
-                  Not showing as active in FMCSA&apos;s data feed. Confirm on SAFER below before deciding.
+                <span style={{ color: "#92400e" }}>
+                  Not authorized for for-hire interstate loads.
+                  {snapshot.allowToOperate ? " The USDOT number is active, which is enough only for private or in-state hauling." : ""}
+                  {" "}Confirm on SAFER below before deciding.
                 </span>
               );
             })()}
@@ -283,8 +295,8 @@ function CheckBrokerInner() {
               </ul>
             ) : (
               <span style={{ fontSize: 13, color: "#4b5568" }}>
-                {snapshot.allowToOperate
-                  ? "Details not returned by FMCSA's data feed. See the SAFER link below for the full list."
+                {snapshot.authorityUnknown
+                  ? "Couldn't load the authority list right now. See the SAFER link below for the full list."
                   : "None on file with FMCSA"}
               </span>
             )}
@@ -347,6 +359,13 @@ function CheckBrokerInner() {
             before trusting a load.
           </p>
         </div>
+      )}
+
+      {snapshot && (
+        <DispatchNudge
+          title="Checking brokers before every load?"
+          body="Steady Wake Dispatch checks every broker on FMCSA before booking, negotiates the rate and handles the setup paperwork, so you can drive."
+        />
       )}
 
       <div style={{ marginTop: 24, background: "#fff4e5", border: "1px solid #f3d19e", borderRadius: 12, padding: "16px 20px" }}>
