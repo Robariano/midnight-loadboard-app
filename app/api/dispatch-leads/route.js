@@ -2,6 +2,41 @@ import { getServiceClient } from "../../../lib/supabase";
 import { checkRateLimit } from "../../../lib/rate-limit";
 import { sendDispatchLeadAlertSMS } from "../../../lib/twilio";
 import { sendDispatchLeadAlertEmail } from "../../../lib/email";
+import { lookupCarrierByDot, lookupCarrierByMc } from "../../../lib/fmcsa";
+
+// Best-effort FMCSA check so each lead arrives already vetted (authority,
+// trucks, insurance) instead of Rob looking every one up by hand. Capped at
+// 6s so a slow FMCSA/SAFER never holds up the visitor's submission; any
+// failure just means no auto-check line.
+async function fmcsaCheckLine({ dotNumber, mcNumber }) {
+  const cleanDot = dotNumber.replace(/\D/g, "");
+  const cleanMc = mcNumber.replace(/\D/g, "");
+  if (!cleanDot && !cleanMc) return null;
+  try {
+    const snap = await Promise.race([
+      cleanDot ? lookupCarrierByDot(cleanDot) : lookupCarrierByMc(cleanMc),
+      new Promise((resolve) => setTimeout(() => resolve("timeout"), 6000)),
+    ]);
+    if (snap === "timeout") return "FMCSA auto-check: timed out. Check SAFER by hand.";
+    if (!snap) return `FMCSA auto-check: no FMCSA record found for ${cleanDot ? "DOT " + cleanDot : "MC " + cleanMc}. Double-check the number.`;
+    const names = [snap.legalName, snap.dbaName && `dba ${snap.dbaName}`].filter(Boolean).join(" ");
+    const property = (snap.authorities || []).some((a) => a.type === "Property");
+    const authority = snap.authorityUnknown
+      ? "authority: couldn't confirm (check SAFER)"
+      : property ? "AUTHORIZED for property" : "NOT authorized for property yet";
+    const parts = [
+      `${names || "Unknown name"} (DOT ${snap.dotNumber})`,
+      snap.outOfService ? "OUT OF SERVICE" : null,
+      !snap.allowToOperate ? "not allowed to operate" : null,
+      authority,
+      snap.powerUnits === null ? null : `${snap.powerUnits} power unit${snap.powerUnits === 1 ? "" : "s"}${snap.powerUnits === 0 ? " (brokers may reject)" : ""}`,
+      snap.bipdInsuranceAmount ? `$${Math.round(snap.bipdInsuranceAmount / 1000)}K liability on file` : "insurance not in FMCSA feed (get their COI)",
+    ].filter(Boolean);
+    return `FMCSA auto-check: ${parts.join(" · ")}${snap.authoritySource === "safer" ? " (authority via SAFER)" : ""}`;
+  } catch {
+    return null;
+  }
+}
 
 // Genuinely public lead form - no login needed. Captures two real cases
 // (see app/dispatch/_DispatcherForm.js and the migration for why they're
@@ -48,6 +83,9 @@ export async function POST(req) {
     return Response.json({ error: "Enter an email or phone number so we can reach you." }, { status: 400 });
   }
 
+  const autoCheck = hasOwnAuthority ? await fmcsaCheckLine({ dotNumber, mcNumber }) : null;
+  const notesWithCheck = [notes, autoCheck].filter(Boolean).join("\n");
+
   const supabase = getServiceClient();
   const { error } = await supabase.from("dispatch_leads").insert({
     company_name: companyName,
@@ -58,7 +96,7 @@ export async function POST(req) {
     contact_name: contactName || null,
     contact_email: contactEmail || null,
     contact_phone: contactPhone || null,
-    notes: notes || null,
+    notes: notesWithCheck || null,
     source: source || null,
   });
 
@@ -85,7 +123,7 @@ export async function POST(req) {
   try {
     await sendDispatchLeadAlertEmail({
       companyName, hasOwnAuthority, mcNumber, dotNumber, leasedUnderCompany,
-      contactName, contactPhone, contactEmail, notes, source,
+      contactName, contactPhone, contactEmail, notes: notesWithCheck, source,
     });
   } catch (emailError) {
     console.error("Failed to send dispatch lead alert email:", emailError);
