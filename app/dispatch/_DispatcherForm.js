@@ -21,6 +21,10 @@ const inputStyle = {
 
 export default function DispatcherLeadForm() {
   const [hasOwnAuthority, setHasOwnAuthority] = useState(true);
+  // A carrier that runs leased-on owner-operators (a small fleet). Still
+  // holds its own authority, so it's stored as has_own_authority = true,
+  // with a note marking it as a fleet lead.
+  const [isFleet, setIsFleet] = useState(false);
   const [companyName, setCompanyName] = useState("");
   const [mcNumber, setMcNumber] = useState("");
   const [dotNumber, setDotNumber] = useState("");
@@ -57,7 +61,8 @@ export default function DispatcherLeadForm() {
         contact_name: contactName,
         contact_email: contactEmail,
         contact_phone: contactPhone,
-        notes: hasOwnAuthority ? notes : [
+        notes: isFleet ? ["FLEET LEAD: carrier with leased-on owner-operators", notes.trim()].filter(Boolean).join("\n")
+          : hasOwnAuthority ? notes : [
           carrierNumber.trim() && `Carrier MC/DOT: ${carrierNumber.trim()}`,
           carrierContact.trim() && `Best contact at carrier: ${carrierContact.trim()}`,
           `OK to mention this driver to the carrier: ${okToMention ? "yes" : "no"}`,
@@ -94,19 +99,27 @@ export default function DispatcherLeadForm() {
       padding: "16px 20px",
     }}>
       <label style={{ display: "block", fontSize: 12, color: "#4b5568", marginBottom: 6 }}>
-        Do you hold your own MC/DOT authority, or are you leased on to a carrier?
+        Which describes you?
       </label>
-      <div style={{ display: "flex", gap: 8, marginBottom: 14 }}>
-        <button type="button" onClick={() => setHasOwnAuthority(true)} style={{
-          flex: 1, padding: "8px", borderRadius: 6, cursor: "pointer",
-          border: hasOwnAuthority ? "2px solid #7a2e1f" : "1px solid #e2e5ea",
-          background: hasOwnAuthority ? "#f1e6cc" : "#ffffff",
+      <div style={{ display: "flex", gap: 8, marginBottom: 14, flexWrap: "wrap" }}>
+        <button type="button" onClick={() => { setHasOwnAuthority(true); setIsFleet(false); }} style={{
+          flex: "1 1 140px", padding: "8px", borderRadius: 6, cursor: "pointer",
+          border: (hasOwnAuthority && !isFleet) ? "2px solid #7a2e1f" : "1px solid #e2e5ea",
+          background: (hasOwnAuthority && !isFleet) ? "#f1e6cc" : "#ffffff",
           color: "#14181f", fontWeight: 700, fontSize: 13,
         }}>
           I have my own authority
         </button>
-        <button type="button" onClick={() => setHasOwnAuthority(false)} style={{
-          flex: 1, padding: "8px", borderRadius: 6, cursor: "pointer",
+        <button type="button" onClick={() => { setHasOwnAuthority(true); setIsFleet(true); }} style={{
+          flex: "1 1 140px", padding: "8px", borderRadius: 6, cursor: "pointer",
+          border: isFleet ? "2px solid #7a2e1f" : "1px solid #e2e5ea",
+          background: isFleet ? "#f1e6cc" : "#ffffff",
+          color: "#14181f", fontWeight: 700, fontSize: 13,
+        }}>
+          I run a fleet with leased-on drivers
+        </button>
+        <button type="button" onClick={() => { setHasOwnAuthority(false); setIsFleet(false); }} style={{
+          flex: "1 1 140px", padding: "8px", borderRadius: 6, cursor: "pointer",
           border: !hasOwnAuthority ? "2px solid #7a2e1f" : "1px solid #e2e5ea",
           background: !hasOwnAuthority ? "#f1e6cc" : "#ffffff",
           color: "#14181f", fontWeight: 700, fontSize: 13,
@@ -114,6 +127,21 @@ export default function DispatcherLeadForm() {
           I&apos;m leased on to a carrier
         </button>
       </div>
+
+      {isFleet && (
+        <div style={{
+          background: "#eef4ff", border: "1px solid #c7d7f5", borderRadius: 8,
+          padding: "10px 14px", marginBottom: 14,
+        }}>
+          <p style={{ fontSize: 12, color: "#1e3a8a", margin: 0, lineHeight: 1.5 }}>
+            <b>Backup dispatch for your fleet.</b> When your owner-operators are sitting empty and
+            your dispatcher is maxed out, I find and negotiate loads for them. You stay in control:
+            every load is booked under your authority, on your rate cons, with your approval. I check
+            every broker on FMCSA before booking. First load has no dispatch fee, then 7% per load,
+            paid after you&apos;re paid. No fee on detention or lumper.
+          </p>
+        </div>
+      )}
 
       {!hasOwnAuthority && (
         <div style={{
@@ -199,12 +227,16 @@ export default function DispatcherLeadForm() {
       </p>
 
       <label style={{ display: "block", fontSize: 12, color: "#4b5568", marginBottom: 6 }}>
-        {hasOwnAuthority === false
+        {isFleet
+          ? "About your fleet (how many trucks and leased owner-operators, what freight, how you handle dispatch now)"
+          : hasOwnAuthority === false
           ? "About that carrier (how many trucks they run, what freight they haul, who handles their dispatch)"
           : "What are you looking for? (equipment type, lanes, anything relevant)"}
       </label>
       <textarea value={notes} onChange={(e) => setNotes(e.target.value)} rows={3}
-        placeholder={hasOwnAuthority === false
+        placeholder={isFleet
+          ? "e.g. 8 trucks, 5 leased owner-operators, dry van and flatbed, one in-house dispatcher who gets slammed"
+          : hasOwnAuthority === false
           ? "e.g. About 10 trucks, flatbed and hotshot, owner is Mike, they do their own dispatch but get busy"
           : "e.g. Semi dry van or 40-ft hotshot, Colorado and Texas lanes"}
         style={{ ...inputStyle, resize: "vertical" }} />
