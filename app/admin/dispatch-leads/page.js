@@ -52,9 +52,30 @@ const statusColor = {
   closed: "#4b5568",
 };
 
+
+// Last activity = the newest of the lead's submit date and any "[Mon D]"
+// stamp the Add note box wrote. No database column needed. A stamp that
+// would land in the future is read as last year (notes don't store years).
+const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const STALE_DAYS = 14;
+function lastActivity(l, now) {
+  let latest = new Date(l.created_at);
+  // Automated check lines ("FMCSA check…", "SAFER confirms…") aren't contact, so they don't count.
+  for (const m of String(l.notes || "").matchAll(/\[([A-Z][a-z]{2}) (\d{1,2})\] (?!FMCSA check|CORRECTION \(SAFER|SAFER confirms)/g)) {
+    const mi = MONTHS.indexOf(m[1]);
+    if (mi < 0) continue;
+    let d = new Date(now.getFullYear(), mi, Number(m[2]));
+    if (d > now) d = new Date(now.getFullYear() - 1, mi, Number(m[2]));
+    if (d > latest) latest = d;
+  }
+  return latest;
+}
+const daysSince = (d, now) => Math.floor((now - d) / 864e5);
+
 export default function AdminDispatchLeads() {
   const [leads, setLeads] = useState(null);
   const [error, setError] = useState(null);
+  const [view, setView] = useState("open"); // "followup" | "open" | "all"
 
   function load() {
     fetch("/api/admin/dispatch-leads")
@@ -87,6 +108,22 @@ export default function AdminDispatchLeads() {
   }
   if (!leads) return <p style={{ color: "#4b5568" }}>Loading...</p>;
 
+  const now = new Date();
+  const decorated = leads.map((l) => {
+    const last = lastActivity(l, now);
+    const days = daysSince(last, now);
+    return { ...l, _last: last, _days: days, _stale: l.status !== "closed" && days >= STALE_DAYS };
+  });
+  const counts = {
+    followup: decorated.filter((l) => l._stale).length,
+    open: decorated.filter((l) => l.status !== "closed").length,
+    all: decorated.length,
+  };
+  const shown = view === "followup"
+    ? decorated.filter((l) => l._stale).sort((a, b) => a._last - b._last) // longest-waiting first
+    : view === "open" ? decorated.filter((l) => l.status !== "closed") : decorated;
+  const tabs = [["followup", "Needs follow-up"], ["open", "Open"], ["all", "All"]];
+
   return (
     <div>
       <h1 style={{ color: "#14181f" }}>Dispatcher Leads</h1>
@@ -94,15 +131,34 @@ export default function AdminDispatchLeads() {
         Submissions from carriers with their own MC/DOT authority looking for dispatch service.
         Private — never shown publicly.
       </p>
-      {leads.length === 0 && <p style={{ color: "#4b5568" }}>No leads yet.</p>}
-      {leads.map((l) => (
+      <div role="tablist" style={{ display: "flex", gap: 8, marginBottom: 16, flexWrap: "wrap" }}>
+        {tabs.map(([key, label]) => (
+          <button key={key} role="tab" aria-selected={view === key} onClick={() => setView(key)} style={{
+            padding: "6px 14px", borderRadius: 20, fontSize: 13, fontWeight: 700, cursor: "pointer",
+            border: view === key ? "1px solid #14181f" : "1px solid #e2e5ea",
+            background: view === key ? "#14181f" : "#ffffff",
+            color: view === key ? "#ffffff" : key === "followup" && counts.followup ? "#92400e" : "#14181f",
+          }}>{label} ({counts[key]})</button>
+        ))}
+      </div>
+      {shown.length === 0 && (
+        <p style={{ color: "#4b5568" }}>
+          {view === "followup" ? `Nothing waiting. Every open lead has activity in the last ${STALE_DAYS} days.` : "No leads yet."}
+        </p>
+      )}
+      {shown.map((l) => (
         <div key={l.id} style={{
           background: "#f7f8fa", border: "1px solid #e2e5ea", borderRadius: 12,
           padding: 16, marginBottom: 12,
         }}>
           <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 8 }}>
             <p style={{ fontWeight: 700, color: "#14181f", margin: 0 }}>{l.company_name}</p>
-            <span style={{ fontSize: 12, color: statusColor[l.status] || "#4b5568", fontWeight: 700 }}>
+            <span style={{ fontSize: 12, color: statusColor[l.status] || "#4b5568", fontWeight: 700, whiteSpace: "nowrap" }}>
+              {l._stale && (
+                <span style={{ background: "#fef3c7", color: "#92400e", borderRadius: 20, padding: "2px 8px", marginRight: 8 }}>
+                  {l._days} days quiet
+                </span>
+              )}
               {l.status}
             </span>
           </div>
@@ -135,7 +191,8 @@ export default function AdminDispatchLeads() {
             </p>
           )}
           <p style={{ fontSize: 11, color: "#8a92a0", margin: "6px 0 10px" }}>
-            Submitted {new Date(l.created_at).toLocaleString()}
+            Last activity {l._last.toLocaleDateString("en-US", { month: "short", day: "numeric" })}
+            {l._days > 0 ? ` (${l._days} day${l._days === 1 ? "" : "s"} ago)` : " (today)"} · Submitted {new Date(l.created_at).toLocaleString()}
             {l.source ? ` · from: ${l.source}` : ""}
           </p>
           <div style={{ display: "flex", gap: 8 }}>
