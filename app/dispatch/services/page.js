@@ -11,7 +11,7 @@ const services = [
   ["Every rate negotiated", "I counter every offer and push for a rate that actually pays your truck."],
   ["Broker checks", "Every broker checked on FMCSA before you commit: active authority, matching name and MC, and bond on file."],
   ["Route planning", "Cutting deadhead miles and keeping your truck moving and earning."],
-  ["Planned around your hours", "Loads that fit your legal hours and your home time. I won't push you to run past your clock."],
+  ["Planned around your hours and your ELD", "Loads that fit your legal hours and your home time. I won't push you to run past your clock, and I make sure your ELD is on FMCSA's approved list so it never gets you put out of service."],
   ["Paperwork", "Rate confirmations, broker setup packets and load documents handled for you."],
   ["Your authority watched daily", "Free for every client: Authority Watch checks your FMCSA status every morning and alerts you if a Motus glitch or insurance mix-up shuts your authority off."],
   ["Direct communication", "Fast, honest answers from me. No runaround, no ghosting."],
