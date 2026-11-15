@@ -1,4 +1,4 @@
-import { listRecordsForDot } from "../../lib/cardanoRecord";
+import { listRecordsForDot, recordStats } from "../../lib/cardanoRecord";
 
 export const dynamic = "force-dynamic";
 
@@ -47,6 +47,7 @@ export default async function Verify({ searchParams }) {
   const dot = String(searchParams?.dot || "").replace(/\D/g, "");
   let result = null;
   let error = null;
+  const stats = await recordStats().catch(() => null);
   if (dot) {
     try {
       result = await listRecordsForDot(dot);
@@ -63,6 +64,17 @@ export default async function Verify({ searchParams }) {
         shows what FMCSA said about the carrier on that date, and it can&apos;t be changed afterward, not even by
         Nightlane.
       </p>
+
+      {stats && stats.records > 0 && (
+        <div style={{ display: "flex", gap: 12, margin: "0 0 18px", flexWrap: "wrap" }}>
+          {[[stats.records, stats.records === 1 ? "carrier check recorded" : "carrier checks recorded"], [stats.carriers, stats.carriers === 1 ? "carrier" : "different carriers"]].map(([n, label]) => (
+            <div key={label} style={{ flex: "1 1 160px", background: "#eef2ff", border: "1px solid #c7d2fe", borderRadius: 12, padding: "12px 16px" }}>
+              <div style={{ fontSize: 28, fontWeight: 800, color: "#1e3a8a" }}>{n.toLocaleString("en-US")}</div>
+              <div style={{ fontSize: 13, color: "#374151" }}>{label} on Cardano{stats.network !== "mainnet" ? " (test network)" : ""}</div>
+            </div>
+          ))}
+        </div>
+      )}
 
       <form method="get" style={{ display: "flex", gap: 8, margin: "0 0 20px", flexWrap: "wrap" }}>
         <input
