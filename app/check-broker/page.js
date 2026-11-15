@@ -83,6 +83,7 @@ function CheckBrokerInner() {
     const [numberValue, setNumberValue] = useState("");
     const [status, setStatus] = useState(null);
     const [snapshot, setSnapshot] = useState(null);
+    const [chainRecord, setChainRecord] = useState(null);
     const [matches, setMatches] = useState(null);
     const [ratingsData, setRatingsData] = useState(null);
     const [error, setError] = useState(null);
@@ -97,6 +98,7 @@ function CheckBrokerInner() {
         setStatus("checking");
         setError(null);
         setSnapshot(null);
+        setChainRecord(null);
         setMatches(null);
         setRatingsData(null);
         const body = type === "dot" ? { dot_number: value } : type === "mc" ? { mc_number: value } : { name: value };
@@ -111,6 +113,7 @@ function CheckBrokerInner() {
                 setStatus("done");
         } else if (res.ok) {
                 setSnapshot(data.snapshot);
+                setChainRecord(data.chain || null);
                 setStatus("done");
                 if (data.snapshot?.dotNumber) loadRatings(String(data.snapshot.dotNumber));
         } else {
@@ -310,6 +313,10 @@ function CheckBrokerInner() {
                 rel="noopener noreferrer"
               >
                 Double-check on FMCSA SAFER (official record) →
+              </a>
+              {" · "}
+              <a href={`/verify?dot=${encodeURIComponent(snapshot.dotNumber)}`}>
+                {chainRecord ? "Saved on the Cardano blockchain ✓" : "Cardano records"} →
               </a>
             </p>
           )}

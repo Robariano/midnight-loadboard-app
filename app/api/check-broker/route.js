@@ -1,5 +1,8 @@
 import { lookupCarrierByDot, lookupCarrierByMc, searchCarriersByName } from "../../../lib/fmcsa";
 import { checkRateLimit } from "../../../lib/rate-limit";
+import { recordCheckIfNeeded } from "../../../lib/cardanoRecord";
+
+export const runtime = "nodejs";
 
 // Public broker/carrier lookup - anyone can check whether a DOT or MC
 // number belongs to a real, active entity on file with FMCSA. Reuses the
@@ -53,7 +56,9 @@ export async function POST(req) {
         { status: 404 }
       );
     }
-    return Response.json({ snapshot });
+    // Tamper-proof record of this check on Cardano (once per DOT per day).
+    const chain = snapshot.dotNumber ? await recordCheckIfNeeded(snapshot) : null;
+    return Response.json({ snapshot, chain });
   } catch (err) {
     return Response.json({ error: "Couldn't reach FMCSA right now. Try again in a moment." }, { status: 502 });
   }
