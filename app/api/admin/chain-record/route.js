@@ -1,7 +1,7 @@
 import { isAdminRequest } from "../../../../lib/admin-auth";
 import { lookupCarrierByDot } from "../../../../lib/fmcsa";
 import { fingerprintSnapshot } from "../../../../lib/carrierFingerprint";
-import { cardanoConfig, recordOnCardano } from "../../../../lib/cardanoRecord";
+import { cardanoConfig, recordOnCardano, splitWalletCoins } from "../../../../lib/cardanoRecord";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -34,6 +34,7 @@ export async function POST(req) {
   if (!isAdminRequest(req)) return Response.json({ error: "Unauthorized" }, { status: 401 });
   try {
     const body = await req.json().catch(() => ({}));
+    if (body.action === "split") return Response.json(await splitWalletCoins({ count: Math.min(Number(body.count) || 20, 40) }));
     const snap = await snapshotFor(body.dot);
     const fp = fingerprintSnapshot(snap);
     const result = await recordOnCardano(fp);
