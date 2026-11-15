@@ -16,7 +16,7 @@ export default function DispatchHome() {
 
       <div className="swd-mom">
         <p className="tag">Why this business exists</p>
-        <h2>Built to honor my mom</h2>
+        <h2>In loving memory</h2>
         <p>
           I&apos;m building Steady Wake Dispatch to honor the memory of my mom, Alfreda Susie Hudson.
         </p>
