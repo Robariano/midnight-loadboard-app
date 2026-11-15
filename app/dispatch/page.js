@@ -43,11 +43,11 @@ export default function DispatchHome() {
         <h3 id="h-promise">Alfreda&apos;s Promise</h3>
         <p>
           Your first load is on me. Every new client gets their first load with no dispatch fee and no strings
-          attached, the way my mom gave me a chance when I had nothing. After that it&apos;s just 7%, paid after
+          attached, in honor of my mom. After that it&apos;s just 7%, paid after
           you&apos;re paid. I keep a limited number of spots each month so every truck gets my full attention.
         </p>
         <p className="swd-note">
-          Why &quot;Steady Wake&quot;? It&apos;s named for the steady support that carried me through rough water.
+          Why &quot;Steady Wake&quot;? It&apos;s named for my mom and the steady presence she was in my life.
         </p>
       </section>
 
