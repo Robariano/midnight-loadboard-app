@@ -23,8 +23,8 @@ export async function GET(req) {
   try {
     const snap = await snapshotFor(new URL(req.url).searchParams.get("dot"));
     const { record, hash } = fingerprintSnapshot(snap);
-    const { enabled, network } = cardanoConfig();
-    return Response.json({ record, hash, cardano: { enabled, network } });
+    const { enabled, network, problems } = cardanoConfig();
+    return Response.json({ record, hash, cardano: { enabled, network, problems } });
   } catch (e) {
     return Response.json({ error: e.message }, { status: e.status || 500 });
   }
