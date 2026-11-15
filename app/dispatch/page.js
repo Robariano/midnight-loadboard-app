@@ -18,7 +18,7 @@ export default function DispatchHome() {
         <p style={{ fontSize: 20, fontWeight: 700, margin: "0 0 10px" }}>Dispatch for owner-operators. Flatbed is my specialty.</p>
         <ul style={{ listStyle: "none", padding: 0, margin: "0 0 16px", fontSize: 17, lineHeight: 1.7 }}>
           <li>✓ <b>First load free</b>, then 7%, paid after you&apos;re paid</li>
-          <li>✓ Loads that fit your hours, with no surprises at the shipper</li>
+          <li>✓ Loads you can legally finish, and no surprises at pickup</li>
           <li>✓ I keep you looking good to brokers</li>
           <li>✓ You approve every load before it&apos;s booked</li>
         </ul>
