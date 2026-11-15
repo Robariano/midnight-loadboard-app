@@ -72,6 +72,7 @@ export default function RootLayout({ children }) {
         <footer style={{ maxWidth: 720, margin: "0 auto", padding: "24px 24px 32px", fontSize: 12, color: "#6b7280", borderTop: "1px solid #e2e5ea", lineHeight: 2 }}>
           <div>
             <b style={{ color: "#4b5568" }}>Free tools:</b>{" "}
+            <a href="/eld-check" style={footLink}>ELD Revoked Check</a>{" · "}
             <a href="/confirm-coverage" style={footLink}>Confirm Coverage</a>{" · "}
             <a href="/my-documents" style={footLink}>My Documents</a>{" · "}
             <a href="/roadside" style={footLink}>Roadside &amp; Repair</a>{" · "}
