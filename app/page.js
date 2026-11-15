@@ -39,6 +39,7 @@ const tools = [
   ["/loads", "Find Loads", "Browse loads posted on Nightlane."],
   ["/my-documents", "My Documents", "Keep your W-9, insurance and authority letter in one place."],
   ["/confirm-coverage", "Confirm Coverage", "Make sure the driver is covered before the truck leaves."],
+  ["/eld-check", "Is My ELD Revoked?", "Check your ELD against FMCSA's official revoked list."],
   ["/roadside", "Roadside & Repair", "Find towing and repair help near you."],
 ];
 
