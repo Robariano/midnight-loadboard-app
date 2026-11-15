@@ -1,4 +1,4 @@
-import { SteadyWakePage, PhoneRibbon, Ornament, dispatchHref } from "./_shared";
+import { SteadyWakePage, PhoneRibbon, Ornament, dispatchHref, BRAND } from "./_shared";
 
 export const metadata = {
   title: "Steady Wake Dispatch | Semi & Hotshot Dispatch | Four Corners",
@@ -13,6 +13,21 @@ export default function DispatchHome() {
         Steady Wake Dispatch
         <small>Semi &amp; hotshot owner-operators · Four Corners &amp; Texas lanes</small>
       </h1>
+
+      <section aria-label="Quick summary" style={{ border: "2px solid currentColor", borderRadius: 12, padding: "18px 20px", margin: "0 0 28px" }}>
+        <p style={{ fontSize: 20, fontWeight: 700, margin: "0 0 10px" }}>Dispatch for owner-operators. Flatbed is my specialty.</p>
+        <ul style={{ listStyle: "none", padding: 0, margin: "0 0 16px", fontSize: 17, lineHeight: 1.7 }}>
+          <li>✓ <b>First load free</b>, then 7%, paid after you&apos;re paid</li>
+          <li>✓ Loads that fit your hours, with no surprises at the shipper</li>
+          <li>✓ I keep you looking good to brokers</li>
+          <li>✓ You approve every load before it✓ You approve every load. No contracts to get stuck in.apos;s booked</li>
+        </ul>
+        <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+          <a className="swd-btn" href={BRAND.phoneHref}>Call Rob {BRAND.phone}</a>
+          <a className="swd-btn" href="sms:+19709039226">Text Rob</a>
+          <a className="swd-btn" href={dispatchHref("/contact")}>Get started online</a>
+        </div>
+      </section>
 
       <div className="swd-mom">
         <p className="tag">Why this business exists</p>
