@@ -96,8 +96,12 @@ export default function DispatchHome() {
       <section aria-labelledby="h-do">
         <p className="swd-eyebrow">For owner-operators</p>
         <h3 id="h-do">What I handle for your truck</h3>
+        <p>
+          <b>I don&apos;t just find you loads. I make sure you look good to brokers so you keep getting them.</b>
+        </p>
         <div className="swd-services">
           {[
+            ["Looking good to brokers", "I keep your Highway profile in order, help you connect your ELD, check that your authority dates are right in FMCSA's Motus system, and make sure brokers always have a current insurance certificate. Fewer rejections, more loads offered."],
             ["Finding and booking loads", "I search the load boards and call brokers directly so you're not hunting freight from the cab."],
             ["Every rate negotiated", "I don't take the first offer. I counter to get your truck real money."],
             ["Brokers checked on FMCSA", "Active authority, matching name and MC, and bond on file before I book."],
