@@ -20,7 +20,7 @@ export default function DispatchHome() {
           <li>✓ <b>First load free</b>, then 7%, paid after you&apos;re paid</li>
           <li>✓ Loads that fit your hours, with no surprises at the shipper</li>
           <li>✓ I keep you looking good to brokers</li>
-          <li>✓ You approve every load before it✓ You approve every load. No contracts to get stuck in.apos;s booked</li>
+          <li>✓ You approve every load before it&apos;s booked</li>
         </ul>
         <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
           <a className="swd-btn" href={BRAND.phoneHref}>Call Rob {BRAND.phone}</a>
