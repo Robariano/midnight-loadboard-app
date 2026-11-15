@@ -15,12 +15,13 @@ function fmtMoney(v) {
   return v || "None on file";
 }
 
-function RecordCard({ r }) {
+function RecordCard({ r, copies = 1 }) {
   const ok = r.fromNightlane && r.hashMatches !== false;
   return (
     <div style={card}>
       <p style={{ margin: "0 0 6px", fontWeight: 700, color: ok ? "#166534" : "#991b1b" }}>
         {ok ? "✓ Genuine Nightlane record" : "✗ Not a valid Nightlane record"} · checked {r.checkedOn}
+        {copies > 1 && <span style={{ fontWeight: 400, color: "#6b7280" }}> · saved {copies}×</span>}
       </p>
       {r.record ? (
         <ul style={{ margin: "0 0 8px", paddingLeft: 18, color: "#374151", fontSize: 14, lineHeight: 1.6 }}>
@@ -102,7 +103,12 @@ export default async function Verify({ searchParams }) {
               No Cardano records yet for DOT {dot}. <a href="/check-broker">Check this carrier</a> to create one.
             </p>
           ) : (
-            result.records.map((r) => <RecordCard key={r.txHash} r={r} />)
+            // Same facts on the same day (a duplicate record) show once.
+            Object.values(result.records.reduce((acc, r) => {
+              const k = `${r.sha256}|${r.fromNightlane && r.hashMatches !== false}`;
+              (acc[k] = acc[k] || []).push(r);
+              return acc;
+            }, {})).map((group) => <RecordCard key={group[0].txHash} r={group[0]} copies={group.length} />)
           )}
           <p style={{ fontSize: 12, color: "#6b7280", marginTop: 16, wordBreak: "break-all" }}>
             Records count as genuine only if they were sent from Nightlane&apos;s wallet ({result.wallet}) and their
