@@ -47,6 +47,11 @@ export default async function ELDCheck() {
         )}
       </div>
 
+      <div style={{ background: "#fef3c7", border: "1px solid #f59e0b", borderRadius: 10, padding: "12px 14px", margin: "0 0 18px", color: "#78350f", fontSize: 15, lineHeight: 1.6 }}>
+        <strong>November 12, 2026 batch:</strong> FMCSA revoked 121 devices that day. Carriers using one of them have until{" "}
+        <strong>January 11, 2027</strong> to switch to a registered ELD. After that, it counts as having no logbook, and the driver can be put out of service.
+      </div>
+
       <h2 style={{ color: "#14181f", fontSize: 20, margin: "0 0 10px" }}>If your ELD is on the list</h2>
       <ol style={{ color: "#374151", fontSize: 15, lineHeight: 1.7, paddingLeft: 20, margin: "0 0 14px" }}>
         <li>Stop relying on it for your hours. Use paper logs or compliant logging software until you switch.</li>
