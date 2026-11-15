@@ -78,7 +78,7 @@ export default function DispatchHome() {
         <div className="swd-services">
           {[
             ["Securement checked before I book", "I look at what's being hauled and make sure your chains, straps and binders are enough for it."],
-            ["Tarps, oversize and extra stops called out", "You hear about tarps, permits and extra stops before you say yes, not at the shipper."],
+            ["Tarps, oversize, extra stops and hours called out", "You hear about tarps, permits, extra stops and whether the load fits your hours before you say yes, not at the shipper."],
             ["Steel, lumber, pipe, machinery", "I know the freight and what it takes, so I can push the broker for the rate it deserves."],
           ].map(([t, d]) => (
             <div className="swd-svc" key={t}>
@@ -105,7 +105,7 @@ export default function DispatchHome() {
             ["Brokers checked on FMCSA", "Active authority, matching name and MC, and bond on file before I book."],
             ["You approve every load", "I send you the details first. Nothing gets booked without your yes."],
             ["Your authority watched every day", "Every client gets Authority Watch free: a check of your FMCSA status every morning, with an alert if a Motus glitch or insurance mix-up shuts your authority off. No finding out at a pickup."],
-            ["Planned around your hours", "Loads that fit your legal hours and your home time. I've driven commercial routes myself."],
+            ["Planned around your hours and your ELD", "I watch your available hours so every load fits legally and gets you home on time, with no running out of clock halfway there. I also make sure your ELD is on FMCSA's approved list, so it never gets you put out of service. I've driven commercial routes myself."],
             ["Flatbed, step deck, dry van, reefer, hotshot, box truck and cargo van", "New authority? I know which brokers work with new carriers, handle the setup paperwork, and open up the bigger brokers once you pass 90 days."],
           ].map(([t, d]) => (
             <div className="swd-svc" key={t}>
