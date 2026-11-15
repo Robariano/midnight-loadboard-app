@@ -16,11 +16,9 @@ export default function DispatchHome() {
 
       <div className="swd-mom">
         <p className="tag">Why this business exists</p>
-        <h2>Built because my mom never gave up on me</h2>
+        <h2>Built to honor my mom</h2>
         <p>
-          Steady Wake Dispatch exists because of my mom, Alfreda Susie Hudson. When I had nothing left, the support
-          she left me kept a roof over my head and pushed me to build something real in the trucking industry. Every
-          load I book is part of the life she made possible.
+          I&apos;m building Steady Wake Dispatch to honor the memory of my mom, Alfreda Susie Hudson.
         </p>
       </div>
 
