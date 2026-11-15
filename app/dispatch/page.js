@@ -19,8 +19,8 @@ export default function DispatchHome() {
         <h2>Built because my mom never gave up on me</h2>
         <p>
           Steady Wake Dispatch exists because of my mom, Alfreda Susie Hudson. When I had nothing left, the support
-          she left me kept a roof over my head and gave me the chance to build this business. Every load I book is part
-          of the life she made possible.
+          she left me kept a roof over my head and pushed me to build something real in the trucking industry. Every
+          load I book is part of the life she made possible.
         </p>
       </div>
 
