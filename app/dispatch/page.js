@@ -47,7 +47,7 @@ export default function DispatchHome() {
           you&apos;re paid. I keep a limited number of spots each month so every truck gets my full attention.
         </p>
         <p className="swd-note">
-          Why &quot;Steady Wake&quot;? It&apos;s named for my mom and the steady presence she was in my life.
+          Why &quot;Steady Wake&quot;? It comes from my time in the Navy. A ship that holds a steady course leaves a steady wake behind it. That&apos;s how I run every truck: steady, on course, no surprises.
         </p>
       </section>
 
