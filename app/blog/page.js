@@ -6,6 +6,13 @@ export const metadata = {
 // Newest first. Add a row here when a post is added under app/blog/.
 const posts = [
   {
+    href: "/blog/protect-your-certificate-of-insurance",
+    tag: "Cargo Theft",
+    date: "Nov 15, 2026",
+    title: "How Cargo Thieves Use Stolen Insurance Certificates, and How to Protect Yours",
+    blurb: "Why your COI is a target for carrier impersonation, and six ways owner-operators and brokers can protect themselves.",
+  },
+  {
     href: "/blog/new-authority-brokers-wont-work-with-me",
     tag: "For Owner-Operators",
     date: "Nov 14, 2026",
