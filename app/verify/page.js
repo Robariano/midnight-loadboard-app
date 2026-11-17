@@ -1,4 +1,5 @@
 import { listRecordsForDot, recordStats } from "../../lib/cardanoRecord";
+import { dotForMc, docketNumbersForDot } from "../../lib/fmcsa";
 
 export const dynamic = "force-dynamic";
 
@@ -45,10 +46,23 @@ function RecordCard({ r, copies = 1 }) {
 }
 
 export default async function Verify({ searchParams }) {
-  const dot = String(searchParams?.dot || "").replace(/\D/g, "");
+  // Look up by DOT (?dot=) or MC (?mc=, or "MC-123" typed in the box).
+  const raw = String(searchParams?.q || "").trim();
+  const by = searchParams?.by === "mc" || /^\s*mc/i.test(raw) || searchParams?.mc ? "mc" : "dot";
+  const typed = String(searchParams?.mc || searchParams?.dot || raw).replace(/\D/g, "");
   let result = null;
   let error = null;
+  let dot = by === "dot" ? typed : "";
+  let mcNumbers = [];
   const stats = await recordStats().catch(() => null);
+  if (by === "mc" && typed) {
+    dot = await dotForMc(typed).catch(() => null) || "";
+    if (!dot) error = `FMCSA has no carrier with MC ${typed}. Check the number, or search by DOT.`;
+  }
+  if (dot) mcNumbers = await Promise.race([
+    docketNumbersForDot(dot).catch(() => []),
+    new Promise((resolve) => setTimeout(() => resolve([]), 4000)),
+  ]);
   if (dot) {
     try {
       result = await listRecordsForDot(dot);
@@ -78,8 +92,15 @@ export default async function Verify({ searchParams }) {
       )}
 
       <form method="get" style={{ display: "flex", gap: 8, margin: "0 0 20px", flexWrap: "wrap" }}>
+        <select
+          name="by" defaultValue={by} aria-label="Number type"
+          style={{ padding: "10px 8px", fontSize: 15, border: "1px solid #cbd2db", borderRadius: 8, background: "#fff" }}
+        >
+          <option value="dot">DOT</option>
+          <option value="mc">MC</option>
+        </select>
         <input
-          name="dot" defaultValue={dot} inputMode="numeric" placeholder="DOT number"
+          name="q" defaultValue={typed} inputMode="numeric" placeholder="DOT or MC number"
           style={{ flex: "1 1 200px", padding: "10px 12px", fontSize: 15, border: "1px solid #cbd2db", borderRadius: 8 }}
         />
         <button type="submit" style={{ padding: "10px 18px", fontSize: 15, fontWeight: 700, borderRadius: 8, border: 0, background: "#1d4ed8", color: "#fff" }}>
@@ -93,6 +114,9 @@ export default async function Verify({ searchParams }) {
 
       {result?.enabled && (
         <>
+          <p style={{ ...p, fontWeight: 700, color: "#14181f", margin: "0 0 10px" }}>
+            DOT {dot}{mcNumbers.length ? ` · ${mcNumbers.join(", ")}` : ""}
+          </p>
           {result.network !== "mainnet" && (
             <p style={{ ...p, fontSize: 13, color: "#92400e", background: "#fef3c7", padding: "8px 12px", borderRadius: 8 }}>
               Test mode: these records are on Cardano&apos;s preprod test network.
