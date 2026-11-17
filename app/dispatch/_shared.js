@@ -177,7 +177,7 @@ export function SteadyWakePage({ active, children }) {
           <a href={dispatchHref("/four-corners")} style={{ color: "var(--ink-soft)" }}>Serving the Four Corners</a>
           {" · "}
           <a href={dispatchHref("/privacy")} style={{ color: "var(--ink-soft)" }}>Privacy &amp; text messaging terms</a>
-          <span className="mom">Dedicated to my mom, Alfreda Sue Ariano (Hudson). Her support kept me off the street while I built this.</span>
+          <span className="mom">Dedicated to my mom, Alfreda Sue Ariano (Hudson).</span>
         </footer>
       </div>
     </div>
