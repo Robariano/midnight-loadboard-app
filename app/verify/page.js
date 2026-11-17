@@ -113,6 +113,7 @@ export default async function Verify({ searchParams }) {
           <p style={{ fontSize: 12, color: "#6b7280", marginTop: 16, wordBreak: "break-all" }}>
             Records count as genuine only if they were sent from Nightlane&apos;s wallet ({result.wallet}) and their
             facts match their fingerprint.
+            {result.source === "dandelion" && " Read through a backup Cardano node (Dandelion, by GameChanger)."}
           </p>
         </>
       )}
