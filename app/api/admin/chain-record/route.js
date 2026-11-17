@@ -1,7 +1,7 @@
 import { isAdminRequest } from "../../../../lib/admin-auth";
 import { lookupCarrierByDot } from "../../../../lib/fmcsa";
 import { fingerprintSnapshot } from "../../../../lib/carrierFingerprint";
-import { cardanoConfig, recordOnCardano, splitWalletCoins, listRecordsForDot, recordStats } from "../../../../lib/cardanoRecord";
+import { cardanoConfig, recordOnCardano, splitWalletCoins, listRecordsForDot, recordStats, cardanoHealth } from "../../../../lib/cardanoRecord";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -24,6 +24,7 @@ export async function GET(req) {
   if (!isAdminRequest(req)) return Response.json({ error: "Unauthorized" }, { status: 401 });
   try {
     const params = new URL(req.url).searchParams;
+    if (params.get("health")) return Response.json(await cardanoHealth());
     if (params.get("compare")) {
       const dot = String(params.get("dot") || "").replace(/\D/g, "");
       const run = async (fn) => {

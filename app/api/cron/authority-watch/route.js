@@ -3,6 +3,8 @@ import { lookupCarrierByDot } from "../../../../lib/fmcsa";
 import { sendAuthorityWatchAlertSMS, sendAuthorityWatchRecoveredSMS } from "../../../../lib/twilio";
 import { sendAuthorityWatchAlertEmail, sendAuthorityWatchRecoveredEmail } from "../../../../lib/email";
 import { watchStatus, compareStatus } from "../../../../lib/authorityWatch";
+import { cardanoHealth } from "../../../../lib/cardanoRecord";
+import { sendCardanoHealthAlertEmail } from "../../../../lib/email";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
@@ -121,5 +123,14 @@ export async function GET(req) {
     }
   }
 
-  return Response.json({ checked: results.length, results });
+  // Once a day, also check the Cardano records system and email Rob only if
+  // something needs attention (low wallet, Blockfrost or Dandelion down).
+  let cardano = null;
+  try {
+    cardano = await Promise.race([cardanoHealth(), new Promise((r) => setTimeout(() => r(null), 10_000))]);
+    if (cardano && !cardano.ok) await sendCardanoHealthAlertEmail(cardano.problems, cardano.network);
+  } catch (e) {
+    cardano = { ok: false, error: e.message };
+  }
+  return Response.json({ checked: results.length, results, cardano });
 }
