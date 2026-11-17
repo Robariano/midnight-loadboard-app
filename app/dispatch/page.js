@@ -3,7 +3,7 @@ import { SteadyWakePage, PhoneRibbon, Ornament, dispatchHref, BRAND } from "./_s
 export const metadata = {
   title: "Steady Wake Dispatch | Semi & Hotshot Dispatch | Four Corners",
   description:
-    "Navy veteran Rob Ariano dispatches flatbed, step deck and hotshot loads, plus dry van, box truck and cargo van, for owner-operators in the Four Corners and Texas. 7% per load. Dedicated to my mom, Alfreda Susie Hudson.",
+    "Navy veteran Rob Ariano dispatches flatbed, step deck and hotshot loads, plus dry van, box truck and cargo van, for owner-operators in the Four Corners and Texas. 7% per load. Dedicated to my mom, Alfreda Sue Ariano (Hudson).",
 };
 
 export default function DispatchHome() {
@@ -33,7 +33,7 @@ export default function DispatchHome() {
         <p className="tag">Why this business exists</p>
         <h2>In loving memory</h2>
         <p>
-          I&apos;m building Steady Wake Dispatch to honor the memory of my mom, Alfreda Susie Hudson.
+          I&apos;m building Steady Wake Dispatch to honor the memory of my mom, Alfreda Sue Ariano (Hudson).
         </p>
       </div>
 

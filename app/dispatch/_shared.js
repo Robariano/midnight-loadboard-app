@@ -5,7 +5,7 @@
 // Coors or A&L Coors (say "a beverage distributor"), and
 // don't frame Steady Wake as a family business. The design borrows the
 // look of Rob's Facebook ads (dark navy, blue glow, red banners). The business is centered on and
-// dedicated to his mom, Alfreda Susie Hudson (use her maiden name).
+// dedicated to his mom, Alfreda Sue Ariano (Hudson) (written as on her headstone).
 //
 // It lives inside this app (app/dispatch/*) so it can reuse the lead form
 // backend and admin panel, and middleware.js serves it on
@@ -177,7 +177,7 @@ export function SteadyWakePage({ active, children }) {
           <a href={dispatchHref("/four-corners")} style={{ color: "var(--ink-soft)" }}>Serving the Four Corners</a>
           {" · "}
           <a href={dispatchHref("/privacy")} style={{ color: "var(--ink-soft)" }}>Privacy &amp; text messaging terms</a>
-          <span className="mom">Dedicated to my mom, Alfreda Susie Hudson. Her support kept me off the street while I built this.</span>
+          <span className="mom">Dedicated to my mom, Alfreda Sue Ariano (Hudson). Her support kept me off the street while I built this.</span>
         </footer>
       </div>
     </div>
