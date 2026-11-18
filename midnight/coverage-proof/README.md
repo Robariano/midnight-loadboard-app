@@ -69,6 +69,17 @@ All three steps run from this folder, with the proof server running.
 
 `carriers/` and `attestations/` hold private data and are gitignored.
 
+## Website flow (pilot)
+
+Brokers use **nightlaneloads.com/coverage-check**: they ask for a proof (request name, carrier DOT, minimums, date) and later look up the answer. Nightlane texts the carrier its private approve link (from `/admin/coverage-requests`). When the carrier approves, the worker on Nightlane's computer builds the proof:
+
+```
+npm run worker            # keeps checking every 30 seconds
+npm run worker -- --once  # handles what's waiting, then stops
+```
+
+The worker needs the proof server running, a carrier enrolled for that DOT (`carrier:new` + `attest`), and `COVERAGE_WORKER_SECRET`: the first run creates it in `.env.preview` and tells you to add the same value in Vercel. The site needs the `coverage_requests` table (`supabase-migration-coverage-requests.sql` at the repo root).
+
 ## Status
 
 - Contract compiles and passes its simulator tests.

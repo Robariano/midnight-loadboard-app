@@ -16,7 +16,8 @@
     "carrier:new": "tsx scripts/carrier-new.ts",
     "attest": "tsx scripts/attest.ts",
     "prove": "tsx scripts/prove.ts",
-    "check": "tsx scripts/check.ts"
+    "check": "tsx scripts/check.ts",
+    "worker": "tsx scripts/worker.ts"
   },
   "dependencies": {
     "@midnight-ntwrk/midnight-js-contracts": "5.0.1",

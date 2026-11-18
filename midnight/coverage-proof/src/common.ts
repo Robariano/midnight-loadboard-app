@@ -30,7 +30,7 @@ export function readDeployment(): DeploymentRecord {
 
 /** A broker's request id: SHA-256 of the request text, e.g. "MC 123456 load 4471". */
 export const requestIdOf = (text: string): Uint8Array =>
-  new Uint8Array(createHash('sha256').update(text.trim().toLowerCase()).digest());
+  new Uint8Array(createHash('sha256').update(text.trim().replace(/\s+/g, ' ').toLowerCase()).digest());
 
 /** "2026-12-31" -> Unix seconds at the end of that day (UTC). */
 export function endOfDay(date: string): bigint {
