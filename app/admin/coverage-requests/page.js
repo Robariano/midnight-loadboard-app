@@ -11,7 +11,7 @@ export default function CoverageRequestsAdmin() {
   const [copied, setCopied] = useState(null);
 
   async function load() {
-    const res = await fetch("/api/admin/coverage-requests");
+    const res = await fetch("/api/admin/coverage-requests", { cache: "no-store" });
     const d = await res.json().catch(() => ({}));
     if (!res.ok) return setError(res.status === 401 ? "Log in at /admin first." : d.error || "Couldn't load.");
     setRows(d.requests);
@@ -31,6 +31,7 @@ export default function CoverageRequestsAdmin() {
         Send the carrier its approve link. Approved requests are proved by the worker on your computer
         (<code>npm run worker</code> in midnight/coverage-proof).
       </p>
+      <button onClick={load} style={{ marginBottom: 12, padding: "6px 12px", fontSize: 13, borderRadius: 6, border: "1px solid #cbd2db", background: "#fff", cursor: "pointer" }}>↻ Refresh list</button>
       {error && <p style={{ color: "#991b1b" }}>{error}</p>}
       {rows && rows.length === 0 && <p>No requests yet.</p>}
       {rows?.map((r) => (
@@ -45,9 +46,14 @@ export default function CoverageRequestsAdmin() {
           </div>
           {r.error && <div style={{ fontSize: 13, color: "#991b1b", marginTop: 4 }}>{r.error}</div>}
           {r.status === "pending" && (
-            <button onClick={() => copy(r)} style={{ marginTop: 8, padding: "6px 12px", fontSize: 13, borderRadius: 6, border: "1px solid #cbd2db", background: "#f7f8fa", cursor: "pointer" }}>
-              {copied === r.id ? "Copied ✓" : "Copy text with approve link"}
-            </button>
+            <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 8 }}>
+              <button onClick={() => copy(r)} style={{ padding: "6px 12px", fontSize: 13, borderRadius: 6, border: "1px solid #cbd2db", background: "#f7f8fa", cursor: "pointer" }}>
+                {copied === r.id ? "Copied ✓" : "Copy text with approve link"}
+              </button>
+              <a href={`/coverage-approve/${r.approve_token}`} target="_blank" rel="noopener" style={{ padding: "6px 12px", fontSize: 13, borderRadius: 6, border: "1px solid #cbd2db", background: "#f7f8fa", color: "#14181f", textDecoration: "none" }}>
+                Open approve page
+              </a>
+            </div>
           )}
         </div>
       ))}
