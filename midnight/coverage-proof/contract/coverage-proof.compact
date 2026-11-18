@@ -1,0 +1,180 @@
+// Nightlane coverage proof (Midnight).
+//
+// A carrier proves "my insurance meets your minimum and is good through your
+// delivery date" to a broker or dispatcher WITHOUT handing over its
+// certificate of insurance (COI). Nothing on-chain shows the carrier's real
+// limits, insurer, policy number or exact expiry.
+//
+// How it works:
+//  1. Nightlane (the attestor) confirms the carrier's coverage once, directly
+//     with the insurance agent, then signs the facts off-chain: DOT number,
+//     liability limit, cargo limit, expiry, a random nonce, and a hash of the
+//     carrier's own public key. The carrier keeps that signed attestation in
+//     its private state. It is never published.
+//  2. When a broker asks "do you have at least $1,000,000 liability and
+//     $100,000 cargo through Friday?", the carrier runs proveCoverage with
+//     those numbers. The circuit checks Nightlane's signature, the minimums,
+//     the dates and that the attestation was not revoked, all inside the
+//     zero-knowledge proof.
+//  3. Only the answer is recorded: this DOT met these minimums through this
+//     date, attested by Nightlane, for this request.
+//
+// Because the attestation is bound to the carrier's secret key, a stolen copy
+// is useless: whoever steals it cannot produce a proof with it. That is the
+// difference from a stolen paper COI, which is used to impersonate carriers.
+//
+// Signature checks use the Schnorr module from Midnight's official zk-loan
+// example (schnorr.compact, Apache-2.0).
+
+pragma language_version 0.28;
+import CompactStandardLibrary;
+
+import "schnorr" prefix Schnorr_;
+
+export { Schnorr_SchnorrSignature };
+
+export new type SecretKey = Bytes<32>;
+export new type CarrierPublicKey = Bytes<32>;
+export new type AdminPublicKey = Bytes<32>;
+
+// The facts Nightlane confirmed with the carrier's insurance agent.
+// Dollar amounts are whole US dollars; expiresAt is a Unix time in seconds.
+export struct Coverage {
+    dot: Uint<32>;
+    liability: Uint<32>;
+    cargo: Uint<32>;
+    expiresAt: Uint<64>;
+}
+
+// What a successful proof records publicly. Note what is NOT here: the real
+// limits, the insurer, the policy and the exact expiry.
+export struct CoverageProof {
+    dot: Uint<32>;
+    minLiability: Uint<32>;
+    minCargo: Uint<32>;
+    coveredThrough: Uint<64>;
+    attestorId: Uint<16>;
+}
+
+constructor() {
+    contractAdmin = disclose(deriveAdminPublicKey(getSecretKey()));
+}
+
+export ledger contractAdmin: AdminPublicKey;
+// Registered attestors (Nightlane, and later perhaps insurers or agents).
+export ledger attestors: Map<Uint<16>, JubjubPoint>;
+// Attestations withdrawn because the policy was cancelled or changed.
+export ledger revoked: Set<Bytes<32>>;
+// Answered requests, keyed by the requester's request id.
+export ledger proofs: Map<Bytes<32>, CoverageProof>;
+
+witness getSecretKey(): SecretKey;
+// [coverage facts, nonce, Nightlane's signature, attestor id]
+witness getCoverageAttestation(): [Coverage, Field, Schnorr_SchnorrSignature, Uint<16>];
+
+export pure circuit deriveCarrierPublicKey(sk: SecretKey): CarrierPublicKey {
+    return persistentHash<[Bytes<23>, SecretKey]>([
+        "nightlane:carrier:pk:v1",
+        sk
+    ]) as CarrierPublicKey;
+}
+
+export pure circuit deriveAdminPublicKey(sk: SecretKey): AdminPublicKey {
+    return persistentHash<[Bytes<21>, SecretKey]>([
+        "nightlane:admin:pk:v1",
+        sk
+    ]) as AdminPublicKey;
+}
+
+// Public id of an attestation, used only for revocation. It hashes the random
+// nonce, so it reveals nothing about the coverage.
+export pure circuit attestationId(nonce: Field): Bytes<32> {
+    return persistentHash<[Bytes<20>, Field]>([
+        "nightlane:cov:att:v1",
+        nonce
+    ]);
+}
+
+// The message Nightlane signs. Exposed so the off-chain signer builds exactly
+// what the circuit checks.
+export pure circuit attestationMessage(coverage: Coverage, nonce: Field, carrierPk: CarrierPublicKey): Vector<6, Field> {
+    return [
+        coverage.dot as Field,
+        coverage.liability as Field,
+        coverage.cargo as Field,
+        coverage.expiresAt as Field,
+        nonce,
+        transientHash<Bytes<32>>(carrierPk as Bytes<32>)
+    ];
+}
+
+// The carrier answers a coverage request. requestId is chosen by whoever asks
+// (for example a hash of the broker's MC and the load number), so the broker
+// can look the answer up on the ledger.
+export circuit proveCoverage(requestId: Bytes<32>,
+                             minLiability: Uint<32>,
+                             minCargo: Uint<32>,
+                             coveredThrough: Uint<64>): [] {
+    const [coverage, nonce, signature, attestorId] = getCoverageAttestation();
+
+    // Which attestor vouched for it is public; what it vouched for is not.
+    const disclosedAttestorId = disclose(attestorId);
+    assert(attestors.member(disclosedAttestorId), "Attestor not registered");
+    const attestorPk = attestors.lookup(disclosedAttestorId);
+
+    // The signature covers this carrier's key, so only the carrier holding
+    // the matching secret key can use the attestation.
+    const carrierPk = deriveCarrierPublicKey(getSecretKey());
+    Schnorr_schnorrVerify<6>(attestationMessage(coverage, nonce, carrierPk), signature, attestorPk);
+
+    assert(!revoked.member(disclose(attestationId(nonce))), "Attestation was revoked");
+
+    // The private checks. Only pass/fail leaves the proof.
+    assert(coverage.liability >= minLiability, "Liability below the requested minimum");
+    assert(coverage.cargo >= minCargo, "Cargo coverage below the requested minimum");
+    assert(coverage.expiresAt >= coveredThrough, "Coverage ends before the requested date");
+    // coveredThrough must still be in the future. Together with the check
+    // above, that also means the coverage has not expired yet.
+    assert(blockTimeLt(disclose(coveredThrough)), "Requested date is already in the past");
+
+    const disclosedRequestId = disclose(requestId);
+    assert(!proofs.member(disclosedRequestId), "Request already answered");
+    proofs.insert(disclosedRequestId, CoverageProof {
+        dot: disclose(coverage.dot),
+        minLiability: disclose(minLiability),
+        minCargo: disclose(minCargo),
+        coveredThrough: disclose(coveredThrough),
+        attestorId: disclosedAttestorId
+    });
+}
+
+// Challenge hash for the off-chain signer (truncate mod 2^248 before use, as
+// schnorrVerify does).
+export pure circuit coverageChallenge(ann_x: Field, ann_y: Field, pk_x: Field, pk_y: Field, msg: Vector<6, Field>): Field {
+    return Schnorr_schnorrChallenge6(ann_x, ann_y, pk_x, pk_y, msg);
+}
+
+// ---- Admin (Nightlane) ----
+
+export circuit registerAttestor(id: Uint<16>, pk: JubjubPoint): [] {
+    assert(contractAdmin == deriveAdminPublicKey(getSecretKey()), "Only admin can register attestors");
+    attestors.insert(disclose(id), disclose(pk));
+}
+
+export circuit removeAttestor(id: Uint<16>): [] {
+    assert(contractAdmin == deriveAdminPublicKey(getSecretKey()), "Only admin can remove attestors");
+    assert(attestors.member(disclose(id)), "Attestor not found");
+    attestors.remove(disclose(id));
+}
+
+// When a policy is cancelled or changed, Nightlane revokes the attestation so
+// it can no longer be used in a proof.
+export circuit revokeAttestation(id: Bytes<32>): [] {
+    assert(contractAdmin == deriveAdminPublicKey(getSecretKey()), "Only admin can revoke attestations");
+    revoked.insert(disclose(id));
+}
+
+export circuit rotateAdmin(newAdmin: AdminPublicKey): [] {
+    assert(contractAdmin == deriveAdminPublicKey(getSecretKey()), "Only admin can rotate admin role");
+    contractAdmin = disclose(newAdmin);
+}

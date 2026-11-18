@@ -1,0 +1,15 @@
+{
+  "name": "nightlane-midnight",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Nightlane coverage proof on Midnight: carriers prove insurance meets a minimum without sharing their COI.",
+  "scripts": {
+    "compile": "compact compile contract/coverage-proof.compact contract/managed/coverage-proof",
+    "compile:fast": "compact compile --skip-zk contract/coverage-proof.compact contract/managed/coverage-proof",
+    "test": "node test/coverage-proof.test.mjs"
+  },
+  "dependencies": {
+    "@midnight-ntwrk/midnight-js-protocol": "5.0.1"
+  }
+}
