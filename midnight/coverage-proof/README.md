@@ -73,5 +73,5 @@ All three steps run from this folder, with the proof server running.
 
 - Contract compiles and passes its simulator tests.
 - **Live on Midnight Preview** since 2026-11-18: contract `9ccc58c5193805c62f09e8d596e450c8996220a8d7391587f0467fd5cfc94e99`, with Nightlane registered as attestor 1 (see `deployments/preview.json`; both checked on-chain after deploy).
-- Pilot scripts (`carrier:new`, `attest`, `prove`, `check`) ready. Next: run a test proof on Preview, then a simple web page for carriers and brokers (Nightlane signs after confirming with the agent) and a simple page for carriers and brokers.
+- Pilot scripts (`carrier:new`, `attest`, `prove`, `check`) ready. Next: run a test proof on Preview, then a simple web page for carriers and brokers.
 - Pilot with carriers and brokers from Steady Wake Dispatch.
