@@ -1,4 +1,5 @@
 import { checkCoverageRequest, coverageStats } from "../../lib/midnight/coverageProof";
+import RequestForm from "./RequestForm";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -85,11 +86,18 @@ export default async function CoverageCheckPage({ searchParams }) {
         </div>
       )}
 
+      <h2 style={{ fontSize: 18, color: "#14181f", margin: "24px 0 8px" }}>Ask a carrier for a proof</h2>
+      <p style={{ ...p, fontSize: 14 }}>
+        Pilot carriers enrolled with Nightlane can answer here. Give the request a name you&apos;ll recognize, like your
+        MC and load number.
+      </p>
+      <RequestForm />
+
       <h2 style={{ fontSize: 18, color: "#14181f", margin: "24px 0 8px" }}>How it works</h2>
       <ol style={{ ...p, paddingLeft: 20 }}>
-        <li>You tell the carrier your request and your minimums, e.g. &ldquo;MC 123456 load 1001: $1,000,000 liability, $100,000 cargo through Nov 28.&rdquo;</li>
-        <li>The carrier proves it on Midnight from coverage Nightlane already confirmed with their agent.</li>
-        <li>You type the same request here and see the answer.</li>
+        <li>You ask for a proof above: your minimums and the date coverage must last through.</li>
+        <li>The carrier approves it, and the proof is made on Midnight from coverage Nightlane already confirmed with their insurance agent.</li>
+        <li>You type the same request name in the Check box and see the answer.</li>
       </ol>
       <p style={{ ...p, fontSize: 14 }}>
         Why it&apos;s safer than a COI: cargo thieves use stolen certificates to pose as real carriers. A coverage proof
