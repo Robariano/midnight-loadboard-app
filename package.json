@@ -9,11 +9,15 @@
   },
   "dependencies": {
     "@emurgo/cardano-serialization-lib-nodejs": "17.0.0",
+    "@midnight-ntwrk/compact-runtime": "0.21.0",
     "@supabase/supabase-js": "2.45.4",
     "bip39": "3.1.2",
     "next": "14.2.35",
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "uuid": "9.0.1"
+  },
+  "overrides": {
+    "@midnightntwrk/onchain-runtime-v4": "4.0.2"
   }
 }

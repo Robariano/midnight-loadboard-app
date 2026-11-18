@@ -79,6 +79,7 @@ export default function RootLayout({ children }) {
             <a href="/revoked-carriers" style={footLink}>Revoked Credentials</a>{" · "}
             <a href="/blog" style={footLink}>Blog</a>{" · "}
             <a href="/verify" style={footLink}>Verified on Cardano</a>{" · "}
+            <a href="/coverage-check" style={footLink}>Private Coverage Check</a>{" · "}
             <a href="/about" style={footLink}>About</a>
           </div>
           <div>
