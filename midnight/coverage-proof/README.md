@@ -54,9 +54,24 @@ A new deployer wallet has no tNIGHT, so the script prints its address and the fa
 
 Preview uses Midnight's own public endpoints, so no Blockfrost project is needed. Preprod (`MIDNIGHT_NETWORK=preprod`) needs `BLOCKFROST_PROJECT_ID` from a Blockfrost Midnight Preprod project.
 
+## Use it (pilot flow)
+
+All three steps run from this folder, with the proof server running.
+
+1. **Carrier creates its key** (once). The secret stays in `carriers/<name>.json`; only the public key goes to Nightlane.
+   `npm run carrier:new -- monarch`
+2. **Nightlane attests the coverage** after confirming it with the carrier's insurance agent. Off-chain, no fees. Writes a private file for the carrier in `attestations/`.
+   `npm run attest -- --carrier monarch --dot 3349902 --liability 1000000 --cargo 100000 --expires 2027-06-30`
+3. **Carrier answers a broker's request** ("MC 123456 load 4471: $1M liability, $100K cargo through Nov 28"). Builds the zero-knowledge proof locally; only the answer goes on-chain. Nightlane's wallet pays the fee in the pilot.
+   `npm run prove -- --carrier monarch --attestation attestations/3349902-2027-06-30.json --request "MC 123456 load 4471" --liability 1000000 --cargo 100000 --through 2026-11-28`
+4. **Broker checks** (read-only, no wallet):
+   `npm run check -- "MC 123456 load 4471"`  or `npm run check` for every answer.
+
+`carriers/` and `attestations/` hold private data and are gitignored.
+
 ## Status
 
 - Contract compiles and passes its simulator tests.
 - **Live on Midnight Preview** since 2026-11-18: contract `9ccc58c5193805c62f09e8d596e450c8996220a8d7391587f0467fd5cfc94e99`, with Nightlane registered as attestor 1 (see `deployments/preview.json`; both checked on-chain after deploy).
-- Next: build the attestor service (Nightlane signs after confirming with the agent) and a simple page for carriers and brokers.
+- Pilot scripts (`carrier:new`, `attest`, `prove`, `check`) ready. Next: run a test proof on Preview, then a simple web page for carriers and brokers (Nightlane signs after confirming with the agent) and a simple page for carriers and brokers.
 - Pilot with carriers and brokers from Steady Wake Dispatch.

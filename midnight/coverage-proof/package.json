@@ -12,7 +12,11 @@
     "compile:fast": "compact compile --skip-zk contract/coverage-proof.compact contract/managed/coverage-proof",
     "test": "node test/coverage-proof.test.mjs",
     "typecheck": "tsc --noEmit -p .",
-    "deploy:preview": "MIDNIGHT_NETWORK=preview tsx scripts/deploy.ts"
+    "deploy:preview": "MIDNIGHT_NETWORK=preview tsx scripts/deploy.ts",
+    "carrier:new": "tsx scripts/carrier-new.ts",
+    "attest": "tsx scripts/attest.ts",
+    "prove": "tsx scripts/prove.ts",
+    "check": "tsx scripts/check.ts"
   },
   "dependencies": {
     "@midnight-ntwrk/midnight-js-contracts": "5.0.1",
