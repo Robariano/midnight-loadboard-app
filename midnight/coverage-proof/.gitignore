@@ -3,3 +3,5 @@ contract/managed/
 .env*
 .wallet-state/
 midnight-level-db/
+carriers/
+attestations/
