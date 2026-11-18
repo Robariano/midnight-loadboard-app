@@ -1,2 +1,5 @@
 node_modules/
 contract/managed/
+.env*
+.wallet-state/
+midnight-level-db/
