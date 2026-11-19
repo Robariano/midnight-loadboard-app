@@ -29,7 +29,10 @@ export default function TermsOfService() {
       <p style={{ color: "#14181f", lineHeight: 1.6 }}>
         The service is provided "as is." We do not guarantee load availability, carrier reliability,
         or that any coverage confirmation is accurate — carriers and drivers remain responsible for
-        their own compliance with applicable insurance and authority requirements.
+        their own compliance with applicable insurance and authority requirements. Where Nightlane
+        shows payment records or payment proofs for a broker, they reflect past payments confirmed by
+        the parties involved. They are not a guarantee that any broker will pay future loads, and
+        Nightlane is not a party to, and is not responsible for, payments between brokers and carriers.
       </p>
 
       <h2 style={{ color: "#14181f", fontSize: 18, marginTop: 24 }}>Contact</h2>
