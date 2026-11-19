@@ -9,7 +9,7 @@ export const metadata = {
 // Deliberately shows only public-safe fields: company name, DOT/MC
 // numbers, and revoked status. No contact info, no documents, no
 // internal flag counts.
-export const revalidate = 60; // re-check every minute rather than on every request
+export const dynamic = "force-dynamic"; // Supabase reads are no-store, so render per request
 
 async function getRevokedCarriers() {
   const supabase = getServiceClient();
