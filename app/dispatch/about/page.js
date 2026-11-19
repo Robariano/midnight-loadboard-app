@@ -21,11 +21,10 @@ export default function DispatchAbout() {
 
 
       <section className="swd-prose swd-mom" aria-labelledby="h-memory">
-        <p className="swd-eyebrow">The reason for all of it</p>
-        <h3 id="h-memory">My mom, Alfreda Sue Ariano (Hudson)</h3>
+        <p className="swd-eyebrow">Why this business exists</p>
+        <h3 id="h-memory">In loving memory</h3>
         <p>
-          Steady Wake exists because my mom never stopped looking out for me. Her support kept a roof over my head
-          while I built this business. Every load I book carries a little of her with it.
+          I&apos;m building Steady Wake Dispatch to honor the memory of my mom, Alfreda Sue Ariano (Hudson).
         </p>
       </section>
 
