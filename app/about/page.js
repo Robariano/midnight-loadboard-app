@@ -39,6 +39,22 @@ export default function About() {
         carriers.
       </p>
 
+      <h2 style={h2}>Back on Cardano, where it helps</h2>
+      <p style={p}>
+        The blockchain came back in where it actually helps people: proof. When Nightlane checks a broker or carrier,
+        the result can be saved on Cardano, so anyone can confirm what FMCSA showed on that date and that the record
+        was never changed. Every Nightlane record uses metadata label 8420, which is officially registered to
+        Nightlane in Cardano&apos;s{" "}
+        <a href="https://github.com/cardano-foundation/CIPs/pull/1323" target="_blank" rel="noopener noreferrer">
+          CIP-0010 label registry
+        </a>
+        . You can look up any record on the <a href="/verify">Verified on Cardano</a> page.
+      </p>
+      <p style={p}>
+        I&apos;m also testing private coverage proofs on the Midnight network, so a carrier can prove their
+        insurance meets a broker&apos;s minimum without handing over the whole policy.
+      </p>
+
       <h2 style={h2}>What hasn&apos;t changed</h2>
       <p style={p}>
         The goal is the same as day one: make trucking fairer and more transparent for the people actually moving
