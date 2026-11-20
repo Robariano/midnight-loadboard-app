@@ -79,6 +79,18 @@ export default async function Verify({ searchParams }) {
         shows what FMCSA said about the carrier on that date, and it can&apos;t be changed afterward, not even by
         Nightlane.
       </p>
+      <p style={{ ...p, fontSize: 14 }}>
+        Every Nightlane record carries metadata label <strong>8420</strong>, which is officially registered to
+        Nightlane in Cardano&apos;s{" "}
+        <a href="https://github.com/cardano-foundation/CIPs/tree/master/CIP-0010" target="_blank" rel="noopener noreferrer">
+          CIP-0010 label registry
+        </a>{" "}
+        (
+        <a href="https://github.com/cardano-foundation/CIPs/pull/1323" target="_blank" rel="noopener noreferrer">
+          approved and merged
+        </a>
+        , November 2026).
+      </p>
 
       {stats && stats.records > 0 && (
         <div style={{ display: "flex", gap: 12, margin: "0 0 18px", flexWrap: "wrap" }}>
