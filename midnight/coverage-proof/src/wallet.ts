@@ -208,48 +208,92 @@ export async function syncWallet(
 ): Promise<FacadeState> {
   logger.info('Syncing wallet...');
   let emissionCount = 0;
-  const state = await Rx.firstValueFrom(
-    wallet.state().pipe(
-      Rx.tap((state: FacadeState) => {
-        emissionCount++;
-        const shielded = isProgressStrictlyComplete(state.shielded.progress);
-        const unshielded = isProgressStrictlyComplete(state.unshielded.progress);
-        const dust = isProgressStrictlyComplete(state.dust.progress);
-        logger.info(
-          `Wallet sync [${emissionCount}]: shielded=${shielded}, unshielded=${unshielded}, dust=${dust}`,
-        );
-        if (!shielded) {
-          logger.debug(`  shielded.progress: ${JSON.stringify(state.shielded.progress)}`);
-        }
-        if (!unshielded) {
-          logger.debug(`  unshielded.progress: ${JSON.stringify(state.unshielded.progress)}`);
-        }
-        if (!dust) {
-          logger.debug(`  dust.progress: ${JSON.stringify(state.dust.progress)}`);
-        }
-      }),
-      Rx.filter(
-        (state: FacadeState) =>
-          isProgressStrictlyComplete(state.shielded.progress) &&
-          isProgressStrictlyComplete(state.dust.progress) &&
-          isProgressStrictlyComplete(state.unshielded.progress),
+  const stopCheckpoints = startSyncCheckpoints(logger, wallet);
+  let state: FacadeState;
+  try {
+    state = await Rx.firstValueFrom(
+      wallet.state().pipe(
+        Rx.tap((state: FacadeState) => {
+          emissionCount++;
+          const shielded = isProgressStrictlyComplete(state.shielded.progress);
+          const unshielded = isProgressStrictlyComplete(state.unshielded.progress);
+          const dust = isProgressStrictlyComplete(state.dust.progress);
+          logger.info(
+            `Wallet sync [${emissionCount}]: shielded=${shielded}, unshielded=${unshielded}, dust=${dust}`,
+          );
+          if (!shielded) {
+            logger.debug(`  shielded.progress: ${JSON.stringify(state.shielded.progress)}`);
+          }
+          if (!unshielded) {
+            logger.debug(`  unshielded.progress: ${JSON.stringify(state.unshielded.progress)}`);
+          }
+          if (!dust) {
+            logger.debug(`  dust.progress: ${JSON.stringify(state.dust.progress)}`);
+          }
+        }),
+        Rx.filter(
+          (state: FacadeState) =>
+            isProgressStrictlyComplete(state.shielded.progress) &&
+            isProgressStrictlyComplete(state.dust.progress) &&
+            isProgressStrictlyComplete(state.unshielded.progress),
+        ),
+        Rx.tap(() => logger.info(`Wallet sync complete after ${emissionCount} emissions`)),
+        Rx.timeout({
+          each: timeout,
+          with: () =>
+            Rx.throwError(
+              () => new Error(`Wallet sync timeout after ${timeout}ms (${emissionCount} emissions received)`),
+            ),
+        }),
+        Rx.catchError((err) => {
+          logger.error(`Wallet sync error: ${err}`);
+          return Rx.throwError(() => err);
+        }),
       ),
-      Rx.tap(() => logger.info(`Wallet sync complete after ${emissionCount} emissions`)),
-      Rx.timeout({
-        each: timeout,
-        with: () =>
-          Rx.throwError(
-            () => new Error(`Wallet sync timeout after ${timeout}ms (${emissionCount} emissions received)`),
-          ),
-      }),
-      Rx.catchError((err) => {
-        logger.error(`Wallet sync error: ${err}`);
-        return Rx.throwError(() => err);
-      }),
-    ),
-  );
+    );
+  } finally {
+    await stopCheckpoints();
+  }
   await saveWalletState(logger, wallet);
   return state;
+}
+
+// A first sync on mainnet can take hours, and a closed window or a sleeping
+// laptop used to throw all of it away. While syncing, save the wallet's state
+// every few minutes (MIDNIGHT_STATE_SAVE_MS, default 5 min), and once more if
+// the process is stopped (Ctrl+C, window closed), so the next run restores it
+// and syncs only the gap. Each sub-wallet saves its own cursor, so a snapshot
+// taken mid-sync resumes cleanly.
+const CHECKPOINT_MS = Number(process.env['MIDNIGHT_STATE_SAVE_MS'] ?? 5 * 60_000);
+const STOP_SIGNALS = ['SIGINT', 'SIGTERM', 'SIGHUP'] as const;
+
+function startSyncCheckpoints(logger: Logger, wallet: WalletFacade): () => Promise<void> {
+  if (!stateFiles.has(wallet) || !(CHECKPOINT_MS > 0)) return async () => {};
+  let saving: Promise<void> | null = null;
+  const checkpoint = (): Promise<void> => {
+    if (!saving) {
+      saving = saveWalletState(logger, wallet)
+        .catch((error) => logger.warn(`Could not save sync progress (${String(error)}); will try again.`))
+        .finally(() => {
+          saving = null;
+        });
+    }
+    return saving;
+  };
+  const timer = setInterval(() => void checkpoint(), CHECKPOINT_MS);
+  timer.unref();
+  const onStop = (signal: NodeJS.Signals) => {
+    logger.info(`Stopping (${signal}); saving sync progress first...`);
+    const giveUp = new Promise<void>((resolve) => setTimeout(resolve, 20_000).unref());
+    void Promise.race([checkpoint(), giveUp]).finally(() => process.exit(130));
+  };
+  for (const signal of STOP_SIGNALS) process.once(signal, onStop);
+  logger.info(`Sync progress is saved every ${Math.round(CHECKPOINT_MS / 60_000)} min; a stopped run resumes from there.`);
+  return async () => {
+    clearInterval(timer);
+    for (const signal of STOP_SIGNALS) process.removeListener(signal, onStop);
+    if (saving) await saving;
+  };
 }
 
 // ---------------------------------------------------------------------------
