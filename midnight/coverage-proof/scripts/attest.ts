@@ -22,7 +22,7 @@ const randomScalar = () => BigInt('0x' + randomBytes(32).toString('hex')) % JUBJ
 const { values: a } = parseArgs({
   options: {
     carrier: { type: 'string' }, dot: { type: 'string' }, liability: { type: 'string' },
-    cargo: { type: 'string' }, expires: { type: 'string' },
+    cargo: { type: 'string' }, expires: { type: 'string' }, network: { type: 'string' },
   },
 });
 for (const k of ['carrier', 'dot', 'liability', 'cargo', 'expires'] as const) {

@@ -79,6 +79,28 @@ export function preprodConfig(): NetworkConfig {
   };
 }
 
+// Mainnet also goes through Blockfrost, with a separate Midnight Mainnet project
+// token (it starts with "nightmainnet"). Read from BLOCKFROST_MAINNET_PROJECT_ID
+// in the gitignored repo-root .env.mainnet; never written into a source file.
+export function mainnetConfig(): NetworkConfig {
+  const projectId = process.env['BLOCKFROST_MAINNET_PROJECT_ID']?.trim();
+  if (!projectId) {
+    throw new Error(
+      'BLOCKFROST_MAINNET_PROJECT_ID is not set. Add your Blockfrost Midnight Mainnet token ' +
+        '(starts with nightmainnet) to the repo-root .env.mainnet (gitignored).',
+    );
+  }
+  return {
+    networkId: 'mainnet',
+    indexer: withBlockfrostKey('https://midnight-mainnet.blockfrost.io/api/v0', projectId),
+    indexerWS: withBlockfrostKey('wss://midnight-mainnet.blockfrost.io/api/v0/ws', projectId),
+    node: withBlockfrostKey('https://rpc.midnight-mainnet.blockfrost.io', projectId),
+    nodeWS: withBlockfrostKey('wss://rpc.midnight-mainnet.blockfrost.io', projectId),
+    proofServer: process.env['MIDNIGHT_PROOF_SERVER'] ?? 'http://127.0.0.1:6300',
+    faucet: '(none on mainnet: send real NIGHT to this address)',
+  };
+}
+
 // A network that exists only in env: e.g. a private or short-lived network whose
 // endpoints arrive late. Set these in the gitignored repo-root .env.custom (see
 // .env.custom.example), or in the file named by MIDNIGHT_ENV_FILE, which is
@@ -120,11 +142,13 @@ export function getConfig(): NetworkConfig {
       return PREVIEW_CONFIG;
     case 'preprod':
       return preprodConfig();
+    case 'mainnet':
+      return mainnetConfig();
     case 'custom':
       return customConfig();
     default:
       throw new Error(
-        `Unknown network: ${network}. Supported: 'local', 'preview', 'preprod', 'custom'.`,
+        `Unknown network: ${network}. Supported: 'local', 'preview', 'preprod', 'mainnet', 'custom'.`,
       );
   }
 }
