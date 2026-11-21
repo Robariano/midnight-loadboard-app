@@ -46,6 +46,7 @@ import {
   UnshieldedWallet,
   WalletEntrySchema,
   WalletFacade,
+  MidnightBech32m,
   type FacadeState,
   type UnshieldedKeystore,
   type WalletSeeds,
@@ -564,13 +565,22 @@ export async function waitForNightThenDust(
       Rx.catchError(() => Rx.of(null)),
     ),
   );
+  // Mainnet: DUST can come from cNIGHT held on Cardano (registered through the
+  // cNgD DApp to this wallet's DUST address), with no NIGHT on Midnight at all.
+  const hasDust = (s: FacadeState) => s.dust.balance(new Date()) > 0n;
+  if (registerDust && current !== null && hasDust(current)) {
+    logger.info(`${label}: DUST available; ready.`);
+    return;
+  }
   if (current === null || !hasNight(current)) {
-    logger.info(`Fund ${label} with tNIGHT at ${faucet}; the run continues once it arrives.`);
+    logger.info(`Fund ${label} with NIGHT (or register cNIGHT for DUST to its DUST address); the run continues once either arrives.`);
+    logger.info(`  faucet/help: ${faucet}`);
     logger.info(`  address: ${address}`);
+    if (current !== null) logger.info(`  DUST address: ${MidnightBech32m.encode(envConfig.networkId, current.dust.address).asString()}`);
     if (!registerDust) logger.info('  This wallet must NOT have DUST delegated: send tNIGHT only.');
     await Rx.firstValueFrom(
       wallet.state().pipe(
-        Rx.filter(hasNight),
+        Rx.filter((s) => hasNight(s) || (registerDust && hasDust(s))),
         Rx.take(1),
         Rx.timeout({
           each: FUND_TIMEOUT_MS,
@@ -578,6 +588,12 @@ export async function waitForNightThenDust(
         }),
       ),
     );
+  }
+
+  const afterWait = await Rx.firstValueFrom(wallet.state());
+  if (registerDust && hasDust(afterWait) && !hasNight(afterWait)) {
+    logger.info(`${label}: DUST available (cNIGHT-backed); ready.`);
+    return;
   }
 
   if (!registerDust) {
