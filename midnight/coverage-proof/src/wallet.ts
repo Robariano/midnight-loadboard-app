@@ -213,6 +213,17 @@ export async function syncWallet(
   try {
     state = await Rx.firstValueFrom(
       wallet.state().pipe(
+        // Fail only when the wallet goes quiet for `timeout` ms. Placed before
+        // the filter, it times the gap between progress updates; after the
+        // filter it capped the whole sync, and a mainnet first sync (hours)
+        // always hit it.
+        Rx.timeout({
+          each: timeout,
+          with: () =>
+            Rx.throwError(
+              () => new Error(`Wallet sync stalled: no progress for ${timeout}ms (${emissionCount} emissions received)`),
+            ),
+        }),
         Rx.tap((state: FacadeState) => {
           emissionCount++;
           const shielded = isProgressStrictlyComplete(state.shielded.progress);
@@ -238,13 +249,6 @@ export async function syncWallet(
             isProgressStrictlyComplete(state.unshielded.progress),
         ),
         Rx.tap(() => logger.info(`Wallet sync complete after ${emissionCount} emissions`)),
-        Rx.timeout({
-          each: timeout,
-          with: () =>
-            Rx.throwError(
-              () => new Error(`Wallet sync timeout after ${timeout}ms (${emissionCount} emissions received)`),
-            ),
-        }),
         Rx.catchError((err) => {
           logger.error(`Wallet sync error: ${err}`);
           return Rx.throwError(() => err);

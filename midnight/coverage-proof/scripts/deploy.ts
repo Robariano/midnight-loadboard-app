@@ -86,7 +86,8 @@ const envConfig: EnvironmentConfiguration = {
   faucet: config.faucet,
   proofServer: config.proofServer,
 };
-const syncTimeoutMs = Number(process.env['MIDNIGHT_SYNC_TIMEOUT_MS'] ?? 3 * 60 * 60_000);
+// How long the wallet may go without any sync progress before the run gives up.
+const syncTimeoutMs = Number(process.env['MIDNIGHT_SYNC_TIMEOUT_MS'] ?? 20 * 60_000);
 
 const proof = await fetch(config.proofServer).catch(() => null);
 if (!proof) throw new Error(`No proof server at ${config.proofServer}. Start it with Docker first (see the top of this file).`);
