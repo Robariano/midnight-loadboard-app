@@ -61,7 +61,8 @@ function ensureSecrets() {
   const missing = Object.keys(wanted).filter((k) => !new RegExp(`^${k}=`, 'm').test(existing));
   if (missing.length) {
     const header = existing ? '' : `# Nightlane coverage proof: ${network} deployment secrets. Keep this file. Never share or commit it.\n`;
-    appendFileSync(envFile, header + missing.map((k) => `${k}=${wanted[k]()}`).join('\n') + '\n', { mode: 0o600 });
+    const sep = existing && !existing.endsWith('\n') ? '\n' : '';
+    appendFileSync(envFile, sep + header + missing.map((k) => `${k}=${wanted[k]()}`).join('\n') + '\n', { mode: 0o600 });
     logger.info(`Created ${missing.length} new secret(s) in .env.${network} (kept on this computer only).`);
   }
   process.loadEnvFile(envFile);
