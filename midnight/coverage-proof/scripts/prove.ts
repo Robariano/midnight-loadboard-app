@@ -18,7 +18,7 @@ import { openSession } from '../src/session.js';
 const { values: a } = parseArgs({
   options: {
     carrier: { type: 'string' }, attestation: { type: 'string' }, request: { type: 'string' },
-    liability: { type: 'string' }, cargo: { type: 'string' }, through: { type: 'string' },
+    liability: { type: 'string' }, cargo: { type: 'string' }, through: { type: 'string' }, network: { type: 'string' },
   },
 });
 for (const k of ['carrier', 'attestation', 'request', 'liability', 'cargo', 'through'] as const) {

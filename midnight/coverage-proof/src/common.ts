@@ -5,6 +5,9 @@ import { fileURLToPath } from 'node:url';
 import pino from 'pino';
 
 export const ROOT = fileURLToPath(new URL('../', import.meta.url));
+// "--network=mainnet" works on Windows PowerShell too (no inline env vars there).
+const networkArg = process.argv.find((a) => a.startsWith('--network='))?.split('=')[1];
+if (networkArg) process.env['MIDNIGHT_NETWORK'] = networkArg;
 export const NETWORK = process.env['MIDNIGHT_NETWORK'] ?? 'preview';
 
 export const logger = pino({ level: process.env['LOG_LEVEL'] ?? 'info', transport: { target: 'pino-pretty' } });

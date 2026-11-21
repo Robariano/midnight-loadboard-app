@@ -37,8 +37,10 @@ globalThis.WebSocket = WebSocket;
 
 const logger = pino({ level: process.env['LOG_LEVEL'] ?? 'info', transport: { target: 'pino-pretty' } });
 
+const networkArg = process.argv.find((a) => a.startsWith('--network='))?.split('=')[1];
+if (networkArg) process.env['MIDNIGHT_NETWORK'] = networkArg;
 const network = process.env['MIDNIGHT_NETWORK'] ?? 'preview';
-if (network === 'local') throw new Error('Use preview or preprod. This script is for a public test network.');
+if (network === 'local') throw new Error('Use preview, preprod or mainnet. This script is for a public network.');
 const upper = network.toUpperCase();
 const root = fileURLToPath(new URL('../', import.meta.url));
 const envFile = `${root}.env.${network}`;
