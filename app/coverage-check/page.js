@@ -40,7 +40,7 @@ export default async function CoverageCheckPage({ searchParams }) {
       </p>
 
       <p style={{ ...p, fontSize: 13, color: "#92400e", background: "#fef3c7", padding: "8px 12px", borderRadius: 8 }}>
-        Pilot: running on Midnight&apos;s Preview test network
+        Pilot: running on {(stats?.config?.network || "preview") === "mainnet" ? "Midnight mainnet" : "Midnight’s Preview test network"}
         {stats ? ` · ${stats.total} request${stats.total === 1 ? "" : "s"} answered so far` : ""}.
       </p>
 
