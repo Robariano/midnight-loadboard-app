@@ -1,4 +1,4 @@
-import { checkCoverageRequest, coverageStats } from "../../lib/midnight/coverageProof";
+import { checkCoverageRequest, coverageStats, sampleCoverageProof } from "../../lib/midnight/coverageProof";
 import RequestForm from "./RequestForm";
 
 export const dynamic = "force-dynamic";
@@ -15,15 +15,25 @@ const usd = (n) => `$${Number(n).toLocaleString("en-US")}`;
 
 export default async function CoverageCheckPage({ searchParams }) {
   const q = String(searchParams?.q || "").trim().slice(0, 200);
+  // Demo mode reads the Preview test network, where Nightlane's sample carrier
+  // answered a sample request, so brokers can see a real "yes" without a made-up
+  // record on mainnet.
+  const demo = searchParams?.demo === "1";
+  const env = demo
+    ? { ...process.env, MIDNIGHT_COVERAGE_NETWORK: "preview", MIDNIGHT_COVERAGE_INDEXER: "", MIDNIGHT_COVERAGE_CONTRACT: "" }
+    : process.env;
   let result = null;
   let stats = null;
   let error = null;
   try {
-    if (q) {
-      result = await checkCoverageRequest(q);
+    if (demo && !q) {
+      result = await sampleCoverageProof({ env });
+      stats = { total: result.total, config: result.config };
+    } else if (q) {
+      result = await checkCoverageRequest(q, { env });
       stats = { total: result.total, config: result.config };
     } else {
-      stats = await coverageStats();
+      stats = await coverageStats({ env });
     }
   } catch (e) {
     error = "Couldn't reach Midnight right now. Please try again in a minute.";
@@ -39,12 +49,20 @@ export default async function CoverageCheckPage({ searchParams }) {
         and nothing else: no policy, insurer or exact limits that could be stolen or misused.
       </p>
 
+      {demo && (
+        <p style={{ ...p, fontSize: 13, color: "#1e3a8a", background: "#dbeafe", padding: "8px 12px", borderRadius: 8 }}>
+          <b>Sample only.</b> This reads Midnight&apos;s Preview test network and a sample carrier, so you can see what
+          an answer looks like. It is not a real carrier&apos;s coverage. <a href="/coverage-check">Back to the live check</a>.
+        </p>
+      )}
+
       <p style={{ ...p, fontSize: 13, color: "#92400e", background: "#fef3c7", padding: "8px 12px", borderRadius: 8 }}>
         Pilot: running on {(stats?.config?.network || "preview") === "mainnet" ? "Midnight mainnet" : "Midnight’s Preview test network"}
         {stats ? ` · ${stats.total} request${stats.total === 1 ? "" : "s"} answered so far` : ""}.
       </p>
 
-      <form method="get" style={{ display: "flex", gap: 8, margin: "0 0 20px", flexWrap: "wrap" }}>
+      <form method="get" style={{ display: "flex", gap: 8, margin: "0 0 8px", flexWrap: "wrap" }}>
+        {demo && <input type="hidden" name="demo" value="1" />}
         <input
           name="q"
           defaultValue={q}
@@ -59,6 +77,14 @@ export default async function CoverageCheckPage({ searchParams }) {
         </button>
       </form>
 
+      {!demo && (
+        <p style={{ fontSize: 13, color: "#6b7280", margin: "0 0 20px" }}>
+          Want to see what an answer looks like?{" "}
+          <a href="/coverage-check?demo=1">See a sample (test network)</a>.
+        </p>
+      )}
+      {demo && <div style={{ height: 12 }} />}
+
       {error && <p style={{ ...p, color: "#991b1b" }}>{error}</p>}
 
       {result && result.found && (
@@ -70,7 +96,7 @@ export default async function CoverageCheckPage({ searchParams }) {
           </p>
           <p style={{ margin: 0, fontSize: 13, color: "#6b7280" }}>
             Verified by attestor {result.proof.attestorId}
-            {result.proof.attestorId === 1 ? " (Nightlane)" : ""} for request &ldquo;{q}&rdquo;. Proven on Midnight;
+            {result.proof.attestorId === 1 ? " (Nightlane)" : ""} for {q ? <>request &ldquo;{q}&rdquo;</> : "a sample request"}. Proven on Midnight;
             the carrier&apos;s actual limits and policy stay private.
           </p>
         </div>
