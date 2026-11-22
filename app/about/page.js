@@ -51,8 +51,9 @@ export default function About() {
         . You can look up any record on the <a href="/verify">Verified on Cardano</a> page.
       </p>
       <p style={p}>
-        I&apos;m also testing private coverage proofs on the Midnight network, so a carrier can prove their
-        insurance meets a broker&apos;s minimum without handing over the whole policy.
+        Private coverage proofs are now live on Midnight mainnet as a pilot, so a carrier can prove their
+        insurance meets a broker&apos;s minimum without handing over the whole policy. Try the{" "}
+        <a href="/coverage-check">Private Coverage Check</a>.
       </p>
 
       <h2 style={h2}>What hasn&apos;t changed</h2>
