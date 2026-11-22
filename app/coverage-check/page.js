@@ -1,4 +1,4 @@
-import { checkCoverageRequest, coverageStats } from "../../lib/midnight/coverageProof";
+import { checkCoverageRequest, coverageStats, sampleCoverageProof } from "../../lib/midnight/coverageProof";
 import RequestForm from "./RequestForm";
 
 export const dynamic = "force-dynamic";
@@ -11,7 +11,6 @@ export const metadata = {
 };
 
 const p = { color: "#374151", fontSize: 15, lineHeight: 1.6, margin: "0 0 12px" };
-const SAMPLE_REQUEST = "MC 123456 load 4471";
 const usd = (n) => `$${Number(n).toLocaleString("en-US")}`;
 
 export default async function CoverageCheckPage({ searchParams }) {
@@ -27,7 +26,10 @@ export default async function CoverageCheckPage({ searchParams }) {
   let stats = null;
   let error = null;
   try {
-    if (q) {
+    if (demo && !q) {
+      result = await sampleCoverageProof({ env });
+      stats = { total: result.total, config: result.config };
+    } else if (q) {
       result = await checkCoverageRequest(q, { env });
       stats = { total: result.total, config: result.config };
     } else {
@@ -78,7 +80,7 @@ export default async function CoverageCheckPage({ searchParams }) {
       {!demo && (
         <p style={{ fontSize: 13, color: "#6b7280", margin: "0 0 20px" }}>
           Want to see what an answer looks like?{" "}
-          <a href={`/coverage-check?demo=1&q=${encodeURIComponent(SAMPLE_REQUEST)}`}>See a sample (test network)</a>.
+          <a href="/coverage-check?demo=1">See a sample (test network)</a>.
         </p>
       )}
       {demo && <div style={{ height: 12 }} />}
@@ -94,7 +96,7 @@ export default async function CoverageCheckPage({ searchParams }) {
           </p>
           <p style={{ margin: 0, fontSize: 13, color: "#6b7280" }}>
             Verified by attestor {result.proof.attestorId}
-            {result.proof.attestorId === 1 ? " (Nightlane)" : ""} for request &ldquo;{q}&rdquo;. Proven on Midnight;
+            {result.proof.attestorId === 1 ? " (Nightlane)" : ""} for {q ? <>request &ldquo;{q}&rdquo;</> : "a sample request"}. Proven on Midnight;
             the carrier&apos;s actual limits and policy stay private.
           </p>
         </div>
