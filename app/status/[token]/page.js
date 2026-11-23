@@ -1,4 +1,6 @@
+import { headers } from "next/headers";
 import { getServiceClient } from "../../../lib/supabase";
+import { isAdminRequest } from "../../../lib/admin-auth";
 import { DRIVER_STEPS, statusInfo, stepIndex } from "../../../lib/driverStatus";
 import AutoRefresh from "./AutoRefresh";
 
@@ -30,7 +32,11 @@ async function getLink(token) {
   if (error || !link) return { link: null, reason: "not_found" };
   if (link.revoked_at) return { link: null, reason: "revoked" };
   if (new Date(link.expires_at) < new Date()) return { link: null, reason: "expired" };
-  // Count the view (read-then-write is fine at this volume).
+  // Count the view (read-then-write is fine at this volume), but not when
+  // the dispatcher is the one looking (logged in as admin on this browser),
+  // so "Driver opened it" only counts the driver.
+  const viewer = { headers: { get: (name) => headers().get(name) } };
+  if (isAdminRequest(viewer)) return { link, reason: null };
   await supabase
     .from("driver_status_links")
     .update({ view_count: (link.view_count || 0) + 1, last_viewed_at: new Date().toISOString() })
