@@ -89,7 +89,8 @@ export default async function Verify({ searchParams }) {
         <a href="https://github.com/cardano-foundation/CIPs/pull/1323" target="_blank" rel="noopener noreferrer">
           approved and merged
         </a>
-        , November 2026).
+        , November 2026).{" "}
+        <a href="/verify/how">How to verify a record yourself →</a>
       </p>
 
       {stats && stats.records > 0 && (
@@ -148,7 +149,7 @@ export default async function Verify({ searchParams }) {
           )}
           <p style={{ fontSize: 12, color: "#6b7280", marginTop: 16, wordBreak: "break-all" }}>
             Records count as genuine only if they were sent from Nightlane&apos;s wallet ({result.wallet}) and their
-            facts match their fingerprint.
+            facts match their fingerprint. <a href="/verify/how">Check it yourself →</a>
             {result.source === "dandelion" && " Read through a backup Cardano node (Dandelion, by GameChanger)."}
           </p>
         </>
