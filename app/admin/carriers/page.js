@@ -72,6 +72,8 @@ export default function AdminCarriers() {
         {" "}&middot;{" "}
         <a href="/admin/dispatch-leads" style={{ color: "#1d4ed8" }}>View dispatcher leads &rarr;</a>
         {" "}&middot;{" "}
+        <a href="/admin/driver-status" style={{ color: "#1d4ed8" }}>Driver status links &rarr;</a>
+        {" "}&middot;{" "}
         <a href="/admin/coverage-requests" style={{ color: "#1d4ed8" }}>Coverage proof requests &rarr;</a>
           </p>
 {carriers.map((c) => (
