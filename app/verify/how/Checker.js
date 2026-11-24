@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 // Re-derives a Nightlane record's fingerprint entirely in the visitor's
 // browser: paste the label-8420 metadata from a block explorer (or Koios),
@@ -57,6 +57,29 @@ async function sha256Hex(text) {
   return [...new Uint8Array(buf)].map((b) => b.toString(16).padStart(2, "0")).join("");
 }
 
+// Explorers sometimes show metadata in Cardano's "detailed" JSON form
+// ({"map":[{"k":{"string":"app"},"v":{"string":"nightlane"}}]}). Turn that
+// into plain JSON so both forms work.
+function fromDetailed(x) {
+  if (Array.isArray(x)) return x.map(fromDetailed);
+  if (!x || typeof x !== "object") return x;
+  const keys = Object.keys(x);
+  if (keys.length === 1) {
+    const [k] = keys;
+    if (k === "string" || k === "bytes") return x[k];
+    if (k === "int") return Number(x[k]);
+    if (k === "list" && Array.isArray(x[k])) return x[k].map(fromDetailed);
+    if (k === "map" && Array.isArray(x[k])) {
+      const out = {};
+      for (const e of x[k]) out[String(fromDetailed(e.k))] = fromDetailed(e.v);
+      return out;
+    }
+  }
+  const out = {};
+  for (const k of keys) out[k] = fromDetailed(x[k]);
+  return out;
+}
+
 // Accepts {"8420": {...}}, the inner object itself, or an explorer/Koios
 // response that has the record somewhere inside it.
 function findRecord(value) {
@@ -76,6 +99,21 @@ const mono = { fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace", fon
 export default function Checker() {
   const [text, setText] = useState(EXAMPLE);
   const [result, setResult] = useState(null);
+  const [guide, setGuide] = useState(null);
+
+  // Arriving from a record on /verify (?tx=...&explorer=...): show the
+  // two-step Cardanoscan guide and start with an empty box, so the data the
+  // visitor checks comes from the explorer, not from this site.
+  useEffect(() => {
+    const q = new URLSearchParams(window.location.search);
+    const tx = (q.get("tx") || "").toLowerCase();
+    if (!/^[0-9a-f]{64}$/.test(tx)) return;
+    const ex = q.get("explorer") || "";
+    const explorer = /^https:\/\/(preprod\.)?cardanoscan\.io\/transaction\/[0-9a-f]{64}$/i.test(ex)
+      ? ex : `https://cardanoscan.io/transaction/${tx}`;
+    setGuide({ tx, explorer, cexplorer: explorer.includes("preprod.") ? null : `https://cexplorer.io/tx/${tx}` });
+    setText("");
+  }, []);
 
   async function check() {
     setResult(null);
@@ -86,7 +124,7 @@ export default function Checker() {
       setResult({ error: "That isn't valid JSON. Paste the whole metadata block, including the curly braces." });
       return;
     }
-    const md = findRecord(parsed);
+    const md = findRecord(fromDetailed(parsed));
     if (!md) {
       setResult({ error: "Couldn't find a Nightlane record (with facts, sha256 and on) in what you pasted." });
       return;
@@ -105,12 +143,23 @@ export default function Checker() {
   }
 
   return (
-    <div style={box}>
+    <div id="check" style={box}>
       <h3 style={{ margin: "0 0 6px", color: "#14181f", fontSize: 17 }}>Check one right here, on your own device</h3>
+      {guide && (
+        <ol style={{ margin: "0 0 12px", paddingLeft: 20, color: "#14181f", fontSize: 15, lineHeight: 1.7 }}>
+          <li>
+            <a href={guide.explorer} target="_blank" rel="noopener noreferrer"><strong>Open this record on Cardanoscan</strong></a>
+            , tap the <strong>Metadata</strong> tab, and copy everything shown for label <strong>8420</strong>.
+            {guide.cexplorer && (<> (Or use <a href={guide.cexplorer} target="_blank" rel="noopener noreferrer">Cexplorer</a>.)</>)}
+            {" "}While you&apos;re there, check the transaction was sent from Nightlane&apos;s wallet (step 1 above).
+          </li>
+          <li>Paste it in the box below and tap <strong>Check fingerprint</strong>.</li>
+        </ol>
+      )}
       <p style={{ margin: "0 0 10px", color: "#374151", fontSize: 14, lineHeight: 1.6 }}>
         Paste a record&apos;s label-8420 metadata, copied from a block explorer (the transaction&apos;s Metadata tab
         on Cardanoscan) or from Koios. The fingerprint is computed in your browser with its built-in SHA-256.
-        Nothing you paste is sent to Nightlane. The example below is the Swick Logistics record from step 2.
+        Nothing you paste is sent to Nightlane.{guide ? "" : " The example below is the Swick Logistics record from step 2."}
       </p>
       <textarea
         aria-label="Record metadata JSON"

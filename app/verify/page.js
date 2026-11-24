@@ -40,6 +40,14 @@ function RecordCard({ r, copies = 1 }) {
         {r.hashMatches === true && " (matches the facts above)"}
         {" · "}
         <a href={r.url} target="_blank" rel="noopener noreferrer">View on the Cardano blockchain →</a>
+        {r.record && r.txHash && (
+          <>
+            {" · "}
+            <a href={`/verify/how?tx=${encodeURIComponent(r.txHash)}&explorer=${encodeURIComponent(r.url)}#check`}>
+              Double-check it yourself →
+            </a>
+          </>
+        )}
       </p>
     </div>
   );
