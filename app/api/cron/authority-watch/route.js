@@ -4,6 +4,7 @@ import { sendAuthorityWatchAlertSMS, sendAuthorityWatchRecoveredSMS } from "../.
 import { sendAuthorityWatchAlertEmail, sendAuthorityWatchRecoveredEmail } from "../../../../lib/email";
 import { watchStatus, compareStatus } from "../../../../lib/authorityWatch";
 import { cardanoHealth } from "../../../../lib/cardanoRecord";
+import { flushBatch } from "../../../../lib/cardanoBatch";
 import { sendCardanoHealthAlertEmail } from "../../../../lib/email";
 
 export const dynamic = "force-dynamic";
@@ -132,5 +133,17 @@ export async function GET(req) {
   } catch (e) {
     cardano = { ok: false, error: e.message };
   }
-  return Response.json({ checked: results.length, results, cardano });
+  // Also write any carrier checks still waiting in the Cardano batch queue
+  // (during the day batches go out as checks come in; this catches the rest).
+  const batches = [];
+  try {
+    while (Date.now() - started < 52_000) {
+      const res = await Promise.race([flushBatch(), new Promise((r) => setTimeout(() => r(null), 15_000))]);
+      if (!res?.written) break;
+      batches.push({ written: res.written, txHash: res.txHash });
+    }
+  } catch (e) {
+    batches.push({ error: String(e.message).slice(0, 200) });
+  }
+  return Response.json({ checked: results.length, results, cardano, batches });
 }
