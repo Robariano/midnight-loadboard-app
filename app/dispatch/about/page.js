@@ -94,8 +94,11 @@ export default function DispatchAbout() {
         <h3 id="h-why">No load is worth driving unprotected</h3>
         <p>
           Early on, a carrier once asked me to drive a load under unclear insurance coverage, and the story he gave me
-          about it didn&apos;t add up. When he then asked me to drive without being properly covered, I said no. That&apos;s
-          part of why I personally check every broker against FMCSA&apos;s federal database before I book anything.
+          about it didn&apos;t add up. When he asked me to drive without being properly covered, I said no.
+        </p>
+        <p>
+          That&apos;s why I check both sides before I book anything: every broker against FMCSA&apos;s federal database,
+          and every carrier&apos;s insurance directly with their agent, down to which trucks are on the policy.
         </p>
         <p>
           Owner-operators deserve a dispatcher who&apos;s honest, answers the phone, and treats every load like it
