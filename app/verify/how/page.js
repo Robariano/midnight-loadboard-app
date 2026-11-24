@@ -3,6 +3,8 @@
 // recordFromMetadata() in lib/cardanoRecord.js. If either changes, the layout
 // version (facts.v) changes and this page gets a new section.
 
+import Checker from "./Checker";
+
 export const metadata = {
   title: "How to verify a Nightlane record | Nightlane",
   description:
@@ -117,6 +119,14 @@ export default function HowToVerify() {
         Nightlane&apos;s mainnet record wallet:
       </p>
       <pre style={preWrap}>{WALLET}</pre>
+      <p style={{ ...p, fontSize: 14 }}>
+        To list every transaction under label 8420 straight from Cardano (no Nightlane involved), open{" "}
+        <a href="https://api.koios.rest/api/v1/tx_by_metalabel?_label=8420" target="_blank" rel="noopener noreferrer">
+          api.koios.rest/api/v1/tx_by_metalabel?_label=8420
+        </a>
+        . That list includes transactions from other wallets too (label numbers can be used by anyone), which is why
+        the sender check matters.
+      </p>
 
       <h2 style={h2}>2. Read the metadata</h2>
       <p style={p}>A real mainnet record (Swick Logistics, checked 23 Nov 2026):</p>
@@ -160,6 +170,7 @@ export default function HowToVerify() {
       <pre style={preWrap}>{SHELL}</pre>
       <p style={p}>Or in code:</p>
       <pre style={pre}>{JS_CODE}</pre>
+      <Checker />
 
       <h2 style={h2}>Versions</h2>
       <p style={p}>
