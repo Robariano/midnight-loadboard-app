@@ -149,7 +149,7 @@ export default function Checker() {
         <ol style={{ margin: "0 0 12px", paddingLeft: 20, color: "#14181f", fontSize: 15, lineHeight: 1.7 }}>
           <li>
             <a href={guide.explorer} target="_blank" rel="noopener noreferrer"><strong>Open this record on Cardanoscan</strong></a>
-            , tap the <strong>Metadata</strong> tab, and copy everything shown for label <strong>8420</strong>.
+            , tap the <strong>Metadata</strong> tab, and copy the text in the box under the blue <strong>Label 8420</strong> tag, from the first <strong>{"{"}</strong> to the last <strong>{"}"}</strong>.
             {guide.cexplorer && (<> (Or use <a href={guide.cexplorer} target="_blank" rel="noopener noreferrer">Cexplorer</a>.)</>)}
             {" "}While you&apos;re there, check the transaction was sent from Nightlane&apos;s wallet (step 1 above).
           </li>
