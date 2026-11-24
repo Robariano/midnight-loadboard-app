@@ -316,7 +316,7 @@ function CheckBrokerInner() {
               </a>
               {" · "}
               <a href={`/verify?dot=${encodeURIComponent(snapshot.dotNumber)}`}>
-                {chainRecord ? "Saved on the Cardano blockchain ✓" : "Cardano records"} →
+                {chainRecord?.queued ? "Saving to the Cardano blockchain (in the next batch)" : chainRecord ? "Saved on the Cardano blockchain ✓" : "Cardano records"} →
               </a>
             </p>
           )}

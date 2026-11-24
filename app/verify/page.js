@@ -43,7 +43,7 @@ function RecordCard({ r, copies = 1 }) {
         {r.record && r.txHash && (
           <>
             {" · "}
-            <a href={`/verify/how?tx=${encodeURIComponent(r.txHash)}&explorer=${encodeURIComponent(r.url)}#check`}>
+            <a href={`/verify/how?tx=${encodeURIComponent(r.txHash)}&explorer=${encodeURIComponent(r.url)}&dot=${encodeURIComponent(r.record.dot)}#check`}>
               Double-check it yourself →
             </a>
           </>

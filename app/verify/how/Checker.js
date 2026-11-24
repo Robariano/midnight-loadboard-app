@@ -85,16 +85,21 @@ function fromDetailed(x) {
 }
 
 // Accepts {"8420": {...}}, the inner object itself, or an explorer/Koios
-// response that has the record somewhere inside it.
-function findRecord(value) {
-  if (!value || typeof value !== "object") return null;
-  if (value.facts && value.sha256 && value.on) return value;
-  if (value["8420"]) return findRecord(value["8420"]);
-  for (const v of Array.isArray(value) ? value : Object.values(value)) {
-    const found = findRecord(v);
-    if (found) return found;
+// response that has the record somewhere inside it. A batch transaction
+// ("kind": "carrier-check-batch") holds several records in "records"; each
+// one is returned, with the batch's "app" copied onto it.
+function findRecords(value) {
+  if (!value || typeof value !== "object") return [];
+  if (value.kind === "carrier-check-batch" && Array.isArray(value.records)) {
+    return value.records.filter((r) => r && r.facts && r.sha256 && r.on).map((r) => ({ app: value.app, ...r }));
   }
-  return null;
+  if (value.facts && value.sha256 && value.on) return [value];
+  if (value["8420"]) return findRecords(value["8420"]);
+  for (const v of Array.isArray(value) ? value : Object.values(value)) {
+    const found = findRecords(v);
+    if (found.length) return found;
+  }
+  return [];
 }
 
 const box = { background: "#f3f7ff", border: "1px solid #bcd0fb", borderRadius: 12, padding: 16, margin: "0 0 16px" };
@@ -117,7 +122,8 @@ export default function Checker() {
     const ex = q.get("explorer") || "";
     const explorer = /^https:\/\/(preprod\.)?cardanoscan\.io\/transaction\/[0-9a-f]{64}$/i.test(ex)
       ? ex : `https://cardanoscan.io/transaction/${tx}`;
-    setGuide({ tx, explorer, cexplorer: explorer.includes("preprod.") ? null : `https://cexplorer.io/tx/${tx}` });
+    const dot = (q.get("dot") || "").replace(/\D/g, "");
+    setGuide({ tx, explorer, dot, cexplorer: explorer.includes("preprod.") ? null : `https://cexplorer.io/tx/${tx}` });
     setText("");
   }, []);
 
@@ -130,11 +136,15 @@ export default function Checker() {
       setResult({ error: "That isn't valid JSON. Paste the whole metadata block, including the curly braces." });
       return;
     }
-    const md = findRecord(fromDetailed(parsed));
-    if (!md) {
+    const all = findRecords(fromDetailed(parsed));
+    if (!all.length) {
       setResult({ error: "Couldn't find a Nightlane record (with facts, sha256 and on) in what you pasted." });
       return;
     }
+    // In a batch, check the record for the DOT the visitor came from (if
+    // any); the others in the batch are checked too and counted below.
+    const wantDot = guide?.dot || "";
+    const md = all.find((r) => String(r.dot) === wantDot) || all[0];
     if (md.app && md.app !== "nightlane") {
       setResult({ error: `This record says app "${md.app}", not "nightlane".` });
       return;
@@ -142,7 +152,15 @@ export default function Checker() {
     try {
       const bytes = canonical(rebuild(md));
       const hash = await sha256Hex(bytes);
-      setResult({ bytes, hash, expected: String(md.sha256).toLowerCase(), match: hash === String(md.sha256).toLowerCase() });
+      let batch = null;
+      if (all.length > 1) {
+        let ok = 0;
+        for (const r of all) {
+          if (await sha256Hex(canonical(rebuild(r))) === String(r.sha256).toLowerCase()) ok++;
+        }
+        batch = { total: all.length, ok, dot: String(md.dot), name: rebuild(md).name };
+      }
+      setResult({ bytes, hash, expected: String(md.sha256).toLowerCase(), match: hash === String(md.sha256).toLowerCase(), batch });
     } catch (e) {
       setResult({ error: "Couldn't rebuild the record: " + e.message });
     }
@@ -223,6 +241,12 @@ export default function Checker() {
           <p style={{ margin: "0 0 8px", fontWeight: 800, color: result.match ? "#166534" : "#991b1b", fontSize: 16 }}>
             {result.match ? "✓ Fingerprint matches" : "✗ Fingerprint does not match"}
           </p>
+          {result.batch && (
+            <p style={{ margin: "0 0 8px", fontSize: 14, color: "#374151" }}>
+              This transaction is a batch of {result.batch.total} carrier checks. Shown below: DOT {result.batch.dot} ({result.batch.name}).
+              {" "}{result.batch.ok === result.batch.total ? `All ${result.batch.total} fingerprints in the batch match.` : `${result.batch.ok} of ${result.batch.total} fingerprints in the batch match.`}
+            </p>
+          )}
           <p style={{ margin: "0 0 4px", fontSize: 13, color: "#374151" }}>Bytes hashed:</p>
           <p style={{ margin: "0 0 8px", ...mono }}>{result.bytes}</p>
           <p style={{ margin: "0 0 4px", fontSize: 13, color: "#374151" }}>Computed SHA-256: <span style={mono}>{result.hash}</span></p>

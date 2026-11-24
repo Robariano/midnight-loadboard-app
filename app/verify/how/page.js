@@ -138,6 +138,12 @@ export default function HowToVerify() {
         </a>
         . Cardano metadata has no booleans or nulls, so flags are stored as 1/0 and unknown values are left out.
       </p>
+      <p style={p}>
+        <strong>Batches.</strong> To save on network fees, newer transactions can hold many checks at once. Their
+        metadata says <code>&quot;kind&quot;: &quot;carrier-check-batch&quot;</code> and has a <code>records</code> list.
+        Each entry in the list has the same fields as the single record above (<code>dot</code>, <code>on</code>,{" "}
+        <code>sha256</code>, <code>facts</code>) and is checked exactly the same way. The checker below handles both.
+      </p>
 
       <h2 style={h2}>3. Rebuild the record that was hashed (layout v1)</h2>
       <p style={p}>Build an object with exactly these 11 keys:</p>

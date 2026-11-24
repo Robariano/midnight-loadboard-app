@@ -11,7 +11,7 @@ When a carrier is checked against the US Federal Motor Carrier Safety Administra
 
 ## How a record is written
 
-Each record is a transaction that sends ADA from Nightlane's own wallet back to itself, carrying the metadata below. No token is minted, and carriers do not need a wallet. Nightlane writes a record the first time a carrier is checked on a given UTC day, and again that day only if the carrier's facts change.
+Each record is a transaction that sends ADA from Nightlane's own wallet back to itself, carrying the metadata below. No token is minted, and carriers do not need a wallet. Nightlane writes a record the first time a carrier is checked on a given UTC day, and again that day only if the carrier's facts change. Since 24 Nov 2026 records are usually written in batches (see below).
 
 ## Metadata layout
 
@@ -56,6 +56,26 @@ Each record is a transaction that sends ADA from Nightlane's own wallet back to 
 | `facts.pu` | Power units (trucks). Omitted if unknown. |
 
 Cardano metadata has no booleans or nulls, so flags are `1`/`0` and unknown values are left out.
+
+## Batches
+
+To save on network fees, one transaction can hold many checks. A batch looks like this:
+
+```json
+{
+  "8420": {
+    "app": "nightlane",
+    "kind": "carrier-check-batch",
+    "v": 1,
+    "records": [
+      { "kind": "carrier-check", "dot": "3442654", "on": "2026-11-24", "sha256": "<64 hex>", "facts": { "v": 1, "...": "..." } },
+      { "kind": "carrier-check", "dot": "2248552", "on": "2026-11-24", "sha256": "<64 hex>", "facts": { "v": 1, "...": "..." } }
+    ]
+  }
+}
+```
+
+Each entry in `records` has exactly the fields of a single record (without `app`) and is verified the same way. The batch `v` is the batch layout version (currently `1`); each entry's `facts.v` is still the record layout version. Checks wait in a queue and are written when about 20 are waiting or the oldest has waited an hour, plus once a day for anything left over, so a check can take up to a day to appear on chain.
 
 ## Verifying a record
 
