@@ -6,6 +6,10 @@ import { useEffect, useState } from "react";
 // and the SHA-256 is computed on this device with the Web Crypto API.
 // Nothing is sent to Nightlane.
 
+const NIGHTLANE_WALLETS = [
+  "addr1qytk2zvppcytejkh09p358qkn6mm3fxc2vg2qlehj6kexj50qpvpl7qvswxtuj4g7vawuq98qpd452akzulurtfyrzss5mpx8p",
+];
+
 const EXAMPLE = `{
   "8420": {
     "app": "nightlane",
@@ -100,6 +104,8 @@ export default function Checker() {
   const [text, setText] = useState(EXAMPLE);
   const [result, setResult] = useState(null);
   const [guide, setGuide] = useState(null);
+  const [fetching, setFetching] = useState(false);
+  const [sender, setSender] = useState(null); // { ok, addresses } when fetched from Cardano
 
   // Arriving from a record on /verify (?tx=...&explorer=...): show the
   // two-step Cardanoscan guide and start with an empty box, so the data the
@@ -115,11 +121,11 @@ export default function Checker() {
     setText("");
   }, []);
 
-  async function check() {
+  async function check(input = text) {
     setResult(null);
     let parsed;
     try {
-      parsed = JSON.parse(text);
+      parsed = JSON.parse(input);
     } catch {
       setResult({ error: "That isn't valid JSON. Paste the whole metadata block, including the curly braces." });
       return;
@@ -142,9 +148,43 @@ export default function Checker() {
     }
   }
 
+  async function fetchFromCardano() {
+    if (!guide) return;
+    setFetching(true);
+    setResult(null);
+    setSender(null);
+    try {
+      const network = guide.explorer.includes("preprod.") ? "preprod" : "mainnet";
+      const res = await fetch(`/api/verify-tx?tx=${guide.tx}&network=${network}`);
+      const d = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        setResult({ error: d.error || "Couldn't get it from Cardano. Copy it from Cardanoscan instead." });
+        return;
+      }
+      const pretty = JSON.stringify(d.metadata, null, 2);
+      setText(pretty);
+      const addresses = d.senders || [];
+      setSender({ ok: network !== "mainnet" ? null : addresses.some((a) => NIGHTLANE_WALLETS.includes(a)), addresses });
+      await check(pretty);
+    } finally {
+      setFetching(false);
+    }
+  }
+
   return (
     <div id="check" style={box}>
       <h3 style={{ margin: "0 0 6px", color: "#14181f", fontSize: 17 }}>Check one right here, on your own device</h3>
+      {guide && (
+        <div style={{ margin: "0 0 12px" }}>
+          <button onClick={fetchFromCardano} disabled={fetching} style={{ background: "#16a34a", color: "#fff", border: "none", borderRadius: 8, padding: "12px 18px", fontWeight: 800, fontSize: 16, cursor: "pointer" }}>
+            {fetching ? "Getting it from Cardano…" : "Check this record for me"}
+          </button>
+          <p style={{ margin: "6px 0 0", fontSize: 13, color: "#4b5568" }}>
+            One tap: we get the record from Koios (a public Cardano service Nightlane doesn&apos;t run) and your browser
+            does the math. Want the strictest check? Do it by hand instead:
+          </p>
+        </div>
+      )}
       {guide && (
         <ol style={{ margin: "0 0 12px", paddingLeft: 20, color: "#14181f", fontSize: 15, lineHeight: 1.7 }}>
           <li>
@@ -169,7 +209,7 @@ export default function Checker() {
         style={{ width: "100%", minHeight: 200, boxSizing: "border-box", padding: 10, borderRadius: 8, border: "1px solid #cbd5e1", ...mono }}
       />
       <div style={{ display: "flex", gap: 8, marginTop: 8, flexWrap: "wrap" }}>
-        <button onClick={check} style={{ background: "#1d4ed8", color: "#fff", border: "none", borderRadius: 8, padding: "10px 16px", fontWeight: 700, fontSize: 15, cursor: "pointer" }}>
+        <button onClick={() => { setSender(null); check(); }} style={{ background: "#1d4ed8", color: "#fff", border: "none", borderRadius: 8, padding: "10px 16px", fontWeight: 700, fontSize: 15, cursor: "pointer" }}>
           Check fingerprint
         </button>
         <button onClick={() => { setText(""); setResult(null); }} style={{ background: "#fff", color: "#14181f", border: "1px solid #cbd5e1", borderRadius: 8, padding: "10px 16px", fontSize: 15, cursor: "pointer" }}>
@@ -187,7 +227,12 @@ export default function Checker() {
           <p style={{ margin: "0 0 8px", ...mono }}>{result.bytes}</p>
           <p style={{ margin: "0 0 4px", fontSize: 13, color: "#374151" }}>Computed SHA-256: <span style={mono}>{result.hash}</span></p>
           <p style={{ margin: 0, fontSize: 13, color: "#374151" }}>Record says: <span style={mono}>{result.expected}</span></p>
-          {result.match && (
+          {result.match && sender && sender.ok !== null && (
+            <p style={{ margin: "8px 0 0", fontWeight: 700, fontSize: 14, color: sender.ok ? "#166534" : "#991b1b" }}>
+              {sender.ok ? "✓ Sent from Nightlane's wallet. This is a genuine Nightlane record." : "✗ Not sent from Nightlane's wallet, so it is not a Nightlane record."}
+            </p>
+          )}
+          {result.match && !(sender && sender.ok !== null) && (
             <p style={{ margin: "8px 0 0", fontSize: 13, color: "#374151" }}>
               Last step: on the explorer, confirm the transaction was sent from Nightlane&apos;s wallet (step 1). Other
               people can and do write under label 8420, so the sender is what makes it a Nightlane record.
