@@ -18,6 +18,21 @@ export default function CoverageRequestsAdmin() {
   }
   useEffect(() => { load(); }, []);
 
+  async function decide(r, decision) {
+    if (decision === "approve") {
+      const ok = window.confirm(
+        `Approve for the carrier?\n\n${r.request_text}\nDOT ${r.dot_number}: ${usd(r.min_liability)} liability, ${usd(r.min_cargo)} cargo, through ${r.covered_through}\n\nCheck: it's a real broker you're booking with, the minimums are what they asked for, the date is the delivery date, and the carrier OK'd you approving proofs.`
+      );
+      if (!ok) return;
+    }
+    const res = await fetch(`/api/admin/coverage-requests/${r.id}`, {
+      method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ decision }),
+    });
+    const d = await res.json().catch(() => ({}));
+    if (!res.ok) setError(d.error || "Couldn't save.");
+    load();
+  }
+
   const link = (r) => `${window.location.origin}/coverage-approve/${r.approve_token}`;
   async function copy(r) {
     const text = `Hi, it's Rob with Steady Wake / Nightlane. A broker asked for proof your insurance meets their minimums (${r.request_text}). Your COI stays private. Approve here: ${link(r)}`;
@@ -28,7 +43,8 @@ export default function CoverageRequestsAdmin() {
     <div style={{ maxWidth: 900 }}>
       <h1 style={{ color: "#14181f" }}>Coverage proof requests</h1>
       <p style={{ color: "#374151", fontSize: 14 }}>
-        Send the carrier its approve link. Approved requests are proved by the worker on your computer
+        Approve for the carrier yourself (with the carrier&apos;s standing OK), or send the carrier its approve link.
+        Approved requests are proved by the worker on your computer
         (<code>npm run worker</code> in midnight/coverage-proof).
       </p>
       <button onClick={load} style={{ marginBottom: 12, padding: "6px 12px", fontSize: 13, borderRadius: 6, border: "1px solid #cbd2db", background: "#fff", cursor: "pointer" }}>↻ Refresh list</button>
@@ -47,6 +63,12 @@ export default function CoverageRequestsAdmin() {
           {r.error && <div style={{ fontSize: 13, color: "#991b1b", marginTop: 4 }}>{r.error}</div>}
           {r.status === "pending" && (
             <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 8 }}>
+              <button onClick={() => decide(r, "approve")} style={{ padding: "6px 12px", fontSize: 13, borderRadius: 6, border: "none", background: "#166534", color: "#fff", fontWeight: 700, cursor: "pointer" }}>
+                Approve for carrier
+              </button>
+              <button onClick={() => decide(r, "decline")} style={{ padding: "6px 12px", fontSize: 13, borderRadius: 6, border: "1px solid #cbd2db", background: "#fff", color: "#991b1b", cursor: "pointer" }}>
+                Decline
+              </button>
               <button onClick={() => copy(r)} style={{ padding: "6px 12px", fontSize: 13, borderRadius: 6, border: "1px solid #cbd2db", background: "#f7f8fa", cursor: "pointer" }}>
                 {copied === r.id ? "Copied ✓" : "Copy text with approve link"}
               </button>
