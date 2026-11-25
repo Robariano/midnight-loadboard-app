@@ -80,7 +80,7 @@ export default function Nightwatch() {
           Why I built this
         </p>
         <p style={{ color: "#4b5568", fontSize: 14, lineHeight: 1.7, margin: 0 }}>
-          A carrier once asked me to run a load under insurance coverage that didn&apos;t check out. The
+          A carrier once asked me to drive a load under insurance coverage that didn&apos;t check out. The
           story didn&apos;t add up, and I&apos;d have been the one exposed if something happened. Brokers face
           the same risk from the other side. Nightwatch is built so nobody finds out after the fact.
           <br />
