@@ -149,6 +149,18 @@ export default function DispatchHome() {
         </div>
       </section>
 
+      <section aria-labelledby="h-expect">
+        <p className="swd-eyebrow">What to expect</p>
+        <h3 id="h-expect">What I can and can&apos;t promise</h3>
+        <ul>
+          <li>I search the boards, bid on loads that fit, call brokers on good ones, and tell you the moment a broker says yes.</li>
+          <li>I can&apos;t promise a load every day, or on holidays when freight slows down and brokers stop answering.</li>
+          <li>I&apos;ll try to get your drivers home when they need to be, but available freight decides.</li>
+          <li>I&apos;m an independent dispatcher, not your employee. I work with the owner, not the drivers, on insurance, drivers and rates.</li>
+          <li>I only book trucks and drivers that are on your insurance policy.</li>
+        </ul>
+      </section>
+
       <section aria-labelledby="h-start">
         <p className="swd-eyebrow">Getting started</p>
         <h3 id="h-start">How we get your truck rolling</h3>

@@ -51,9 +51,14 @@ export default function About() {
         . You can look up any record on the <a href="/verify">Verified on Cardano</a> page.
       </p>
       <p style={p}>
-        Private coverage proofs are now live on Midnight mainnet as a pilot, so a carrier can prove their
-        insurance meets a broker&apos;s minimum without handing over the whole policy. Try the{" "}
+        Private coverage proofs are live on Midnight mainnet, so a carrier can prove their insurance meets a
+        broker&apos;s minimum without handing over the whole policy. Try the{" "}
         <a href="/coverage-check">Private Coverage Check</a>.
+      </p>
+      <p style={p}>
+        Building on Midnight is what made me call the carrier&apos;s insurance agent before booking. That first call
+        showed one of a client&apos;s vans wasn&apos;t on the policy. I found out before booking a load on it, even
+        though I&apos;d already been bidding that van. Now every carrier I dispatch gets that call first.
       </p>
 
       <h2 style={h2}>What hasn&apos;t changed</h2>
