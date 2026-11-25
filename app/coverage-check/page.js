@@ -56,8 +56,8 @@ export default async function CoverageCheckPage({ searchParams }) {
         </p>
       )}
 
-      <p style={{ ...p, fontSize: 13, color: "#92400e", background: "#fef3c7", padding: "8px 12px", borderRadius: 8 }}>
-        Pilot: running on {(stats?.config?.network || "preview") === "mainnet" ? "Midnight mainnet" : "Midnight’s Preview test network"}
+      <p style={{ ...p, fontSize: 13, color: "#166534", background: "#dcfce7", padding: "8px 12px", borderRadius: 8 }}>
+        Live on {(stats?.config?.network || "preview") === "mainnet" ? "Midnight mainnet" : "Midnight’s Preview test network"}
         {stats ? ` · ${stats.total} request${stats.total === 1 ? "" : "s"} answered so far` : ""}.
       </p>
 
@@ -114,7 +114,7 @@ export default async function CoverageCheckPage({ searchParams }) {
 
       <h2 style={{ fontSize: 18, color: "#14181f", margin: "24px 0 8px" }}>Ask a carrier for a proof</h2>
       <p style={{ ...p, fontSize: 14 }}>
-        Pilot carriers enrolled with Nightlane can answer here. Give the request a name you&apos;ll recognize, like your
+        Carriers enrolled with Nightlane can answer here. Give the request a name you&apos;ll recognize, like your
         MC and load number.
       </p>
       <RequestForm />
