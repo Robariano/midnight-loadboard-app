@@ -136,7 +136,9 @@ export default function GetVerified() {
           padding: "10px 14px", marginBottom: 14, fontSize: 13, color: "#374151", lineHeight: 1.5,
         }}>
           <b>Document links:</b> optional for now, but needed before we can verify you. Upload each file to
-          Google Drive or Dropbox, set it to &quot;Anyone with the link,&quot; and paste the link here.
+          Google Drive or Dropbox, set it to &quot;Anyone with the link,&quot; and paste the link here. Once
+          you&apos;re verified, turn link sharing back off. Thieves use stolen insurance certificates to pose as
+          real carriers, so don&apos;t leave yours open.
         </div>
 
         <label style={labelStyle}>Link to CDL (optional)</label>

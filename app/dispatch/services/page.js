@@ -10,6 +10,7 @@ const services = [
   ["Load booking", "Finding solid freight that fits your equipment, your lanes and your schedule."],
   ["Every rate negotiated", "I counter every offer and push for a rate that actually pays your truck."],
   ["Broker checks", "Every broker checked on FMCSA before you commit: active authority, matching name and MC, and bond on file."],
+  ["Coverage checked, truck by truck", "Before your first load I confirm with your insurance agent which trucks (by VIN) and which drivers are on your policy. New truck or new driver? They go on the policy first, then they run loads. It protects you, your authority and your broker relationships."],
   ["Route planning", "Cutting deadhead miles and keeping your truck moving and earning."],
   ["Planned around your hours and your ELD", "Loads that fit your legal hours and your home time. I won't push you to run past your clock, and I make sure your ELD is on FMCSA's approved list so it never gets you put out of service."],
   ["Paperwork", "Rate confirmations, broker setup packets and load documents handled for you."],

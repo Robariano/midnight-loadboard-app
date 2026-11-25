@@ -47,7 +47,8 @@ const dispatchPoints = [
   ["First load free.", "Then 7%, only after the broker pays you."],
   ["Booked under your MC,", "with your OK on every load."],
   ["Every broker checked on FMCSA", "before I book."],
-  ["New authority welcome.", "I know which brokers will set you up."],
+  ["Every truck and driver confirmed on your insurance", "before I book. No coverage, no load."],
+  ["New authority welcome.", "I know which brokers will set you up. Insurance gaps aren't."],
 ];
 
 export default function Home() {
@@ -115,7 +116,8 @@ export default function Home() {
         </p>
         <p style={{ color: "#4b5568", fontSize: 14, lineHeight: 1.6, margin: "0 0 14px" }}>
           A truck can carry valid insurance while the driver isn't listed on the policy. A free, private
-          30-second check closes that gap, for a load from any board or a phone call.
+          30-second check asks the driver directly, for a load from any board or a phone call. Use it
+          alongside a call to the carrier's insurance agent, not instead of one.
         </p>
         <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
           <a href="/confirm-coverage" style={{ ...primaryBtn, padding: "10px 18px" }}>Confirm Coverage →</a>

@@ -106,7 +106,8 @@ function Pitch({ title, items }) {
       </ul>
       <p style={{ fontSize: 12, color: "#1e3a8a", margin: "8px 0 0", lineHeight: 1.45 }}>
         <b>What happens next:</b> I call or text you, we talk for about 10 minutes about your trucks and lanes,
-        you sign a short dispatch agreement and send your W-9, COI and authority letter, and I start finding loads.
+        you sign a short dispatch agreement and send your W-9, COI and authority letter, I confirm your trucks and drivers
+        with your insurance agent, and I start finding loads.
       </p>
     </div>
   );

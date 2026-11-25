@@ -118,6 +118,7 @@ export default function DispatchHome() {
             ["Finding and booking loads", "I search the load boards and call brokers directly so you're not hunting freight from the cab."],
             ["Every rate negotiated", "I don't take the first offer. I counter to get your truck real money."],
             ["Brokers checked on FMCSA", "Active authority, matching name and MC, and bond on file before I book."],
+            ["Coverage checked, truck by truck", "Before your first load I confirm with your insurance agent which trucks (by VIN) and which drivers are on your policy. New truck or new driver? They go on the policy first, then they run loads. It protects you, your authority and your broker relationships."],
             ["You approve every load", "I send you the details first. Nothing gets booked without your yes."],
             ["Your authority watched every day", "Every client gets Authority Watch free: a check of your FMCSA status every morning, with an alert if a Motus glitch or insurance mix-up shuts your authority off. No finding out at a pickup."],
             ["Planned around your hours and your ELD", "I watch your available hours so every load fits legally and gets you home on time, with no running out of clock halfway there. I also make sure your ELD is on FMCSA's approved list, so it never gets you put out of service. I've driven commercial routes myself."],
@@ -167,7 +168,7 @@ export default function DispatchHome() {
           <li>
             <div>
               <b>Send your paperwork</b>
-              <span>W-9, certificate of insurance and MC authority letter, so brokers can set you up.</span>
+              <span>W-9, MC authority letter, and a certificate of insurance listing every truck by VIN, plus the names of the drivers on your policy. I confirm it with your insurance agent before I book.</span>
             </div>
           </li>
           <li>
