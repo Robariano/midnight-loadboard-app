@@ -11,7 +11,7 @@ export default function DispatchHome() {
     <SteadyWakePage active="Home">
       <h1 className="swd-brand">
         Steady Wake Dispatch
-        <small>Semi &amp; hotshot owner-operators · Four Corners &amp; Texas lanes</small>
+        <small>Semi, hotshot &amp; cargo van owner-operators · Four Corners &amp; Texas lanes</small>
       </h1>
 
       <section aria-label="Quick summary" style={{ border: "2px solid currentColor", borderRadius: 12, padding: "18px 20px", margin: "0 0 28px" }}>
