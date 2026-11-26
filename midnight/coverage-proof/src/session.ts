@@ -14,7 +14,8 @@ import { NETWORK, logger, loadSecrets } from './common.js';
 // @ts-expect-error WebSocket global assignment for apollo
 globalThis.WebSocket = WebSocket;
 
-export async function openSession(): Promise<{ providers: CoverageProviders; close: () => Promise<void> }> {
+/** zkPath: the compiled contract's assets (coverage-proof by default). */
+export async function openSession(zkPath: string = zkConfigPath): Promise<{ providers: CoverageProviders; close: () => Promise<void> }> {
   loadSecrets();
   const password = process.env['MIDNIGHT_PRIVATE_STATE_PASSWORD']!;
   validatePassword(password);
@@ -36,5 +37,5 @@ export async function openSession(): Promise<{ providers: CoverageProviders; clo
   await wallet.start();
   await syncWallet(logger, wallet.wallet, Number(process.env['MIDNIGHT_SYNC_TIMEOUT_MS'] ?? 60 * 60_000));
   await waitForNightThenDust(logger, wallet.wallet, wallet.unshieldedKeystore, envConfig, config.faucet, { label: 'fee wallet' });
-  return { providers: buildProviders(wallet, zkConfigPath, config, password), close: () => wallet.stop() };
+  return { providers: buildProviders(wallet, zkPath, config, password), close: () => wallet.stop() };
 }

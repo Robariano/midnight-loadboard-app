@@ -22,7 +22,10 @@
     "worker": "tsx scripts/worker.ts",
     "compile:vehicle": "compact compile contract/vehicle-proof.compact contract/managed/vehicle-proof",
     "compile:vehicle:fast": "compact compile --skip-zk contract/vehicle-proof.compact contract/managed/vehicle-proof",
-    "test:vehicle": "node test/vehicle-proof.test.mjs"
+    "test:vehicle": "node test/vehicle-proof.test.mjs",
+    "deploy:vehicle": "tsx scripts/deploy-vehicle.ts",
+    "attest:vehicle": "tsx scripts/attest-vehicle.ts",
+    "prove:vehicle": "tsx scripts/prove-vehicle.ts"
   },
   "dependencies": {
     "@midnight-ntwrk/midnight-js-contracts": "5.0.1",
