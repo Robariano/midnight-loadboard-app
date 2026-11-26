@@ -59,7 +59,7 @@ export default function CoverageRequestsAdmin() {
   async function decide(r, decision) {
     if (decision === "approve") {
       const ok = window.confirm(
-        `Approve for the carrier?\n\n${r.request_text}\nDOT ${r.dot_number}: ${usd(r.min_liability)} liability, ${usd(r.min_cargo)} cargo, through ${r.covered_through}\n\nCheck: it's a real broker you're booking with, the minimums are what they asked for, the date is the delivery date, and the carrier OK'd you approving proofs.`
+        `Approve for the carrier?\n\n${r.request_text}\nDOT ${r.dot_number}: ${r.kind === "vehicle" ? `van VIN ...${String(r.vin).slice(-6)} on the policy` : `${usd(r.min_liability)} liability, ${usd(r.min_cargo)} cargo`}, through ${r.covered_through}\n\nCheck: it's a real broker you're booking with, the minimums are what they asked for, the date is the delivery date, and the carrier OK'd you approving proofs.`
       );
       if (!ok) return;
     }
@@ -102,7 +102,7 @@ export default function CoverageRequestsAdmin() {
             <span style={{ color: color[r.status], fontWeight: 700, textTransform: "uppercase", fontSize: 12 }}>{r.status}</span>
           </div>
           <div style={{ fontSize: 14, color: "#374151", marginTop: 4 }}>
-            DOT {r.dot_number} · {usd(r.min_liability)} liability · {usd(r.min_cargo)} cargo · through {r.covered_through}
+            DOT {r.dot_number} · {r.kind === "vehicle" ? <>van VIN ...{String(r.vin).slice(-6)} on the policy</> : <>{usd(r.min_liability)} liability · {usd(r.min_cargo)} cargo</>} · through {r.covered_through}
             {r.broker_contact ? ` · broker: ${r.broker_contact}` : ""}
           </div>
           {r.error && <div style={{ fontSize: 13, color: "#991b1b", marginTop: 4 }}>{r.error}</div>}

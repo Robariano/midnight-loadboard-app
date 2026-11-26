@@ -11,9 +11,10 @@
 // It talks to the website with COVERAGE_WORKER_SECRET. The first run creates
 // one in .env.<network> and prints what to put in Vercel.
 import { randomBytes } from 'node:crypto';
-import { appendFileSync, readdirSync, readFileSync } from 'node:fs';
+import { appendFileSync, existsSync, readdirSync, readFileSync } from 'node:fs';
 import { submitCallTx } from '@midnight-ntwrk/midnight-js-contracts';
 import { CompiledCoverageContract, ledger } from '../contract/index.js';
+import { CompiledVehicleContract, vehicleLedger, vehiclePureCircuits, vehicleZkConfigPath, vinBytes, type VehicleAttestation, type VehiclePrivateState } from '../contract/vehicle.js';
 import type { CoverageAttestation, CoveragePrivateState } from '../contract/witnesses.js';
 import { NETWORK, ROOT, endOfDay, loadSecrets, logger, readDeployment, requestIdOf, reviveBigints, usd } from '../src/common.js';
 import { ledgerState } from '../src/providers.js';
@@ -37,7 +38,7 @@ const auth = { Authorization: `Bearer ${process.env['COVERAGE_WORKER_SECRET']}` 
 
 type QueuedRequest = {
   id: string; request_text: string; dot_number: string;
-  min_liability: number; min_cargo: number; covered_through: string;
+  min_liability: number; min_cargo: number; covered_through: string; kind?: 'coverage' | 'vehicle'; vin?: string | null;
 };
 
 async function api(path: string, init?: RequestInit) {
@@ -63,6 +64,25 @@ function carrierFor(dot: string): { name: string; secretKey: Uint8Array; attesta
   return null;
 }
 
+// The vehicle attestation for this DOT and VIN, and the carrier key it was issued to.
+function vehicleCarrierFor(dot: string, vin: string): { name: string; secretKey: Uint8Array; attestation: VehicleAttestation } | null {
+  const last6 = vin.slice(-6);
+  const files = (() => { try { return readdirSync(`${ROOT}attestations`); } catch { return []; } })()
+    .filter((f) => f === `vehicle-${dot}-${last6}.json`);
+  const carriers = (() => { try { return readdirSync(`${ROOT}carriers`); } catch { return []; } })()
+    .map((f) => JSON.parse(readFileSync(`${ROOT}carriers/${f}`, 'utf8')));
+  for (const f of files) {
+    const file = JSON.parse(readFileSync(`${ROOT}attestations/${f}`, 'utf8'));
+    if (file.kind !== 'vehicle') continue;
+    const { carrierPublicKey, attestation: raw } = reviveBigints(file);
+    const attestation = { ...raw, vehicle: { ...raw.vehicle, vin: Uint8Array.from(Buffer.from(raw.vehicle.vin, 'hex')) } };
+    if (Buffer.from(attestation.vehicle.vin).toString('ascii') !== vin) continue;
+    const c = carriers.find((x) => x.publicKey === carrierPublicKey);
+    if (c) return { name: c.name, secretKey: Uint8Array.from(Buffer.from(c.secretKey, 'hex')), attestation };
+  }
+  return null;
+}
+
 // Plain-English reason the carrier's attestation can't answer, or null.
 function cannotProve(a: CoverageAttestation, r: QueuedRequest, through: bigint): string | null {
   const why: string[] = [];
@@ -73,11 +93,56 @@ function cannotProve(a: CoverageAttestation, r: QueuedRequest, through: bigint):
 }
 
 const deployment = readDeployment();
-const { providers, close } = await openSession();
+const vehicleDepFile = `${ROOT}deployments/${NETWORK}-vehicle.json`;
+const vehicleDeployment = existsSync(vehicleDepFile) ? JSON.parse(readFileSync(vehicleDepFile, 'utf8')) : null;
+const { providers, providersFor, close } = await openSession();
+const vehicleProviders = vehicleDeployment ? providersFor(vehicleZkConfigPath) : null;
 process.on('SIGINT', async () => { logger.info('Stopping worker...'); await close(); process.exit(0); });
 logger.info(`Worker ready. Watching ${SITE} for approved coverage requests${once ? ' (once)' : ''}.`);
 
+async function handleVehicle(r: QueuedRequest) {
+  const label = `"${r.request_text}" (DOT ${r.dot_number}, van ...${String(r.vin || '').slice(-6)})`;
+  if (!vehicleDeployment || !vehicleProviders) return report(r.id, 'failed', 'Van proofs are not set up on this computer yet.');
+  let vin: Uint8Array;
+  try { vin = vinBytes(String(r.vin || '')); } catch { return report(r.id, 'failed', 'That VIN is not valid.'); }
+  const vinText = Buffer.from(vin).toString('ascii');
+  const carrier = vehicleCarrierFor(r.dot_number, vinText);
+  if (!carrier) {
+    logger.info(`${label}: no attestation for this van.`);
+    return report(r.id, 'failed', 'Nightlane has not confirmed this van on the carrier\'s policy.');
+  }
+  const through = endOfDay(r.covered_through);
+  if (carrier.attestation.vehicle.expiresAt < through) return report(r.id, 'failed', `Can't prove: coverage on file ends before ${r.covered_through}.`);
+  const requestId = requestIdOf(r.request_text);
+  const before = vehicleLedger(ledgerState(await vehicleProviders.publicDataProvider.queryContractState(vehicleDeployment.contractAddress)));
+  if (before.proofs.member(requestId)) {
+    await report(r.id, 'proving');
+    return report(r.id, 'proved');
+  }
+  await report(r.id, 'proving');
+  try {
+    const stateId = `vehicle-carrier-${carrier.name}`;
+    const ps: VehiclePrivateState = { secretKey: carrier.secretKey, attestation: carrier.attestation };
+    await (vehicleProviders.privateStateProvider as any).forContract(vehicleDeployment.contractAddress).set(stateId, ps);
+    logger.info(`${label}: building the proof...`);
+    await submitCallTx(vehicleProviders as any, {
+      compiledContract: CompiledVehicleContract,
+      contractAddress: vehicleDeployment.contractAddress,
+      privateStateId: stateId,
+      circuitId: 'proveVehicle',
+      args: [requestId, vehiclePureCircuits.vinCommitment(vin), through],
+    } as any);
+    await report(r.id, 'proved');
+    logger.info(`${label}: proved on Midnight.`);
+  } catch (e: any) {
+    const msg = String(e?.message || e).slice(0, 250);
+    logger.error(`${label}: failed: ${msg}`);
+    await report(r.id, 'failed', `Proof failed: ${msg}`).catch(() => {});
+  }
+}
+
 async function handle(r: QueuedRequest) {
+  if (r.kind === 'vehicle') return handleVehicle(r);
   const label = `"${r.request_text}" (DOT ${r.dot_number})`;
   const carrier = carrierFor(r.dot_number);
   if (!carrier) {
