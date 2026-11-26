@@ -1,5 +1,5 @@
 import { checkCoverageRequest, coverageStats, sampleCoverageProof } from "../../lib/midnight/coverageProof";
-import { checkVehicleRequest, vinCommitmentHex } from "../../lib/midnight/vehicleProof";
+import { checkVehicleRequest, vehicleStats, vinCommitmentHex } from "../../lib/midnight/vehicleProof";
 import { requestKeyOf } from "../../lib/midnight/coverageRequests";
 import { getServiceClient } from "../../lib/supabase";
 import RequestForm from "./RequestForm";
@@ -40,6 +40,15 @@ export default async function CoverageCheckPage({ searchParams }) {
     }
   } catch (e) {
     error = "Couldn't reach Midnight right now. Please try again in a minute.";
+  }
+
+  // The answered count covers both contracts (insurance and van proofs). The
+  // sample view counts only the test network's insurance proofs.
+  if (stats && !demo && !error) {
+    try {
+      const v = await vehicleStats();
+      stats = { ...stats, total: Number(stats.total) + v.total };
+    } catch {}
   }
 
   // Van proofs live on a second contract. Only looked up for a real request
