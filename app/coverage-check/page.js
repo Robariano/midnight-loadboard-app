@@ -1,5 +1,5 @@
 import { checkCoverageRequest, coverageStats, sampleCoverageProof } from "../../lib/midnight/coverageProof";
-import { checkVehicleRequest, vehicleStats, vinCommitmentHex } from "../../lib/midnight/vehicleProof";
+import { checkVehicleRequest, vehicleConfig, vehicleStats, vinCommitmentHex } from "../../lib/midnight/vehicleProof";
 import { checkDriverRequest, driverStats, nameCommitmentHex } from "../../lib/midnight/driverProof";
 import { requestKeyOf } from "../../lib/midnight/coverageRequests";
 import { getServiceClient } from "../../lib/supabase";
@@ -209,7 +209,8 @@ export default async function CoverageCheckPage({ searchParams }) {
         policy is cancelled.
       </p>
       <p style={{ fontSize: 12, color: "#6b7280", marginTop: 16, wordBreak: "break-all" }}>
-        Contract {stats?.config?.contractAddress || "(unavailable)"} on Midnight {stats?.config?.network || "preview"}. Public
+        Insurance proofs: contract {stats?.config?.contractAddress || "(unavailable)"} on Midnight {stats?.config?.network || "preview"}.
+        {!demo && vehicleConfig().contractAddress ? <> Van proofs: contract {vehicleConfig().contractAddress}.</> : null} Public
         FMCSA checks stay on Cardano: <a href="/verify">Verified on Cardano</a>.
       </p>
     </div>
