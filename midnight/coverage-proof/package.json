@@ -25,7 +25,12 @@
     "test:vehicle": "node test/vehicle-proof.test.mjs",
     "deploy:vehicle": "tsx scripts/deploy-vehicle.ts",
     "attest:vehicle": "tsx scripts/attest-vehicle.ts",
-    "prove:vehicle": "tsx scripts/prove-vehicle.ts"
+    "prove:vehicle": "tsx scripts/prove-vehicle.ts",
+    "compile:driver": "compact compile contract/driver-proof.compact contract/managed/driver-proof",
+    "compile:driver:fast": "compact compile --skip-zk contract/driver-proof.compact contract/managed/driver-proof",
+    "test:driver": "node test/driver-proof.test.mjs",
+    "deploy:driver": "tsx scripts/deploy-driver.ts",
+    "attest:driver": "tsx scripts/attest-driver.ts"
   },
   "dependencies": {
     "@midnight-ntwrk/midnight-js-contracts": "5.0.1",

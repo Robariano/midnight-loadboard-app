@@ -22,7 +22,19 @@ export default async function ApprovePage({ params }) {
   return (
     <div style={{ maxWidth: 620 }}>
       <h1 style={{ color: "#14181f", marginBottom: 8 }}>A broker asked about your insurance</h1>
-      {r.kind === "vehicle" ? (
+      {r.kind === "driver" ? (
+        <>
+          <p style={p}>
+            Request <b>&ldquo;{r.request_text}&rdquo;</b> for DOT <b>{r.dot_number}</b>. The broker wants to know that
+            driver <b>{r.driver_name}</b> is on your insurance policy through <b>{r.covered_through}</b>.
+          </p>
+          <p style={p}>
+            If you approve, Nightlane proves it on the Midnight blockchain from what it confirmed with your insurance agent.
+            The broker sees only <b>yes, this driver is on the policy</b>. Your certificate of insurance, insurer, policy
+            number and your other drivers are never shown or sent.
+          </p>
+        </>
+      ) : r.kind === "vehicle" ? (
         <>
           <p style={p}>
             Request <b>&ldquo;{r.request_text}&rdquo;</b> for DOT <b>{r.dot_number}</b>. The broker wants to know that the

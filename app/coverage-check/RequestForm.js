@@ -6,7 +6,7 @@ const label = { display: "block", fontSize: 13, fontWeight: 600, color: "#374151
 
 // A broker asks a carrier for a private coverage proof.
 export default function RequestForm() {
-  const [f, setF] = useState({ kind: "coverage", request: "", dot: "", vin: "", liability: "1000000", cargo: "100000", through: "", contact: "" });
+  const [f, setF] = useState({ kind: "coverage", request: "", dot: "", vin: "", driver_name: "", liability: "1000000", cargo: "100000", through: "", contact: "" });
   const [state, setState] = useState({ busy: false, error: null, done: null });
   const set = (k) => (e) => setF({ ...f, [k]: e.target.value });
 
@@ -34,7 +34,7 @@ export default function RequestForm() {
   return (
     <form onSubmit={submit} style={{ display: "grid", gap: 12, background: "#f7f8fa", border: "1px solid #e2e5ea", borderRadius: 12, padding: 16 }}>
       <div role="radiogroup" aria-label="What to prove" style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-        {[["coverage", "Insurance meets my minimums"], ["vehicle", "This van is on the policy"]].map(([k, text]) => (
+        {[["coverage", "Insurance meets my minimums"], ["vehicle", "This van is on the policy"], ["driver", "This driver is on the policy"]].map(([k, text]) => (
           <button key={k} type="button" role="radio" aria-checked={f.kind === k} onClick={() => setF({ ...f, kind: k })}
             style={{ padding: "8px 12px", fontSize: 14, fontWeight: 600, borderRadius: 8, cursor: "pointer",
               border: f.kind === k ? "2px solid #1d4ed8" : "1px solid #cbd2db", background: f.kind === k ? "#eff6ff" : "#fff", color: "#14181f" }}>
@@ -51,7 +51,12 @@ export default function RequestForm() {
         <input id="cr-dot" style={input} value={f.dot} onChange={set("dot")} inputMode="numeric" placeholder="1234567" required />
       </div>
       <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
-        {f.kind === "vehicle" ? (
+        {f.kind === "driver" ? (
+          <div style={{ flex: "2 1 280px" }}>
+            <label style={label} htmlFor="cr-driver">Driver&apos;s full name (as on the policy)</label>
+            <input id="cr-driver" style={input} value={f.driver_name} onChange={set("driver_name")} maxLength={32} placeholder="First Last" required />
+          </div>
+        ) : f.kind === "vehicle" ? (
           <div style={{ flex: "2 1 280px" }}>
             <label style={label} htmlFor="cr-vin">Van VIN (17 characters)</label>
             <input id="cr-vin" style={input} value={f.vin} onChange={set("vin")} maxLength={17} placeholder="1FTBR3XG0PKC00000" required />
