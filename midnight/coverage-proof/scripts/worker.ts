@@ -14,6 +14,7 @@ import { randomBytes } from 'node:crypto';
 import { appendFileSync, existsSync, readdirSync, readFileSync } from 'node:fs';
 import { submitCallTx } from '@midnight-ntwrk/midnight-js-contracts';
 import { CompiledCoverageContract, ledger } from '../contract/index.js';
+import { CompiledDriverContract, driverLedger, driverPureCircuits, driverZkConfigPath, nameBytes, normalizeDriverName, type DriverAttestation, type DriverPrivateState } from '../contract/driver.js';
 import { CompiledVehicleContract, vehicleLedger, vehiclePureCircuits, vehicleZkConfigPath, vinBytes, type VehicleAttestation, type VehiclePrivateState } from '../contract/vehicle.js';
 import type { CoverageAttestation, CoveragePrivateState } from '../contract/witnesses.js';
 import { NETWORK, ROOT, endOfDay, loadSecrets, logger, readDeployment, requestIdOf, reviveBigints, usd } from '../src/common.js';
@@ -38,7 +39,7 @@ const auth = { Authorization: `Bearer ${process.env['COVERAGE_WORKER_SECRET']}` 
 
 type QueuedRequest = {
   id: string; request_text: string; dot_number: string;
-  min_liability: number; min_cargo: number; covered_through: string; kind?: 'coverage' | 'vehicle'; vin?: string | null;
+  min_liability: number; min_cargo: number; covered_through: string; kind?: 'coverage' | 'vehicle' | 'driver'; vin?: string | null; driver_name?: string | null;
 };
 
 async function api(path: string, init?: RequestInit) {
@@ -83,6 +84,21 @@ function vehicleCarrierFor(dot: string, vin: string): { name: string; secretKey:
   return null;
 }
 
+// The driver attestation for this DOT and (normalized) driver name.
+function driverCarrierFor(dot: string, name: string): { name: string; secretKey: Uint8Array; attestation: DriverAttestation } | null {
+  const file = `driver-${dot}-${name.replace(/[^A-Z0-9]+/g, '_')}.json`;
+  if (!existsSync(`${ROOT}attestations/${file}`)) return null;
+  const carriers = (() => { try { return readdirSync(`${ROOT}carriers`); } catch { return []; } })()
+    .map((f) => JSON.parse(readFileSync(`${ROOT}carriers/${f}`, 'utf8')));
+  const data = JSON.parse(readFileSync(`${ROOT}attestations/${file}`, 'utf8'));
+  if (data.kind !== 'driver') return null;
+  const { carrierPublicKey, attestation: raw } = reviveBigints(data);
+  const attestation = { ...raw, driver: { ...raw.driver, name: Uint8Array.from(Buffer.from(raw.driver.name, 'hex')) } };
+  if (!Buffer.from(attestation.driver.name).equals(Buffer.from(nameBytes(name)))) return null;
+  const c = carriers.find((x) => x.publicKey === carrierPublicKey);
+  return c ? { name: c.name, secretKey: Uint8Array.from(Buffer.from(c.secretKey, 'hex')), attestation } : null;
+}
+
 // Plain-English reason the carrier's attestation can't answer, or null.
 function cannotProve(a: CoverageAttestation, r: QueuedRequest, through: bigint): string | null {
   const why: string[] = [];
@@ -97,6 +113,9 @@ const vehicleDepFile = `${ROOT}deployments/${NETWORK}-vehicle.json`;
 const vehicleDeployment = existsSync(vehicleDepFile) ? JSON.parse(readFileSync(vehicleDepFile, 'utf8')) : null;
 const { providers, providersFor, close } = await openSession();
 const vehicleProviders = vehicleDeployment ? providersFor(vehicleZkConfigPath) : null;
+const driverDepFile = `${ROOT}deployments/${NETWORK}-driver.json`;
+const driverDeployment = existsSync(driverDepFile) ? JSON.parse(readFileSync(driverDepFile, 'utf8')) : null;
+const driverProviders = driverDeployment ? providersFor(driverZkConfigPath) : null;
 process.on('SIGINT', async () => { logger.info('Stopping worker...'); await close(); process.exit(0); });
 logger.info(`Worker ready. Watching ${SITE} for approved coverage requests${once ? ' (once)' : ''}.`);
 
@@ -141,8 +160,49 @@ async function handleVehicle(r: QueuedRequest) {
   }
 }
 
+async function handleDriver(r: QueuedRequest) {
+  let name: string;
+  try { name = normalizeDriverName(String(r.driver_name || '')); } catch { return report(r.id, 'failed', 'That driver name is not valid.'); }
+  const label = `"${r.request_text}" (DOT ${r.dot_number}, driver ${name})`;
+  if (!driverDeployment || !driverProviders) return report(r.id, 'failed', 'Driver proofs are not set up on this computer yet.');
+  const carrier = driverCarrierFor(r.dot_number, name);
+  if (!carrier) {
+    logger.info(`${label}: no attestation for this driver.`);
+    return report(r.id, 'failed', 'Nightlane has not confirmed this driver on the carrier\'s policy.');
+  }
+  const through = endOfDay(r.covered_through);
+  if (carrier.attestation.driver.expiresAt < through) return report(r.id, 'failed', `Can't prove: coverage on file ends before ${r.covered_through}.`);
+  const requestId = requestIdOf(r.request_text);
+  const before = driverLedger(ledgerState(await driverProviders.publicDataProvider.queryContractState(driverDeployment.contractAddress)));
+  if (before.proofs.member(requestId)) {
+    await report(r.id, 'proving');
+    return report(r.id, 'proved');
+  }
+  await report(r.id, 'proving');
+  try {
+    const stateId = `driver-carrier-${carrier.name}`;
+    const ps: DriverPrivateState = { secretKey: carrier.secretKey, attestation: carrier.attestation };
+    await (driverProviders.privateStateProvider as any).forContract(driverDeployment.contractAddress).set(stateId, ps);
+    logger.info(`${label}: building the proof...`);
+    await submitCallTx(driverProviders as any, {
+      compiledContract: CompiledDriverContract,
+      contractAddress: driverDeployment.contractAddress,
+      privateStateId: stateId,
+      circuitId: 'proveDriver',
+      args: [requestId, driverPureCircuits.nameCommitment(nameBytes(name)), through],
+    } as any);
+    await report(r.id, 'proved');
+    logger.info(`${label}: proved on Midnight.`);
+  } catch (e: any) {
+    const msg = String(e?.message || e).slice(0, 250);
+    logger.error(`${label}: failed: ${msg}`);
+    await report(r.id, 'failed', `Proof failed: ${msg}`).catch(() => {});
+  }
+}
+
 async function handle(r: QueuedRequest) {
   if (r.kind === 'vehicle') return handleVehicle(r);
+  if (r.kind === 'driver') return handleDriver(r);
   const label = `"${r.request_text}" (DOT ${r.dot_number})`;
   const carrier = carrierFor(r.dot_number);
   if (!carrier) {

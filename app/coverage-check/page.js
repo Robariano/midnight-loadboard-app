@@ -1,5 +1,6 @@
 import { checkCoverageRequest, coverageStats, sampleCoverageProof } from "../../lib/midnight/coverageProof";
 import { checkVehicleRequest, vehicleStats, vinCommitmentHex } from "../../lib/midnight/vehicleProof";
+import { checkDriverRequest, driverStats, nameCommitmentHex } from "../../lib/midnight/driverProof";
 import { requestKeyOf } from "../../lib/midnight/coverageRequests";
 import { getServiceClient } from "../../lib/supabase";
 import RequestForm from "./RequestForm";
@@ -46,8 +47,8 @@ export default async function CoverageCheckPage({ searchParams }) {
   // sample view counts only the test network's insurance proofs.
   if (stats && !demo && !error) {
     try {
-      const v = await vehicleStats();
-      stats = { ...stats, total: Number(stats.total) + v.total };
+      const [v, d] = await Promise.all([vehicleStats().catch(() => ({ total: 0 })), driverStats().catch(() => ({ total: 0 }))]);
+      stats = { ...stats, total: Number(stats.total) + v.total + d.total };
     } catch {}
   }
 
@@ -66,6 +67,22 @@ export default async function CoverageCheckPage({ searchParams }) {
           if (r?.vin && vinCommitmentHex(r.vin) === v.proof.vinCommitment) vinLast6 = r.vin.slice(-6);
         } catch {}
         vehicle = { ...v.proof, vinLast6 };
+      }
+    } catch {}
+  }
+
+  // Driver proofs live on a third contract.
+  let driver = null;
+  if (q && !demo && !error && !(result && result.found) && !vehicle) {
+    try {
+      const d = await checkDriverRequest(q);
+      if (d.found) {
+        let name = null;
+        try {
+          const { data: r } = await getServiceClient().from("coverage_requests").select("*").eq("request_key", requestKeyOf(q)).maybeSingle();
+          if (r?.driver_name && nameCommitmentHex(r.driver_name) === d.proof.nameCommitment) name = r.driver_name;
+        } catch {}
+        driver = { ...d.proof, name };
       }
     } catch {}
   }
@@ -148,7 +165,22 @@ export default async function CoverageCheckPage({ searchParams }) {
         </div>
       )}
 
-      {result && !result.found && !vehicle && (
+      {driver && (
+        <div style={{ background: "#f0fdf4", border: "1px solid #bbf7d0", borderRadius: 12, padding: 16, marginBottom: 16 }}>
+          <p style={{ margin: "0 0 6px", fontWeight: 800, color: "#166534", fontSize: 18 }}>✓ Yes, this driver is on the policy</p>
+          <p style={{ ...p, margin: "0 0 8px" }}>
+            {driver.name ? <><b>{driver.name}</b> is a driver</> : <>The requested driver is</>} on DOT <b>{driver.dot}</b>&apos;s
+            insurance policy, good through <b>{driver.coveredThrough}</b>.
+          </p>
+          <p style={{ margin: 0, fontSize: 13, color: "#6b7280" }}>
+            Verified by attestor {driver.attestorId}
+            {driver.attestorId === 1 ? " (Nightlane)" : ""} for request &ldquo;{q}&rdquo;. Proven on Midnight; the policy,
+            insurer and the carrier&apos;s other drivers stay private.
+          </p>
+        </div>
+      )}
+
+      {result && !result.found && !vehicle && !driver && (
         <div style={{ background: "#f7f8fa", border: "1px solid #e2e5ea", borderRadius: 12, padding: 16, marginBottom: 16 }}>
           <p style={{ margin: "0 0 6px", fontWeight: 700, color: "#14181f" }}>No answer yet for &ldquo;{q}&rdquo;</p>
           <p style={{ ...p, margin: 0, fontSize: 14 }}>

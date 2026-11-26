@@ -1,0 +1,168 @@
+// Nightlane driver proof (Midnight).
+//
+// A carrier proves "this driver is listed on my insurance policy, through your
+// delivery date" to a broker WITHOUT handing over the policy or the list of
+// other drivers.
+//
+//  1. Nightlane confirms with the carrier's insurance agent that a named
+//     driver is a scheduled driver on the policy, then signs: DOT number, a
+//     commitment to the driver's name, the policy expiry, a random nonce and
+//     a hash of the carrier's public key. The carrier keeps it privately.
+//  2. A broker asks "is <driver name> on the policy through Friday?" The
+//     carrier runs proveDriver; the circuit checks Nightlane's signature, the
+//     name match, the dates and revocation.
+//  3. Only the answer is recorded: this DOT's driver (by name commitment) is
+//     covered through this date.
+//
+// A driver who is NOT on the policy has no attestation, so no proof can be
+// made: the broker gets a clear "no". The name is normalized off-chain
+// (upper case, single spaces, up to 32 characters) and zero-padded.
+//
+// Privacy note: the commitment is a plain hash of the name. Whoever already
+// knows the name (the broker who asked) can confirm it; the policy, insurer
+// and the other drivers stay private.
+
+pragma language_version 0.28;
+import CompactStandardLibrary;
+
+import "schnorr" prefix Schnorr_;
+
+export { Schnorr_SchnorrSignature };
+
+export new type SecretKey = Bytes<32>;
+export new type CarrierPublicKey = Bytes<32>;
+export new type AdminPublicKey = Bytes<32>;
+
+// The facts Nightlane confirmed with the carrier's insurance agent.
+// name: normalized driver name, ASCII, zero-padded to 32 bytes.
+export struct DriverAttestation {
+    dot: Uint<32>;
+    name: Bytes<32>;
+    expiresAt: Uint<64>;
+}
+
+// What a successful proof records publicly.
+export struct DriverProof {
+    dot: Uint<32>;
+    nameCommitment: Bytes<32>;
+    coveredThrough: Uint<64>;
+    attestorId: Uint<16>;
+}
+
+constructor() {
+    contractAdmin = disclose(deriveAdminPublicKey(getSecretKey()));
+}
+
+export ledger contractAdmin: AdminPublicKey;
+export ledger attestors: Map<Uint<16>, JubjubPoint>;
+export ledger revoked: Set<Bytes<32>>;
+export ledger proofs: Map<Bytes<32>, DriverProof>;
+
+witness getSecretKey(): SecretKey;
+// [driver facts, nonce, Nightlane's signature, attestor id]
+witness getDriverAttestation(): [DriverAttestation, Field, Schnorr_SchnorrSignature, Uint<16>];
+
+// Same key derivation as the coverage contract, so a carrier uses one key for
+// both kinds of proof.
+export pure circuit deriveCarrierPublicKey(sk: SecretKey): CarrierPublicKey {
+    return persistentHash<[Bytes<23>, SecretKey]>([
+        "nightlane:carrier:pk:v1",
+        sk
+    ]) as CarrierPublicKey;
+}
+
+export pure circuit deriveAdminPublicKey(sk: SecretKey): AdminPublicKey {
+    return persistentHash<[Bytes<21>, SecretKey]>([
+        "nightlane:admin:pk:v1",
+        sk
+    ]) as AdminPublicKey;
+}
+
+// The public commitment of a (normalized, padded) driver name.
+export pure circuit nameCommitment(name: Bytes<32>): Bytes<32> {
+    return persistentHash<[Bytes<22>, Bytes<32>]>([
+        "nightlane:driver:name:",
+        name
+    ]);
+}
+
+export pure circuit attestationId(nonce: Field): Bytes<32> {
+    return persistentHash<[Bytes<20>, Field]>([
+        "nightlane:drv:att:v1",
+        nonce
+    ]);
+}
+
+// Tag that keeps driver signatures apart from coverage (random nonce here)
+// and vehicle (tag 2) signatures.
+export pure circuit driverTag(): Field {
+    return 3 as Field;
+}
+
+// The message Nightlane signs (6 fields, so it reuses schnorrChallenge6).
+export pure circuit attestationMessage(att: DriverAttestation, nonce: Field, carrierPk: CarrierPublicKey): Vector<6, Field> {
+    return [
+        att.dot as Field,
+        transientHash<Bytes<32>>(nameCommitment(att.name)),
+        att.expiresAt as Field,
+        nonce,
+        driverTag(),
+        transientHash<Bytes<32>>(carrierPk as Bytes<32>)
+    ];
+}
+
+// The carrier answers "is this driver on the policy through this date?".
+export circuit proveDriver(requestId: Bytes<32>,
+                           requestedName: Bytes<32>,
+                           coveredThrough: Uint<64>): [] {
+    const [att, nonce, signature, attestorId] = getDriverAttestation();
+
+    const disclosedAttestorId = disclose(attestorId);
+    assert(attestors.member(disclosedAttestorId), "Attestor not registered");
+    const attestorPk = attestors.lookup(disclosedAttestorId);
+
+    const carrierPk = deriveCarrierPublicKey(getSecretKey());
+    Schnorr_schnorrVerify<6>(attestationMessage(att, nonce, carrierPk), signature, attestorPk);
+
+    assert(!revoked.member(disclose(attestationId(nonce))), "Attestation was revoked");
+
+    assert(nameCommitment(att.name) == requestedName, "This driver is not the one attested");
+    assert(att.expiresAt >= coveredThrough, "Coverage ends before the requested date");
+    assert(blockTimeLt(disclose(coveredThrough)), "Requested date is already in the past");
+
+    const disclosedRequestId = disclose(requestId);
+    assert(!proofs.member(disclosedRequestId), "Request already answered");
+    proofs.insert(disclosedRequestId, DriverProof {
+        dot: disclose(att.dot),
+        nameCommitment: disclose(requestedName),
+        coveredThrough: disclose(coveredThrough),
+        attestorId: disclosedAttestorId
+    });
+}
+
+export pure circuit driverChallenge(ann_x: Field, ann_y: Field, pk_x: Field, pk_y: Field, msg: Vector<6, Field>): Field {
+    return Schnorr_schnorrChallenge6(ann_x, ann_y, pk_x, pk_y, msg);
+}
+
+// ---- Admin (Nightlane) ----
+
+export circuit registerAttestor(id: Uint<16>, pk: JubjubPoint): [] {
+    assert(contractAdmin == deriveAdminPublicKey(getSecretKey()), "Only admin can register attestors");
+    attestors.insert(disclose(id), disclose(pk));
+}
+
+export circuit removeAttestor(id: Uint<16>): [] {
+    assert(contractAdmin == deriveAdminPublicKey(getSecretKey()), "Only admin can remove attestors");
+    assert(attestors.member(disclose(id)), "Attestor not found");
+    attestors.remove(disclose(id));
+}
+
+export circuit revokeAttestation(id: Bytes<32>): [] {
+    assert(contractAdmin == deriveAdminPublicKey(getSecretKey()), "Only admin can revoke attestations");
+    revoked.insert(disclose(id));
+}
+
+export circuit rotateAdmin(newAdmin: AdminPublicKey): [] {
+    assert(contractAdmin == deriveAdminPublicKey(getSecretKey()), "Only admin can rotate admin role");
+    contractAdmin = disclose(newAdmin);
+}
