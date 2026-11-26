@@ -79,7 +79,7 @@ export default function CoverageRequestsAdmin() {
 
   const link = (r) => `${window.location.origin}/coverage-approve/${r.approve_token}`;
   async function copy(r) {
-    const text = `Hi, it's Rob with Steady Wake / Nightlane. A broker asked for proof your insurance meets their minimums (${r.request_text}). Your COI stays private. Approve here: ${link(r)}`;
+    const text = `Hi, it's Rob with Steady Wake / Nightlane. A broker asked for proof ${r.kind === "driver" ? `${r.driver_name} is a driver on your policy` : r.kind === "vehicle" ? `your van (VIN ...${String(r.vin).slice(-6)}) is on your policy` : "your insurance meets their minimums"} (${r.request_text}). Your COI stays private. Approve here: ${link(r)}`;
     try { await navigator.clipboard.writeText(text); setCopied(r.id); } catch { window.prompt("Copy this text:", text); }
   }
 
