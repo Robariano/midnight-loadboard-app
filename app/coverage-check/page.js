@@ -1,4 +1,7 @@
 import { checkCoverageRequest, coverageStats, sampleCoverageProof } from "../../lib/midnight/coverageProof";
+import { checkVehicleRequest, vinCommitmentHex } from "../../lib/midnight/vehicleProof";
+import { requestKeyOf } from "../../lib/midnight/coverageRequests";
+import { getServiceClient } from "../../lib/supabase";
 import RequestForm from "./RequestForm";
 
 export const dynamic = "force-dynamic";
@@ -37,6 +40,25 @@ export default async function CoverageCheckPage({ searchParams }) {
     }
   } catch (e) {
     error = "Couldn't reach Midnight right now. Please try again in a minute.";
+  }
+
+  // Van proofs live on a second contract. Only looked up for a real request
+  // (not the sample) that the coverage contract didn't answer.
+  let vehicle = null;
+  if (q && !demo && !error && !(result && result.found)) {
+    try {
+      const v = await checkVehicleRequest(q);
+      if (v.found) {
+        // The chain stores only a commitment to the VIN; show the last 6 when it
+        // matches the VIN on the request.
+        let vinLast6 = null;
+        try {
+          const { data: r } = await getServiceClient().from("coverage_requests").select("*").eq("request_key", requestKeyOf(q)).maybeSingle();
+          if (r?.vin && vinCommitmentHex(r.vin) === v.proof.vinCommitment) vinLast6 = r.vin.slice(-6);
+        } catch {}
+        vehicle = { ...v.proof, vinLast6 };
+      }
+    } catch {}
   }
 
   return (
@@ -102,7 +124,22 @@ export default async function CoverageCheckPage({ searchParams }) {
         </div>
       )}
 
-      {result && !result.found && (
+      {vehicle && (
+        <div style={{ background: "#f0fdf4", border: "1px solid #bbf7d0", borderRadius: 12, padding: 16, marginBottom: 16 }}>
+          <p style={{ margin: "0 0 6px", fontWeight: 800, color: "#166534", fontSize: 18 }}>✓ Yes, this van is on the policy</p>
+          <p style={{ ...p, margin: "0 0 8px" }}>
+            DOT <b>{vehicle.dot}</b>&apos;s van{vehicle.vinLast6 ? <> with VIN ending <b>{vehicle.vinLast6}</b></> : null} is on its
+            insurance policy, good through <b>{vehicle.coveredThrough}</b>.
+          </p>
+          <p style={{ margin: 0, fontSize: 13, color: "#6b7280" }}>
+            Verified by attestor {vehicle.attestorId}
+            {vehicle.attestorId === 1 ? " (Nightlane)" : ""} for request &ldquo;{q}&rdquo;. Proven on Midnight; the policy,
+            insurer and the carrier&apos;s other vehicles stay private.
+          </p>
+        </div>
+      )}
+
+      {result && !result.found && !vehicle && (
         <div style={{ background: "#f7f8fa", border: "1px solid #e2e5ea", borderRadius: 12, padding: 16, marginBottom: 16 }}>
           <p style={{ margin: "0 0 6px", fontWeight: 700, color: "#14181f" }}>No answer yet for &ldquo;{q}&rdquo;</p>
           <p style={{ ...p, margin: 0, fontSize: 14 }}>

@@ -15,7 +15,7 @@ import { NETWORK, logger, loadSecrets } from './common.js';
 globalThis.WebSocket = WebSocket;
 
 /** zkPath: the compiled contract's assets (coverage-proof by default). */
-export async function openSession(zkPath: string = zkConfigPath): Promise<{ providers: CoverageProviders; close: () => Promise<void> }> {
+export async function openSession(zkPath: string = zkConfigPath): Promise<{ providers: CoverageProviders; providersFor: (zk: string) => CoverageProviders; close: () => Promise<void> }> {
   loadSecrets();
   const password = process.env['MIDNIGHT_PRIVATE_STATE_PASSWORD']!;
   validatePassword(password);
@@ -37,5 +37,10 @@ export async function openSession(zkPath: string = zkConfigPath): Promise<{ prov
   await wallet.start();
   await syncWallet(logger, wallet.wallet, Number(process.env['MIDNIGHT_SYNC_TIMEOUT_MS'] ?? 60 * 60_000));
   await waitForNightThenDust(logger, wallet.wallet, wallet.unshieldedKeystore, envConfig, config.faucet, { label: 'fee wallet' });
-  return { providers: buildProviders(wallet, zkPath, config, password), close: () => wallet.stop() };
+  return {
+    providers: buildProviders(wallet, zkPath, config, password),
+    // Same wallet, another contract's proving assets (e.g. the vehicle proof).
+    providersFor: (zk: string) => buildProviders(wallet, zk, config, password),
+    close: () => wallet.stop(),
+  };
 }
