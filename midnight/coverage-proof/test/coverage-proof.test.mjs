@@ -79,6 +79,9 @@ class Sim {
     return {
       registerAttestor: (id, pk) => this.run('registerAttestor', ps, (x) => c.registerAttestor(x, id, pk)),
       revokeAttestation: (id) => this.run('revokeAttestation', ps, (x) => c.revokeAttestation(x, id)),
+      setAuthority: (dot, at, rec) => this.run('setAuthority', ps, (x) => c.setAuthority(x, dot, at, rec)),
+      clearAuthority: (dot) => this.run('clearAuthority', ps, (x) => c.clearAuthority(x, dot)),
+      setAuthorityMaxAge: (sec) => this.run('setAuthorityMaxAge', ps, (x) => c.setAuthorityMaxAge(x, sec)),
       proveCoverage: (req, minL, minC, through, time) =>
         this.run('proveCoverage', ps, (x) => c.proveCoverage(x, req, minL, minC, through), time),
     };
@@ -119,9 +122,11 @@ const carrierState = { secretKey: carrierSecret, attestation };
 const adminState = { secretKey: adminSecret, attestation: null };
 const inAWeek = BigInt(now() + 7 * DAY);
 
-async function freshSim() {
+const cardanoRecord = bytes('cardano-8420-record');
+async function freshSim({ authority = true } = {}) {
   const sim = await Sim.create(adminSecret);
   await sim.as(adminState).registerAttestor(1n, nightlane.pk);
+  if (authority) await sim.as(adminState).setAuthority(coverage.dot, BigInt(now()), cardanoRecord);
   return sim;
 }
 
@@ -136,6 +141,8 @@ await test('carrier proves $1M liability / $100K cargo through next week', async
   assert.equal(p.minCargo, 100_000n);
   assert.equal(p.coveredThrough, inAWeek);
   assert.equal(p.attestorId, 1n);
+  assert.deepEqual(Buffer.from(p.authorityRecord), Buffer.from(cardanoRecord));
+  assert.ok(p.authorityCheckedAt > 0n);
 });
 
 await test('the real limits and expiry never reach the public ledger', async () => {
@@ -206,6 +213,38 @@ await test('only Nightlane (the admin) can register attestors or revoke', async 
   const sim = await freshSim();
   await rejects(sim.as(carrierState).registerAttestor(9n, nightlane.pk), 'Only admin');
   await rejects(sim.as(carrierState).revokeAttestation(pureCircuits.attestationId(nonce)), 'Only admin');
+});
+
+await test('rejects when Nightlane has no FMCSA authority check for the carrier', async () => {
+  const sim = await freshSim({ authority: false });
+  await rejects(sim.as(carrierState).proveCoverage(bytes('r'), 1_000_000n, 100_000n, inAWeek), 'No current FMCSA authority check');
+});
+
+await test('rejects when the FMCSA authority check is older than 7 days', async () => {
+  const sim = await freshSim({ authority: false });
+  await sim.as(adminState).setAuthority(coverage.dot, BigInt(now() - 8 * DAY), cardanoRecord);
+  await rejects(sim.as(carrierState).proveCoverage(bytes('r'), 1_000_000n, 100_000n, inAWeek), 'too old');
+});
+
+await test('authority pulled (cleared) means no new proofs, even with good insurance', async () => {
+  const sim = await freshSim();
+  await sim.as(carrierState).proveCoverage(bytes('before'), 1_000_000n, 100_000n, inAWeek);
+  await sim.as(adminState).clearAuthority(coverage.dot);
+  await rejects(sim.as(carrierState).proveCoverage(bytes('after'), 1_000_000n, 100_000n, inAWeek), 'No current FMCSA authority check');
+});
+
+await test('Nightlane can tighten how fresh the authority check must be', async () => {
+  const sim = await freshSim({ authority: false });
+  await sim.as(adminState).setAuthority(coverage.dot, BigInt(now() - 2 * DAY), cardanoRecord);
+  await sim.as(adminState).setAuthorityMaxAge(BigInt(DAY));
+  await rejects(sim.as(carrierState).proveCoverage(bytes('r'), 1_000_000n, 100_000n, inAWeek), 'too old');
+});
+
+await test('only Nightlane (the admin) can set or clear authority', async () => {
+  const sim = await freshSim();
+  await rejects(sim.as(carrierState).setAuthority(coverage.dot, BigInt(now()), cardanoRecord), 'Only admin');
+  await rejects(sim.as(carrierState).clearAuthority(coverage.dot), 'Only admin');
+  await rejects(sim.as(carrierState).setAuthorityMaxAge(1n), 'Only admin');
 });
 
 console.log(`\n${passed} passed`);

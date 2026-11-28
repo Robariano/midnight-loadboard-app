@@ -16,7 +16,7 @@ import { submitCallTx } from '@midnight-ntwrk/midnight-js-contracts';
 import { CompiledCoverageContract, ledger } from '../contract/index.js';
 import { CompiledDriverContract, driverLedger, driverPureCircuits, driverZkConfigPath, nameBytes, normalizeDriverName, type DriverAttestation, type DriverPrivateState } from '../contract/driver.js';
 import { CompiledVehicleContract, vehicleLedger, vehiclePureCircuits, vehicleZkConfigPath, vinBytes, type VehicleAttestation, type VehiclePrivateState } from '../contract/vehicle.js';
-import type { CoverageAttestation, CoveragePrivateState } from '../contract/witnesses.js';
+import { createCoveragePrivateState, type CoverageAttestation, type CoveragePrivateState } from '../contract/witnesses.js';
 import { NETWORK, ROOT, endOfDay, loadSecrets, logger, readDeployment, requestIdOf, reviveBigints, usd } from '../src/common.js';
 import { ledgerState } from '../src/providers.js';
 import { openSession } from '../src/session.js';
@@ -200,6 +200,40 @@ async function handleDriver(r: QueuedRequest) {
   }
 }
 
+// Version 2 of the coverage contract only proves while Nightlane's latest
+// FMCSA check shows the carrier allowed to operate. Before each insurance
+// proof, run a fresh check (the website also writes it on Cardano) and copy
+// the result onto Midnight. Returns a reason to refuse, or null.
+const ADMIN_STATE_ID = 'nightlane-admin';
+const REFRESH_AFTER_S = 24 * 3600;
+async function ensureAuthority(dotText: string): Promise<string | null> {
+  const state = ledger(ledgerState(await providers.publicDataProvider.queryContractState(deployment.contractAddress))) as any;
+  if (!state.authority) return null; // version 1 contract: no authority check
+  const dot = BigInt(dotText);
+  const check = await api(`/api/coverage-worker/authority?dot=${encodeURIComponent(dotText)}`);
+  const adminSecret = Uint8Array.from(Buffer.from(process.env['NIGHTLANE_ADMIN_SECRET'] || '', 'hex'));
+  if (adminSecret.length !== 32) throw new Error('NIGHTLANE_ADMIN_SECRET is missing from .env.' + NETWORK);
+  await providers.privateStateProvider.forContract(deployment.contractAddress).set(ADMIN_STATE_ID, createCoveragePrivateState(adminSecret));
+  const call = (circuitId: string, args: unknown[]) => submitCallTx(providers, {
+    compiledContract: CompiledCoverageContract, contractAddress: deployment.contractAddress,
+    privateStateId: ADMIN_STATE_ID, circuitId, args,
+  } as any);
+  if (!check.active) {
+    if (state.authority.member(dot)) {
+      logger.info(`DOT ${dotText}: FMCSA check failed (${check.reasons.join('; ')}). Clearing authority on Midnight.`);
+      await call('clearAuthority', [dot]);
+    }
+    return `Can't prove: ${check.reasons.join('; ') || 'FMCSA authority not active'}.`;
+  }
+  const current = state.authority.member(dot) ? state.authority.lookup(dot) : null;
+  const age = current ? Math.floor(Date.now() / 1000) - Number(current.checkedAt) : Infinity;
+  if (age > REFRESH_AFTER_S) {
+    logger.info(`DOT ${dotText}: FMCSA shows authority active. Recording the check on Midnight.`);
+    await call('setAuthority', [dot, BigInt(check.checkedAt), Uint8Array.from(Buffer.from(check.sha256, 'hex'))]);
+  }
+  return null;
+}
+
 async function handle(r: QueuedRequest) {
   if (r.kind === 'vehicle') return handleVehicle(r);
   if (r.kind === 'driver') return handleDriver(r);
@@ -225,6 +259,11 @@ async function handle(r: QueuedRequest) {
 
   await report(r.id, 'proving');
   try {
+    const refused = await ensureAuthority(r.dot_number);
+    if (refused) {
+      logger.info(`${label}: ${refused}`);
+      return report(r.id, 'failed', refused);
+    }
     const stateId = `carrier-${carrier.name}`;
     const ps: CoveragePrivateState = { secretKey: carrier.secretKey, attestation: carrier.attestation };
     await providers.privateStateProvider.forContract(deployment.contractAddress).set(stateId, ps);
