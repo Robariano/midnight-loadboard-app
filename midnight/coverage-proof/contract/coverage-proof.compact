@@ -23,6 +23,12 @@
 // is useless: whoever steals it cannot produce a proof with it. That is the
 // difference from a stolen paper COI, which is used to impersonate carriers.
 //
+// Version 2 (11/28/2026) adds an FMCSA authority check: a proof is only made
+// while Nightlane's latest FMCSA check shows the carrier allowed to operate.
+// Nightlane writes each check publicly on Cardano (metadata label 8420) and
+// copies its result here with setAuthority, so one "yes" means authorized AND
+// insured. The check must be recent (authorityMaxAge, 7 days by default).
+//
 // Signature checks use the Schnorr module from Midnight's official zk-loan
 // example (schnorr.compact, Apache-2.0).
 
@@ -46,6 +52,13 @@ export struct Coverage {
     expiresAt: Uint<64>;
 }
 
+// Nightlane's latest FMCSA check for a DOT: when it ran (Unix seconds) and the
+// SHA-256 fingerprint of the record Nightlane wrote on Cardano for it.
+export struct AuthorityStatus {
+    checkedAt: Uint<64>;
+    record: Bytes<32>;
+}
+
 // What a successful proof records publicly. Note what is NOT here: the real
 // limits, the insurer, the policy and the exact expiry.
 export struct CoverageProof {
@@ -54,10 +67,13 @@ export struct CoverageProof {
     minCargo: Uint<32>;
     coveredThrough: Uint<64>;
     attestorId: Uint<16>;
+    authorityCheckedAt: Uint<64>;
+    authorityRecord: Bytes<32>;
 }
 
 constructor() {
     contractAdmin = disclose(deriveAdminPublicKey(getSecretKey()));
+    authorityMaxAge = 604800;
 }
 
 export ledger contractAdmin: AdminPublicKey;
@@ -67,6 +83,10 @@ export ledger attestors: Map<Uint<16>, JubjubPoint>;
 export ledger revoked: Set<Bytes<32>>;
 // Answered requests, keyed by the requester's request id.
 export ledger proofs: Map<Bytes<32>, CoverageProof>;
+// Carriers whose latest FMCSA check shows them allowed to operate, by DOT.
+export ledger authority: Map<Uint<32>, AuthorityStatus>;
+// How old (seconds) an authority check may be when a proof is made.
+export ledger authorityMaxAge: Uint<64>;
 
 witness getSecretKey(): SecretKey;
 // [coverage facts, nonce, Nightlane's signature, attestor id]
@@ -129,6 +149,12 @@ export circuit proveCoverage(requestId: Bytes<32>,
 
     assert(!revoked.member(disclose(attestationId(nonce))), "Attestation was revoked");
 
+    // FMCSA authority: the DOT is public in the proof anyway.
+    const dot = disclose(coverage.dot);
+    assert(authority.member(dot), "No current FMCSA authority check for this carrier");
+    const status = authority.lookup(dot);
+    assert(blockTimeLt((status.checkedAt + authorityMaxAge) as Uint<64>), "FMCSA authority check is too old");
+
     // The private checks. Only pass/fail leaves the proof.
     assert(coverage.liability >= minLiability, "Liability below the requested minimum");
     assert(coverage.cargo >= minCargo, "Cargo coverage below the requested minimum");
@@ -140,11 +166,13 @@ export circuit proveCoverage(requestId: Bytes<32>,
     const disclosedRequestId = disclose(requestId);
     assert(!proofs.member(disclosedRequestId), "Request already answered");
     proofs.insert(disclosedRequestId, CoverageProof {
-        dot: disclose(coverage.dot),
+        dot: dot,
         minLiability: disclose(minLiability),
         minCargo: disclose(minCargo),
         coveredThrough: disclose(coveredThrough),
-        attestorId: disclosedAttestorId
+        attestorId: disclosedAttestorId,
+        authorityCheckedAt: status.checkedAt,
+        authorityRecord: status.record
     });
 }
 
@@ -172,6 +200,25 @@ export circuit removeAttestor(id: Uint<16>): [] {
 export circuit revokeAttestation(id: Bytes<32>): [] {
     assert(contractAdmin == deriveAdminPublicKey(getSecretKey()), "Only admin can revoke attestations");
     revoked.insert(disclose(id));
+}
+
+// After each FMCSA check that shows the carrier allowed to operate, Nightlane
+// records it here (with the Cardano record's fingerprint).
+export circuit setAuthority(dot: Uint<32>, checkedAt: Uint<64>, record: Bytes<32>): [] {
+    assert(contractAdmin == deriveAdminPublicKey(getSecretKey()), "Only admin can set authority");
+    authority.insert(disclose(dot), AuthorityStatus { checkedAt: disclose(checkedAt), record: disclose(record) });
+}
+
+// When FMCSA shows the carrier not allowed to operate (revoked, out of
+// service), Nightlane removes it, and no new proofs can be made.
+export circuit clearAuthority(dot: Uint<32>): [] {
+    assert(contractAdmin == deriveAdminPublicKey(getSecretKey()), "Only admin can clear authority");
+    authority.remove(disclose(dot));
+}
+
+export circuit setAuthorityMaxAge(seconds: Uint<64>): [] {
+    assert(contractAdmin == deriveAdminPublicKey(getSecretKey()), "Only admin can set the authority max age");
+    authorityMaxAge = disclose(seconds);
 }
 
 export circuit rotateAdmin(newAdmin: AdminPublicKey): [] {

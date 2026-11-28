@@ -136,6 +136,13 @@ const record = {
   checks: { adminIsNightlane: adminOk, attestorRegistered: attestorOk },
 };
 mkdirSync(`${root}deployments`, { recursive: true });
+// Keep the record of an earlier deployment (the website still reads its old proofs).
+const depFile = `${root}deployments/${network}.json`;
+if (existsSync(depFile)) {
+  const prev = JSON.parse(readFileSync(depFile, 'utf8'));
+  writeFileSync(`${root}deployments/${network}-${prev.contractAddress.slice(0, 8)}.json`, JSON.stringify(prev, null, 2) + '\n');
+  logger.info(`Kept the earlier deployment record as deployments/${network}-${prev.contractAddress.slice(0, 8)}.json`);
+}
 writeFileSync(`${root}deployments/${network}.json`, JSON.stringify(record, null, 2) + '\n');
 logger.info(`Saved deployments/${network}.json`);
 logger.info(adminOk && attestorOk ? 'All checks passed. The contract is live.' : 'Deployed, but a check failed: see the record.');

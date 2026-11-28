@@ -141,6 +141,10 @@ export default async function CoverageCheckPage({ searchParams }) {
           <p style={{ ...p, margin: "0 0 8px" }}>
             DOT <b>{result.proof.dot}</b> has at least <b>{usd(result.proof.minLiability)}</b> liability and{" "}
             <b>{usd(result.proof.minCargo)}</b> cargo coverage, good through <b>{result.proof.coveredThrough}</b>.
+            {result.proof.authorityCheckedOn && (
+              <> FMCSA showed the carrier allowed to operate on <b>{result.proof.authorityCheckedOn}</b>{" "}
+              (<a href={`/verify?q=${result.proof.dot}`} style={{ color: "#166534" }}>public record on Cardano</a>).</>
+            )}
           </p>
           <p style={{ margin: 0, fontSize: 13, color: "#6b7280" }}>
             Verified by attestor {result.proof.attestorId}
@@ -209,7 +213,7 @@ export default async function CoverageCheckPage({ searchParams }) {
         policy is cancelled.
       </p>
       <p style={{ fontSize: 12, color: "#6b7280", marginTop: 16, wordBreak: "break-all" }}>
-        Insurance proofs: contract {stats?.config?.contractAddress || "(unavailable)"} on Midnight {stats?.config?.network || "preview"}.
+        Insurance proofs: contract {stats?.config?.contractAddressV2 || stats?.config?.contractAddress || "(unavailable)"} on Midnight {stats?.config?.network || "preview"}.
         {!demo && vehicleConfig().contractAddress ? <> Van proofs: contract {vehicleConfig().contractAddress}. Driver proofs: contract {driverConfig().contractAddress}.</> : null} Public
         FMCSA checks stay on Cardano: <a href="/verify">Verified on Cardano</a>.
       </p>
